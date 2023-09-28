@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/srl"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:mode="same_level"
+    style="@style/SCREEN"
+    app:dragEdge="right">
+
+    <!-- Your secondary layout here -->
+    <RelativeLayout
+        android:id="@+id/rlRemoveProduct"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        style="@style/SCREEN"
+        android:layout_width="wrap_content"
+        android:background="@color/white"
+        android:layout_height="120dp" >
+
+        <androidx.cardview.widget.CardView
+            android:layout_marginLeft="15dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
+                android:background="#FFE6E6"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_centerInParent="true"
+                    android:background="#FFE6E6"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/trash_can" />
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+    <!-- Your main layout here -->
+    <RelativeLayout
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_width="match_parent"
+        style="@style/SCREEN"
+        android:background="@color/white"
+        android:layout_height="120dp" >
+
+        <LinearLayout
+            android:id="@+id/ll_selectProduct"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/SCREEN"
+            android:orientation="horizontal" >
+
+            <CheckBox
+                android:id="@+id/cbCartCheck"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                style="@style/CustomCheckbox02"
+                android:scaleX="0.8"
+                android:scaleY="0.8"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="20dp" >
+
+                <ImageView
+                    android:id="@+id/ivCart_productImg"
+                    android:src="@drawable/iphone_14_pro_max_deeppurple"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:scaleType="centerCrop"/>
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="180dp"
+                android:layout_height="match_parent"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:layout_marginLeft="15dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tvCart_productName"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    style="@style/TEXT"
+                    android:text="Iphone 14 Pro Max"
+                    android:textSize="8pt"
+                    android:ellipsize="end"
+                    android:maxLines="2"/>
+
+                <TextView
+                    android:id="@+id/tvCart_productPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:text="$30.00"
+                    style="@style/textNumb"
+                    android:textColor="@color/greenVLUS"
+                    android:textSize="8pt"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvCart_quantityAdded"
+            android:paddingRight="10dp"
+            android:gravity="bottom"
+            style="@style/TEXT"
+            android:paddingBottom="14dp"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="7pt"
+            android:text="3x"/>
+
+    </RelativeLayout>
+
+
+
+</com.chauthai.swipereveallayout.SwipeRevealLayout>

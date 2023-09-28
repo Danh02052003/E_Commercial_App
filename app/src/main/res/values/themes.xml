@@ -1,0 +1,86 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.MobileProject" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#00CC96</item>
+        <item name="colorPrimaryVariant">#FFFFFF</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#FFFFFF</item>
+        <item name="colorSecondaryVariant">#FFFFFF</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.MobileProject" parent="Base.Theme.MobileProject" />
+    <!-- Light mode -->
+    <!-- Screen background if light mode on -->
+
+    <style name="SCREEN">
+        <item name="android:background">#FFF</item>
+    </style>
+    <!-- Texts background if light mode on -->
+    <style name="TEXT">
+        <item name="android:textColor">#172239</item>
+    </style>
+    <style name="SpecialText">
+        <item name="android:textColor">#6D6D78</item>
+    </style>
+    <style name="TitleText">
+        <item name="android:textColor">#172239</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textNumb">
+        <item name="android:textColor">#172239</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <!-- Button background if light mode on -->
+
+    <style name="BUTTON">
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="IMAGEBUTTON">
+        <item name="android:background">#FFFFFF</item>
+    </style>
+
+    <style name="AppBar">
+        <item name="android:background">#FFFFFF</item>
+    </style>
+
+    <style name="MENU">
+        <item name="android:background">@color/greyVLUS</item>
+    </style>
+
+    <style name="TEXTCART">
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+
+
+    <style name="greenButton">
+        <item name="android:background">#00CC96</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="DrawerNavigationText">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <!--> line if light mode on -->
+
+    <style name="line">#6D6D78</style>
+
+    <style name="CustomCheckbox02" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox_selector</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+</resources>

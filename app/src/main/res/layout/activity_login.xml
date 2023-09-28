@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login.LoginActivity"
+    >
+
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:padding="10dp"
+        android:text="Đăng Nhập"
+        android:textSize="30dp"
+        android:textColor="#172239"
+        android:layout_marginTop="166.18dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteY="50dp"
+        />
+
+
+    <EditText
+        android:id="@+id/editTextUserName"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="245dp"
+        android:background="@drawable/rounded_edittext"
+        android:ems="10"
+        android:hint="UserName"
+        android:inputType="text"
+        android:paddingStart="60dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        android:textColorHint="@color/colorHint" />
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="268dp"
+        android:layout_marginRight="-66dp"
+        android:layout_toStartOf="@id/editTextUserName"
+        android:src="@drawable/email"/>
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginTop="335dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_gravity="center"
+        android:background="@drawable/rounded_edittext"
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textColorHint="@color/colorHint"
+        android:paddingStart="60dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp" />
+    <ImageView
+        android:id="@+id/showPasswordIcon"
+        android:layout_toEndOf="@id/editTextPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-40dp"
+        android:layout_marginLeft="-60dp"
+        android:src="@drawable/close_eye"
+        android:clickable="true"
+        android:focusable="true"
+        android:contentDescription="Toggle Password Visibility"
+        android:layout_below="@id/editTextPassword" />
+
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="358dp"
+        android:layout_marginRight="-66dp"
+        android:layout_toStartOf="@id/editTextPassword"
+
+        android:src="@drawable/lock"/>
+    <TextView
+        android:id="@+id/quenmk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:clickable="false"
+        android:padding="10dp"
+        android:layout_marginTop="414.46dp"
+        android:layout_marginLeft="43dp"
+        android:layout_marginRight="24dp"
+        android:text="Quên mật khẩu"
+        android:textColor="#00CC96" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:layout_marginTop="552dp"
+        android:layout_marginLeft="34dp"
+        android:layout_marginRight="34dp"
+        android:layout_gravity="center"
+        android:background="@drawable/rounded_edittext"
+        android:backgroundTint="#00CC96"
+        android:text="Đăng nhập"
+        android:textColor="@color/white"
+        android:textSize="27dp"
+        tools:layout_editor_absoluteX="37dp"
+        tools:layout_editor_absoluteY="515dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="638dp"
+        android:layout_marginLeft="340dp"
+        android:id="@+id/taotaikhoan"
+        android:text="Tạo tài khoản"
+        android:textColor="#00CC96" />
+
+    <TextView
+
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="630dp"
+        android:layout_marginLeft="200dp"
+        android:padding="10dp"
+        android:text="Chưa có tài khoản?"
+        />
+</RelativeLayout>

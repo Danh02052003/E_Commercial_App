@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.view.home.MainActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardElevation="10dp"
+
+        android:id="@+id/cvBorderNavigation" >
+
+        <RelativeLayout
+            android:id="@+id/layout_border"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/AppBar"
+            android:elevation="40dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    style="@style/AppBar">
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="20dp"
+                        style="@style/AppBar"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:titleMarginStart="170dp" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true">
+
+                        <TextView
+                            android:id="@+id/tvVLU"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="VLU"
+                            android:textSize="16pt"
+                            android:textStyle="bold"
+                            android:textColor="@color/greenVLUS" />
+
+                        <TextView
+                            android:id="@+id/tvS"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="S"
+                            android:textSize="16pt"
+                            android:textStyle="bold"
+                            android:textColor="#006D61"
+                            android:layout_toEndOf="@id/tvVLU"/>
+
+                    </RelativeLayout>
+
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="20dp"
+                        app:cardCornerRadius="100dp"
+                        app:cardBackgroundColor="@color/white">
+
+                        <ImageButton
+                            android:id="@+id/ibtnCart"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:padding="14dp"
+                            android:scaleType="centerCrop"
+                            android:background="@color/white"
+                            android:src="@drawable/home_bag_icon" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </RelativeLayout>
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+
+            <FrameLayout
+                android:id="@+id/mainContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/appBarLayout"
+                android:paddingBottom="70dp"/>
+
+            <FrameLayout
+                android:id="@+id/botApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                app:fabCradleMargin="10dp"
+                app:fabCradleRoundedCornerRadius="10dp"
+                app:fabCradleVerticalOffset="10dp"
+                style="@style/MENU"
+                app:labelVisibilityMode="labeled">
+
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:id="@+id/BotNavMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    style="@style/MENU"
+                    android:backgroundTint="@null"
+                    android:outlineAmbientShadowColor="@color/white"
+                    android:outlineSpotShadowColor="@color/white"
+                    app:itemIconTint="@color/selector_bottom_navigation"
+                    app:itemRippleColor="@color/white"
+                    app:itemTextColor="@color/selector_bottom_navigation"
+                    app:menu="@menu/menu_app" />
+            </FrameLayout>
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
+</RelativeLayout>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/SCREEN"
+    tools:context=".activity.view.search.SearchFragment">
+
+
+    <androidx.appcompat.widget.SearchView
+
+        android:id="@+id/searchItem"
+        android:layout_width="377dp"
+        android:layout_height="60dp"
+        android:background="@drawable/search_view_bg"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="40dp"
+        android:queryHint="Search here ...."
+        android:iconifiedByDefault="false"/>
+
+
+
+    <ImageButton
+        android:id="@+id/btnFilter"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="411dp"
+        android:layout_marginTop="40dp"
+        android:background="#FFFFFF"
+        android:scaleType="centerCrop"
+        android:src="@drawable/filter" />
+
+    <ListView
+        android:id="@+id/LVProduct"
+        style="@style/SCREEN"
+        android:layout_width="377dp"
+        android:layout_height="400dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="120dp" />
+
+
+</FrameLayout>

@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/SCREEN"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageButton
+        android:id="@+id/BtnBack"
+        style="@style/BUTTON"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/back_icon" />
+
+    <TextView
+        android:id="@+id/Setting"
+        style="@style/TitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="148dp"
+        android:layout_marginTop="48dp"
+        android:text="Cài Đặt"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/Account"
+        style="@style/SpecialText"
+        android:layout_width="73dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="114dp"
+        android:text="Tài Khoản" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgAvatarAccount"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="152dp" />
+
+    <TextView
+        android:id="@+id/NameAccount"
+        style="@style/TEXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="138dp"
+        android:layout_marginTop="162dp"
+        android:textSize="9pt"
+        android:text="Danh" />
+
+    <TextView
+        android:id="@+id/in4Account"
+        style="@style/SpecialText"
+        android:layout_below="@id/NameAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="138dp"
+        android:layout_marginTop="10dp"
+        android:textSize="8pt"
+        android:text="Thông tin cá nhân" />
+
+
+    <TextView
+        android:id="@+id/NameSetting"
+        style="@style/SpecialText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="282dp"
+        android:text="Cài đặt" />
+
+    <LinearLayout
+        android:layout_marginTop="360dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lLanguage"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/imgLanguage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="24dp"
+            android:src="@drawable/language" />
+
+        <TextView
+            android:id="@+id/Language"
+            style="@style/TEXT"
+            android:layout_width="342dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="9pt"
+            android:layout_gravity="center"
+            android:text="Ngôn ngữ" />
+
+        <TextView
+            android:id="@+id/detailLanguage"
+            style="@style/SpecialText"
+            android:layout_width="16dp"
+            android:layout_height="14dp"
+            android:layout_gravity="center"
+            android:text="VI" />
+
+        <ImageButton
+            android:id="@+id/btnGoToLanguage"
+            style="@style/BUTTON"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+
+            android:src="@drawable/btn" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:id="@+id/lNotify"
+        android:layout_below="@id/lLanguage"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="24dp"
+            android:src="@drawable/notification" />
+
+        <TextView
+            style="@style/TEXT"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="9pt"
+            android:layout_gravity="center"
+            android:text="Thông Báo" />
+
+
+        <ImageButton
+            android:id="@+id/btnGoToNotification"
+            style="@style/BUTTON"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/btn" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/lNotify"
+        android:id="@+id/lDarkmode"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="24dp"
+            android:src="@drawable/darkmode" />
+
+        <TextView
+            style="@style/TEXT"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="9pt"
+            android:layout_gravity="center"
+            android:text="Chế độ tối" />
+
+
+        <Switch
+            android:id="@+id/switchDarkMode"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/lDarkmode"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="24dp"
+            android:src="@drawable/information" />
+
+        <TextView
+            style="@style/TEXT"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="9pt"
+            android:layout_gravity="center"
+            android:text="Thông tin" />
+
+
+        <ImageButton
+            android:id="@+id/BtnGoToIn4Detail"
+            style="@style/BUTTON"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/btn" />
+
+
+    </LinearLayout>
+
+
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imgNotification"-->
+<!--        android:layout_width="40dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginStart="24dp"-->
+<!--        android:layout_marginTop="348dp"-->
+<!--        android:src="@drawable/notification" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/Notification"-->
+<!--        style="@style/TEXT"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="84dp"-->
+<!--        android:layout_marginTop="361dp"-->
+<!--        android:text="Thông Báo" />-->
+
+<!--    <ImageButton-->
+<!--        android:id="@+id/btnGoToNotification"-->
+<!--        style="@style/BUTTON"-->
+<!--        android:layout_width="30dp"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:layout_marginStart="350dp"-->
+<!--        android:layout_marginTop="350dp"-->
+<!--        android:src="@drawable/btn" />-->
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imgDarkMode"-->
+<!--        android:layout_width="40dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginStart="24dp"-->
+<!--        android:layout_marginTop="418dp"-->
+<!--        android:src="@drawable/darkmode" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/DarkMode"-->
+<!--        style="@style/TEXT"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="84dp"-->
+<!--        android:layout_marginTop="431dp"-->
+<!--        android:text="Chế độ tối" />-->
+
+<!--    <Switch-->
+<!--        android:id="@+id/switchDarkMode"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="20dp"-->
+<!--        android:layout_marginStart="350dp"-->
+<!--        android:layout_marginTop="428dp" />-->
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imgInformation"-->
+<!--        android:layout_width="40dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginStart="24dp"-->
+<!--        android:layout_marginTop="488dp"-->
+<!--        android:src="@drawable/information" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/Information"-->
+<!--        style="@style/TEXT"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="84dp"-->
+<!--        android:layout_marginTop="501dp"-->
+<!--        android:text="Thông tin" />-->
+
+<!--    <ImageButton-->
+<!--        android:id="@+id/BtnGoToIn4Detail"-->
+<!--        style="@style/BUTTON"-->
+<!--        android:layout_width="30dp"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:layout_marginStart="350dp"-->
+<!--        android:layout_marginTop="488dp"-->
+<!--        android:src="@drawable/btn" />-->
+</RelativeLayout>

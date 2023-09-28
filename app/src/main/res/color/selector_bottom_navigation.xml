@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Color for the default state -->
+    <item android:color="@color/greyIcon" android:state_checked="false" />
+
+    <!-- Color for the selected state (when item is clicked) -->
+    <item android:color="@color/greenVLUS" android:state_checked="true" />
+</selector>

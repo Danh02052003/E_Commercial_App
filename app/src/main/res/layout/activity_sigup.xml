@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login.sigup">
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="199dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="80.18dp"
+        android:layout_marginLeft="24dp"
+        android:text="Tạo tài khoản "
+        android:textSize="31dp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="19dp"
+        tools:layout_editor_absoluteY="150dp" />
+
+    <EditText
+        android:id="@+id/passWord"
+        android:layout_width="362dp"
+        android:layout_height="55dp"
+        android:background="@drawable/rounded_edittext"
+        
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:layout_marginTop="410dp"
+        android:layout_marginLeft="24dp"
+        android:hint="PassWord"
+        android:textColorHint="@color/colorHint"
+        android:inputType="textPassword"
+        android:paddingStart="60dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp" />
+<ImageView
+    android:layout_width="20.1dp"
+    android:layout_height="28dp"
+    android:layout_marginTop="428dp"
+    android:layout_marginLeft="46dp"
+    android:src="@drawable/lock"/>
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="362dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="320dp"
+        android:layout_marginLeft="24dp"
+        android:background="@drawable/rounded_edittext"
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:hint="Email"
+        android:textColorHint="@color/colorHint"
+        android:inputType="text"
+        android:paddingStart="60dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+         />
+    <ImageView
+        android:layout_width="20.1dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="343dp"
+        android:layout_marginLeft="46.14dp"
+        android:src="@drawable/email"/>
+    <EditText
+        android:id="@+id/userName"
+        android:layout_width="362dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginLeft="24dp"
+        android:background="@drawable/rounded_edittext"
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:hint="UserName"
+        android:textColorHint="@color/colorHint"
+        android:paddingStart="60dp"
+        android:inputType="text"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"/>
+    <ImageView
+    android:layout_width="20.1dp"
+    android:layout_height="18dp"
+    android:layout_marginTop="170dp"
+    android:layout_marginLeft="47.14dp"
+    android:src="@drawable/profile"/>
+    <EditText
+        android:id="@+id/phoneNumber"
+        android:layout_width="362dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="230dp"
+        android:layout_marginLeft="24dp"
+        android:background="@drawable/rounded_edittext"
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:hint="PhoneNumber"
+        android:textColorHint="@color/colorHint"
+        android:paddingStart="60dp"
+        android:inputType="text"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"/>
+    <ImageView
+        android:layout_width="20.1dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="253dp"
+        android:layout_marginLeft="47.14dp"
+        android:src="@drawable/phone"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/bttSignup"
+        android:layout_width="327dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="500dp"
+        android:layout_marginLeft="24dp"
+        android:background="@drawable/rounded_button"
+        android:text="Tạo tài khoản "
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="24dp"
+        tools:layout_editor_absoluteY="530dp" />
+
+    <TextView
+        android:id="@+id/dangNhap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đăng nhập"
+        android:textColor="#00CC96"
+        android:textSize="14dp"
+        android:layout_marginTop="588dp"
+        android:layout_marginLeft="240dp"
+        tools:layout_editor_absoluteX="224dp"
+        tools:layout_editor_absoluteY="337dp" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đã có tài khoản? "
+        android:textSize="14dp"
+        android:layout_marginTop="588dp"
+        android:layout_marginLeft="124dp"
+        tools:layout_editor_absoluteX="125dp"
+        tools:layout_editor_absoluteY="337dp" />
+
+</RelativeLayout>

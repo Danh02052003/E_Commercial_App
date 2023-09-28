@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "678419902754",
+    "firebase_url": "https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "e-commerce-73482",
+    "storage_bucket": "e-commerce-73482.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:678419902754:android:f65f9b77963ac38acbb57b",
+        "android_client_info": {
+          "package_name": "com.vlu.vlu_doancuoiky_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "678419902754-b1085aq7r9da679boal95lkj6jgu1dtd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFW5oa9c91PsxBbALVckXcV_aom0-1zGA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "678419902754-b1085aq7r9da679boal95lkj6jgu1dtd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:678419902754:android:8cd487ae24693d68cbb57b",
+        "android_client_info": {
+          "package_name": "vlu.mobileproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "678419902754-b1085aq7r9da679boal95lkj6jgu1dtd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFW5oa9c91PsxBbALVckXcV_aom0-1zGA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "678419902754-b1085aq7r9da679boal95lkj6jgu1dtd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
