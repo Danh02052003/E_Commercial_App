@@ -32,6 +32,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -56,7 +58,6 @@ import vlu.mobileproject.SubFragment1;
 import vlu.mobileproject.SubFragment2;
 import vlu.mobileproject.SubFragment3;
 import vlu.mobileproject.activity.view.cart.Cart;
-import vlu.mobileproject.activity.view.profile.Information_Account_Detail;
 import vlu.mobileproject.activity.view.search.SearchFragment;
 import vlu.mobileproject.adapter.DrawerAdapter;
 import vlu.mobileproject.activity.view.profile.Information_Account;
@@ -64,6 +65,7 @@ import vlu.mobileproject.databinding.ActivityMainBinding;
 import vlu.mobileproject.globalfuction.DarkModeUtils;
 import vlu.mobileproject.globalfuction.ImageHandler;
 import vlu.mobileproject.login.LoginActivity;
+import vlu.mobileproject.login.SignupActivity;
 import vlu.mobileproject.login.loading;
 import vlu.mobileproject.modle.User;
 

@@ -104,6 +104,15 @@
         android:layout_marginRight="24dp"
         android:text="Quên mật khẩu"
         android:textColor="#00CC96" />
+    <CheckBox
+        android:id="@+id/RememberUser"
+        android:layout_width="20dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="420dp"
+        android:layout_marginRight="-66dp"
+        android:layout_toStartOf="@id/editTextPassword"
+/>
+
 
 
     <androidx.appcompat.widget.AppCompatButton

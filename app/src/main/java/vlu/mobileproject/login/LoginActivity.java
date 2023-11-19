@@ -7,6 +7,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,14 +20,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.auth.FirebaseUser;
 
+import io.paperdb.Paper;
 import vlu.mobileproject.R;
+import vlu.mobileproject.activity.view.home.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -37,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
     private ImageView showPasswordIcon;
     private boolean isPasswordVisible = false;
 
+    CheckBox RememberUser;
+
     FirebaseAuth mAuthLog;
 
     @SuppressLint("MissingInflatedId")
@@ -45,8 +45,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mAuthLog=FirebaseAuth.getInstance();
+        mAuthLog = FirebaseAuth.getInstance();
 
+        RememberUser = findViewById(R.id.RememberUser);
         emailEditText = findViewById(R.id.editTextUserName); // Updated to the correct ID for email input
         passwordEditText = findViewById(R.id.editTextPassword);
         loginButton = findViewById(R.id.button);
@@ -59,16 +60,18 @@ public class LoginActivity extends AppCompatActivity {
                 togglePasswordVisibility();
             }
         });
+
+        Paper.init(this);
     }
 private void addEvent(){
-    quenmk =findViewById(R.id.quenmk);
+    quenmk = findViewById(R.id.quenmk);
     quenmk.setOnClickListener(view -> {
         Intent intent = new Intent(LoginActivity.this, ForgotPassword.class);
         startActivity(intent);
     });
     taotaikhoan =findViewById(R.id.taotaikhoan);
     taotaikhoan.setOnClickListener(view -> {
-        Intent intent = new Intent(LoginActivity.this, sigup.class);
+        Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
         startActivity(intent);
     });
 
@@ -93,7 +96,7 @@ private void addEvent(){
         });
         taotaikhoan =findViewById(R.id.taotaikhoan);
         taotaikhoan.setOnClickListener(view -> {
-            Intent intent = new Intent(LoginActivity.this, sigup.class);
+            Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
             startActivity(intent);
         });
 
@@ -117,6 +120,11 @@ private void addEvent(){
                         if (task.isSuccessful()) {
 
                             Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                            if (RememberUser.isChecked()) {
+                                Paper.book().write("UserEmailKey", email);
+                                Paper.book().write("UserPassKey", password);
+                            }
+
                             Intent intent = new Intent(LoginActivity.this,vlu.mobileproject.activity.view.home.MainActivity.class);
                             // Pass user-specific data if needed
                             intent.putExtra("user_email", email);
