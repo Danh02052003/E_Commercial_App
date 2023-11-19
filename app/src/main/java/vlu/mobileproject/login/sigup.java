@@ -89,7 +89,6 @@ public class sigup extends AppCompatActivity {
             return;
         }
 
-
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -99,7 +98,7 @@ public class sigup extends AppCompatActivity {
                             if (currentUser != null) {
                                 // User registration successful
                                 String verificationCode = generateVerificationCode();
-                                saveUserDataToDatabase(username, email, password,phone, verificationCode);
+                                saveUserDataToDatabase(username,phone, verificationCode);
                             }
                         } else {
                             // Handle specific registration failure cases
@@ -121,7 +120,7 @@ public class sigup extends AppCompatActivity {
                 });
     }
 
-    private void saveUserDataToDatabase(String user_name, String user_email, String user_password, String user_phone, String verificationCode) {
+    private void saveUserDataToDatabase(String user_name, String user_phone, String verificationCode) {
 
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("User");
 
@@ -129,7 +128,7 @@ public class sigup extends AppCompatActivity {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
-        user newUser = new user(user_name, user_email, user_password, user_phone, verificationCode);
+        user newUser = new user(user_name, user_phone, verificationCode);
 
 
         usersRef.child(userId).setValue(newUser)

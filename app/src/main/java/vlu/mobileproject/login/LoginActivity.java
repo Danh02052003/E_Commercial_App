@@ -28,8 +28,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import vlu.mobileproject.R;
 
-// ... (Your imports and other code)
-
 public class LoginActivity extends AppCompatActivity {
 
     private EditText emailEditText; // Updated to the correct EditText for email input

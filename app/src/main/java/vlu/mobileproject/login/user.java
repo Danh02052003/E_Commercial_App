@@ -54,4 +54,10 @@ public class user {
         this.userPhone = userPhone;
         this.verificationCode = verificationCode;
     }
+
+    public user(String username, String userPhone, String verificationCode) {
+        this.userName = username;
+        this.userPhone = userPhone;
+        this.verificationCode = verificationCode;
+    }
 }
