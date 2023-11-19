@@ -15,6 +15,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private ImageView showPasswordIcon;
     private boolean isPasswordVisible = false;
 
-    private DatabaseReference usersRef;
+    FirebaseAuth mAuthLog;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -43,9 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Khởi tạo Firebase Database
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/");
-        usersRef = database.getReference("User");
+        mAuthLog=FirebaseAuth.getInstance();
 
         emailEditText = findViewById(R.id.editTextUserName); // Updated to the correct ID for email input
         passwordEditText = findViewById(R.id.editTextPassword);
@@ -110,46 +112,23 @@ private void addEvent(){
             return;
         }
 
-        // Use "user_email" instead of "user" for ordering and querying
-        Query query = usersRef.orderByChild("user_email").equalTo(email);
+        mAuthLog.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChildren()) {
-                    // There should be only one user with the specified email
-                    DataSnapshot userSnapshot = dataSnapshot.getChildren().iterator().next();
-                    Object storedPasswordObject = userSnapshot.child("user_password").getValue(); // Removed String.class
-
-                    if (storedPasswordObject != null) {
-                        // Convert the storedPasswordObject to String if it's not null
-                        String storedPassword = String.valueOf(storedPasswordObject);
-
-                        if (storedPassword.equals(password)) {
-                            // Xác thực thành công
                             Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this,vlu.mobileproject.activity.view.home.MainActivity.class);
                             // Pass user-specific data if needed
                             intent.putExtra("user_email", email);
                             startActivity(intent);
                             finish();
-                        } else {
-                            // Sai mật khẩu
-                            Toast.makeText(LoginActivity.this, "Mật khẩu không đúng", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        // Handle the case where the password in the database is null
-                        Toast.makeText(LoginActivity.this, "Mật khẩu không tồn tại", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    // Không tìm thấy tài khoản với email nhập vào trong Database
-                    Toast.makeText(LoginActivity.this, "Tài khoản không tồn tại", Toast.LENGTH_SHORT).show();
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(LoginActivity.this, "Đã xảy ra lỗi: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Mật khẩu hoặc Email không đúng.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }}

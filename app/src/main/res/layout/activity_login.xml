@@ -41,7 +41,8 @@
         android:paddingTop="8dp"
         android:paddingEnd="16dp"
         android:paddingBottom="8dp"
-        android:textColorHint="@color/colorHint" />
+        android:textColorHint="@color/colorHint"
+        android:text="danhnguyen02052003@gmail.com"/>
     <ImageView
         android:layout_width="20dp"
         android:layout_height="18dp"
@@ -67,7 +68,8 @@
         android:paddingStart="60dp"
         android:paddingTop="8dp"
         android:paddingEnd="16dp"
-        android:paddingBottom="8dp" />
+        android:paddingBottom="8dp"
+        android:text="soliknokia"/>
     <ImageView
         android:id="@+id/showPasswordIcon"
         android:layout_toEndOf="@id/editTextPassword"
