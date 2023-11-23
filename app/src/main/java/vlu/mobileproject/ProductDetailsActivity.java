@@ -3,6 +3,7 @@ package vlu.mobileproject;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -24,11 +25,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
+import java.util.Arrays;
+import java.util.List;
+
 import vlu.mobileproject.activity.view.cart.Cart;
 import vlu.mobileproject.login.LoginActivity;
 import vlu.mobileproject.login.UserManager;
 import vlu.mobileproject.login.user;
 import vlu.mobileproject.modle.FavoriteFirebase;
+import vlu.mobileproject.translate.UpdateLang;
+import vlu.mobileproject.translate.language;
 
 public class ProductDetailsActivity extends AppCompatActivity {
     static String bet = "https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/";
@@ -50,10 +56,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     int productQuantityAdded = 1;
     boolean isFavoritePresent;
-    private FirebaseAuth firebaseAuth;
-    private String userEmail = UserManager.getInstance().getUserEmail();
+    private final String userEmail = UserManager.getInstance().getUserEmail();
 
+    List<TextView> listPrice;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +74,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         // Check if the product object is not null before accessing its properties
         if (product != null) {
             tvDetails_productName.setText(product.getProductName());
-            tvDetails_productPrice.setText("$" + String.valueOf(product.getProductPrice()));
+            tvDetails_productPrice.setText("$" + product.getProductPrice());
             tvDetails_productDescr.setText("Ngày sản xuất: " + product.getCreatedDate() + "\n" + product.getProductDescription());
             ivDetails_productIllustration.setImageResource(product.getProductImg());
             ivDetailsAddProduct_productImg.setImageResource(product.getProductImg());
@@ -94,12 +101,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     }
                     capacitiesAdapter.notifyDataSetChanged();
             }});
-
-        }
-            else {
         }
 
         SetTextForQuantity();
+        String lang = language.getPresentLang();
+        UpdateLang.exchangeCurrency(listPrice.toArray(new TextView[0]), this);
 
 
     }
@@ -125,7 +131,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         tvDetails_expand = findViewById(R.id.tvDetails_expand);
         btnBack = findViewById(R.id.btnBack);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
         tvDetails_quantity = findViewById(R.id.tvDetails_quantity);
         tvDetails_quantity_2 = findViewById(R.id.tvDetails_quantity_2);
@@ -133,8 +139,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
         btnFavorite = findViewById(R.id.btnFavorite);
         gvCapacities = findViewById(R.id.gvCapacities);
 
+        listPrice = Arrays.asList(tvDetails_productPrice);
+
     }
 
+    @SuppressLint("SetTextI18n")
     private void addEvent(){
         btnDetails_addToCart.setOnClickListener(view -> {
             rlPopupWindow.setVisibility(View.VISIBLE);

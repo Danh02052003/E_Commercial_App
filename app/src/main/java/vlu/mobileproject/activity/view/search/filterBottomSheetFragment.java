@@ -33,6 +33,7 @@ public class filterBottomSheetFragment extends BottomSheetDialogFragment {
     // Define the FilterListener interface
     public interface FilterListener {
         void onFilterApplied(int startValue, int endValue);
+
         void onCancelFilter();
     }
 
@@ -106,9 +107,11 @@ public class filterBottomSheetFragment extends BottomSheetDialogFragment {
         thumbRect.bottom = slider.getHeight() - slider.getPaddingBottom();
         return thumbRect;
     }
-    private void filter(){
+
+    private void filter() {
 
     }
+
     private void addEvent() {
         // Format and update the tooltip text as the RangeSlider values change
         imgApDung.setOnClickListener(v -> {
@@ -121,7 +124,8 @@ public class filterBottomSheetFragment extends BottomSheetDialogFragment {
             }
 
             // Close the bottom sheet
-            dismiss();        });
+            dismiss();
+        });
 
         imgCancel.setOnClickListener(v -> {
             // Notify the listener that the filter should be canceled

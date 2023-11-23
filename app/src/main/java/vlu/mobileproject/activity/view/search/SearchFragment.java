@@ -34,7 +34,7 @@ public class SearchFragment extends Fragment implements filterBottomSheetFragmen
 
     SearchView searchItem;
     ListView listViewProduct;
-    int minPriceValue, maxPriceValue;
+    int minPriceValue, maxPriceValue = 2000;
     private ArrayList<HomeChildItem> allProducts;
     private ArrayList<HomeChildItem> displayedProducts;
     ImageButton btnFilter;
