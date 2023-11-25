@@ -6,6 +6,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import vlu.mobileproject.R;
+import vlu.mobileproject.translate.LanguageHelper;
 
 public class start extends AppCompatActivity {
 
@@ -13,6 +14,7 @@ public class start extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        LanguageHelper.changeLanguage(getResources(),"en");
     }
 
 
@@ -20,6 +22,7 @@ public class start extends AppCompatActivity {
 
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+        recreate();
         finish();
     }
 }

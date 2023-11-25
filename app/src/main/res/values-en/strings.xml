@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MobileProject</string>
+    <string name="welcome">Welcome to VLUS app</string>
+    <string name="start">Start</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="pass">Password</string>
+    <string name="forgot">Forgot password</string>
+    <string name="no_user">Don\'t have account</string>
+    <string name="create_user">Create account</string>
+    <string name="have_user">Have account?</string>
+</resources>

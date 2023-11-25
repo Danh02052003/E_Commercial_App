@@ -5,16 +5,6 @@ import android.content.SharedPreferences;
 import android.widget.TextView;
 
 public class UpdateLang {
-    public static void translateText(TextView[] textViews, Context context) {
-        String inputText;
-        String language = getLanguage(context);
-
-        for (TextView tv : textViews) {
-            inputText = tv.getText().toString();
-            new TranslationTask(tv, language).execute(inputText);
-        }
-    }
-
     public static void exchangeCurrency(TextView[] textViews, Context context) {
         String inputText;
         String language = getLanguage(context);

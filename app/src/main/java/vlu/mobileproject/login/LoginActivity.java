@@ -23,10 +23,14 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import vlu.mobileproject.R;
+import vlu.mobileproject.translate.LanguageHelper;
 
 // ... (Your imports and other code)
 
 public class LoginActivity extends AppCompatActivity {
+
+    Button btnTranslate;
+
 
     private EditText emailEditText; // Updated to the correct EditText for email input
     private EditText passwordEditText;
@@ -42,6 +46,13 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        btnTranslate = findViewById(R.id.btnTranslate);
+        btnTranslate.setOnClickListener(v-> {
+            LanguageHelper.changeLanguage(getResources(), "vi");
+            recreate();
+        });
+
 
         // Khởi tạo Firebase Database
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/");
@@ -152,4 +163,8 @@ private void addEvent(){
                 Toast.makeText(LoginActivity.this, "Đã xảy ra lỗi: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-    }}
+    }
+    protected void onResume() {
+        super.onResume();
+    }
+}
