@@ -5,31 +5,36 @@
 
     <!-- Customize this layout as per your start screen design -->
     <ImageView
+        android:id="@+id/layoutTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
+        android:layout_alignParentTop="true"
 
-        android:src="@drawable/text"/>
+        android:layout_marginTop="65dp"
+        android:src="@drawable/text" />
+
     <ImageView
         android:id="@+id/iv"
         android:layout_width="400dp"
         android:layout_height="400dp"
+        android:layout_below="@+id/layoutTop"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="362dp"
+        android:layout_marginTop="83dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ai"/>
+        android:src="@drawable/ai" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/startButton"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginTop="850dp"
         android:layout_marginLeft="44dp"
+        android:layout_below="@+id/iv"
+        android:layout_marginTop="50dp"
         android:layout_marginRight="44dp"
         android:background="@drawable/rounded_button"
+        android:onClick="onStartButtonClick"
         android:text="Bắt Đầu"
         android:textColor="@color/white"
         android:textSize="20dp"
-        android:textStyle="bold"
-        android:onClick="onStartButtonClick" />
+        android:textStyle="bold" />
 </RelativeLayout>
