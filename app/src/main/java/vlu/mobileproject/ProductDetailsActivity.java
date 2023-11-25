@@ -19,9 +19,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 
 import vlu.mobileproject.activity.view.cart.Cart;
@@ -29,6 +32,7 @@ import vlu.mobileproject.login.LoginActivity;
 import vlu.mobileproject.login.UserManager;
 import vlu.mobileproject.login.user;
 import vlu.mobileproject.modle.FavoriteFirebase;
+import vlu.mobileproject.modle.Products;
 
 public class ProductDetailsActivity extends AppCompatActivity {
     static String bet = "https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/";
@@ -42,7 +46,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     CardView cvPopupWindow_display;
     GridView gvCapacities;
     ArrayAdapter<String> capacitiesAdapter;
-    HomeChildItem product;
+    Products product;
     TextView tvDetails_productName, tvDetails_productPrice, tvDetails_productDescr, tvDetailsAddProduct_productPrice,
             tvDetails_quantity, tvDetails_quantity_2, tvDetails_nProductLeft, tvDetails_expand;
     ImageView ivDetails_productIllustration, ivDetailsAddProduct_productImg, ibtnDetails_remove_2, ibtnDetails_add_2;
@@ -63,22 +67,30 @@ public class ProductDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
 
-        product = (HomeChildItem) bundle.getSerializable("object_product");
+        product = (Products) bundle.getSerializable("object_product");
         // Check if the product object is not null before accessing its properties
         if (product != null) {
-            tvDetails_productName.setText(product.getProductName());
-            tvDetails_productPrice.setText("$" + String.valueOf(product.getProductPrice()));
-            tvDetails_productDescr.setText("Ngày sản xuất: " + product.getCreatedDate() + "\n" + product.getProductDescription());
-            ivDetails_productIllustration.setImageResource(product.getProductImg());
-            ivDetailsAddProduct_productImg.setImageResource(product.getProductImg());
-            tvDetailsAddProduct_productPrice.setText("$" + String.valueOf(product.getProductPrice()));
-            tvDetails_nProductLeft.setText("Còn " + product.getQuantity() + " sản phẩm.");
+            tvDetails_productName.setText(product.getProduct_name());
+            tvDetails_productPrice.setText("$" + String.valueOf(product.getPriceForMemory()));
+            tvDetails_productDescr.setText("Ngày sản xuất: " + product.getProduct_createdDate() + "\n" + product.getProduct_description());
+            StorageReference imgRef = FirebaseStorage.getInstance("gs://e-commerce-73482.appspot.com/product_image/samsung").getReference().child(product.getProduct_img());
+            imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                product.setProduct_img(uri.toString());
+                String imageURL = product.getProduct_img();
+                Glide.with(this).load(imageURL).into(ivDetails_productIllustration);
+                Glide.with(this).load(imageURL).into(ivDetailsAddProduct_productImg);
+            }).addOnFailureListener(e -> {
+                Log.e(this.toString(), "Error loading image from Firebase: " + e.getMessage());
+                e.printStackTrace();
+            });
+            tvDetailsAddProduct_productPrice.setText("$" + String.valueOf(product.getPriceForMemory()));
+            tvDetails_nProductLeft.setText("Còn " + 1 + " sản phẩm.");
 
             isFavoritePresent = FavoriteProduct.lstProduct.contains(product);
             if(isFavoritePresent)
                 btnFavorite.setImageResource(R.drawable.red_heart_icon);
 
-            capacitiesAdapter = new ArrayAdapter<>(this, R.layout.capacity_item, R.id.tvCapacity, product.getCapacities());
+            capacitiesAdapter = new ArrayAdapter<>(this, R.layout.capacity_item, R.id.tvCapacity, product.getMemory());
             gvCapacities.setAdapter(capacitiesAdapter);
             gvCapacities.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -166,7 +178,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             Bundle bundleSender = new Bundle();
             bundleSender.putSerializable("object_product",product);
             intentt.putExtras(bundleSender);
-            ShoppingCart itemPutInCart = new ShoppingCart(product, productQuantityAdded, product.getProductPrice() + productPriceBasedCapacity);
+            ShoppingCart itemPutInCart = new ShoppingCart(product, productQuantityAdded, product.getPriceForMemory() + productPriceBasedCapacity);
 //           ShoppingCart.lstProduct.add(product);
 //           ShoppingCart.lstQuantity.add(productQuantityAdded);
             startActivity(intentt);
@@ -185,7 +197,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
 
             if (!found) {
-                ShoppingCart itemPutInCart = new ShoppingCart(product, productQuantityAdded, product.getProductPrice() + productPriceBasedCapacity);
+                ShoppingCart itemPutInCart = new ShoppingCart(product, productQuantityAdded, product.getPriceForMemory() + productPriceBasedCapacity);
                 // Perform any necessary operations related to the new itemPutInCart
             }
 
@@ -203,55 +215,55 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 FavoriteProduct.lstProduct.add(product);
                 btnFavorite.setImageResource(R.drawable.red_heart_icon);
                 isFavoritePresent = true;
-                saveDataToDatabase(userEmail, product.getProductId());
+                saveDataToDatabase(userEmail, product.getProduct_id());
             }
 
         });
 
-        ibtnDetails_remove_1.setOnClickListener(view -> {
-            if (productQuantityAdded != 0){
-                productQuantityAdded--;
-            }
-            SetTextForQuantity();
-        });
-
-        ibtnDetails_remove_2.setOnClickListener(view -> {
-            if (productQuantityAdded != 0){
-                productQuantityAdded--;
-            }
-            SetTextForQuantity();
-        });
-
-        ibtnDetails_add_1.setOnClickListener(view -> {
-            if (productQuantityAdded < product.getQuantity()){
-                productQuantityAdded++;
-            }
-            SetTextForQuantity();
-        });
-
-        ibtnDetails_add_2.setOnClickListener(view -> {
-            if (productQuantityAdded < product.getQuantity()){
-                productQuantityAdded++;
-            }
-            SetTextForQuantity();
-        });
-
-        tvDetails_expand.setOnClickListener(view -> {
-            if (tvDetails_expand.getText().equals("Xem thêm >")){
-                tvDetails_productDescr.setMaxLines(10);
-                tvDetails_expand.setText("Thu gọn <");
-            }
-            else {
-                tvDetails_productDescr.setMaxLines(2);
-                tvDetails_expand.setText("Xem thêm >");
-            }
-
-
-        });
-
-        btnBack.setOnClickListener(view -> {
-            finish();
-        });
+//        ibtnDetails_remove_1.setOnClickListener(view -> {
+//            if (productQuantityAdded != 0){
+//                productQuantityAdded--;
+//            }
+//            SetTextForQuantity();
+//        });
+//
+//        ibtnDetails_remove_2.setOnClickListener(view -> {
+//            if (productQuantityAdded != 0){
+//                productQuantityAdded--;
+//            }
+//            SetTextForQuantity();
+//        });
+//
+//        ibtnDetails_add_1.setOnClickListener(view -> {
+//            if (productQuantityAdded < product.getQuantity()){
+//                productQuantityAdded++;
+//            }
+//            SetTextForQuantity();
+//        });
+//
+//        ibtnDetails_add_2.setOnClickListener(view -> {
+//            if (productQuantityAdded < product.getQuantity()){
+//                productQuantityAdded++;
+//            }
+//            SetTextForQuantity();
+//        });
+//
+//        tvDetails_expand.setOnClickListener(view -> {
+//            if (tvDetails_expand.getText().equals("Xem thêm >")){
+//                tvDetails_productDescr.setMaxLines(10);
+//                tvDetails_expand.setText("Thu gọn <");
+//            }
+//            else {
+//                tvDetails_productDescr.setMaxLines(2);
+//                tvDetails_expand.setText("Xem thêm >");
+//            }
+//
+//
+//        });
+//
+//        btnBack.setOnClickListener(view -> {
+//            finish();
+//        });
 
     }
 

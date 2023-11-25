@@ -18,9 +18,10 @@ import java.util.List;
 
 import vlu.mobileproject.adapter.HomeParentAdapter;
 import vlu.mobileproject.globalfuction.GlobalData;
+import vlu.mobileproject.modle.Products;
 
 
-public class AllFrag extends Fragment {
+public class AllFrag extends Fragment implements GlobalData.Callback {
     RecyclerView rvCategory;
     RecyclerView rvChildList;
     private HomeParentAdapter parentAdapter;
@@ -68,20 +69,25 @@ public class AllFrag extends Fragment {
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        // Initialize the parentItemList if it's null or empty
+
         if (parentItemList == null || parentItemList.isEmpty()) {
-            GlobalData.initData();
+            GlobalData.initData(getContext(),this);
         }
         rvChildList = anotherLayout.findViewById(R.id.rvChildList);
         rvChildList.setLayoutManager(layoutManager);
-        //Dẫn xuất và gán ParentAdapter cho RecycleView cha
 
-        parentItemList = new ArrayList<>();
-        parentAdapter = new HomeParentAdapter(parentItemList);
-        rvCategory.setAdapter(parentAdapter);
-        parentItemList.add(new HomeParentItem("Dành cho bạn", forYou_list));
-        parentItemList.add(new HomeParentItem("Sản phẩm nổi bật", highlight_list));
         return view;
     }
 
+
+    @Override
+    public void onCompleted(List<Products> foryou_list, List<Products> highlight_list) {
+        parentItemList = new ArrayList<>();
+
+        parentItemList.add(new HomeParentItem("Dành cho bạn", foryou_list));
+        parentItemList.add(new HomeParentItem("Sản phẩm nổi bật", highlight_list));
+        parentAdapter = new HomeParentAdapter(parentItemList);
+        rvCategory.setAdapter(parentAdapter);
+        parentAdapter.notifyDataSetChanged();
+    }
 }

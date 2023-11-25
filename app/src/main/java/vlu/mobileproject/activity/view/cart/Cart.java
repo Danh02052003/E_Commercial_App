@@ -28,12 +28,13 @@ import vlu.mobileproject.ProductInCartItem;
 import vlu.mobileproject.R;
 import vlu.mobileproject.ShoppingCart;
 import vlu.mobileproject.adapter.ProductInCartAdapter;
+import vlu.mobileproject.modle.Products;
 
 public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCheckedChangeListener {
     RecyclerView rvProductAdded;
     List<ProductInCartItem> inCartItemList = new ArrayList<>();
     ProductInCartAdapter adapter;
-    HomeChildItem product;
+    Products product;
     CheckBox cbCartCheck;
     TextView tvCart_state, tvCart_totalPrice, tvCart_discount;
     Button btnPay, btnApplyDiscount;
@@ -64,7 +65,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
 
         if (bundle != null) {
             if (bundle.containsKey("object_product")) {
-                product = (HomeChildItem) bundle.getSerializable("object_product");
+                product = (Products) bundle.getSerializable("object_product");
 
 
                 rvProductAdded = findViewById(R.id.rvProductAdded);
@@ -124,7 +125,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
     private List<ProductInCartItem> getListProductAdded(){
         inCartItemList = getListFromShoppingCartOBJ(ShoppingCart.lstProduct);
         if (inCartItemList.size() != 0){
-            ProductInCartItem lastProduct = new ProductInCartItem(product.getProductName(), ShoppingCart.lstProduct.get(ShoppingCart.lstProduct.size()-1).price, ShoppingCart.lstProduct.get(ShoppingCart.lstProduct.size()-1).quantity, product.getProductImg());
+            ProductInCartItem lastProduct = new ProductInCartItem(product.getProduct_name(), ShoppingCart.lstProduct.get(ShoppingCart.lstProduct.size()-1).price, ShoppingCart.lstProduct.get(ShoppingCart.lstProduct.size()-1).quantity, product.getProduct_img());
             inCartItemList.remove(inCartItemList.size()-1);
             inCartItemList.add(0, lastProduct);
 
@@ -139,7 +140,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
 
         }
         else {
-            inCartItemList.add(new ProductInCartItem(product.getProductName(), product.getProductPrice(), product.getQuantity(), product.getProductImg()));
+            inCartItemList.add(new ProductInCartItem(product.getProduct_name(), product.getPriceForMemory(), 1, product.getProduct_img()));
             inCartItemList.get(0).setInCartId(1);
             return inCartItemList;
         }
@@ -148,7 +149,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
 
     private List<ProductInCartItem> getListFromShoppingCartOBJ(List<ShoppingCart> lst){
         for (ShoppingCart productInCart : lst) {
-            inCartItemList.add(new ProductInCartItem(productInCart.item.getProductName(), productInCart.price, productInCart.quantity, productInCart.item.getProductImg()));
+            inCartItemList.add(new ProductInCartItem(productInCart.item.getProduct_name(), productInCart.price, productInCart.quantity, productInCart.item.getProduct_img()));
         }
         SetIdForProduct();
         return inCartItemList;

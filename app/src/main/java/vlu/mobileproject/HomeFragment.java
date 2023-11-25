@@ -27,7 +27,6 @@ public class HomeFragment extends Fragment implements CategoriesAdapter.OnItemSe
     private static final int POS_ALL = 0;
     private static final int POS_SAMSUNG = 1;
     private static final int POS_IPHONE = 2;
-    private static final int POS_CLOTHES = 3;
 
     private String[] screenCategories;
     RecyclerView rvCategories;
@@ -126,7 +125,7 @@ public class HomeFragment extends Fragment implements CategoriesAdapter.OnItemSe
 
         }
         else if (position == POS_IPHONE) {
-            loadFragment(new IphoneFrag());
+            loadFragment(new SamsungFrag());
         }
 
     }

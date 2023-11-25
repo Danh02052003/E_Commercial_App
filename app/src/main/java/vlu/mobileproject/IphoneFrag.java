@@ -104,15 +104,15 @@ public class IphoneFrag extends Fragment {
         highlight_list.add(new HomeChildItem("iPhone 12 Pro Max", 849, R.drawable.iphone_12_pro_max_azul, 2020021130L, 2, 4, "13/11/2020", "iPhone 12 Pro Max có màn hình 6,7 inch (lớn hơn một chút so với 6,5 inch trên iPhone 11 Pro Max) và giá cơ bản của nó là 1.100 USD. Nó có cùng lựa chọn màu sắc: bạc, than chì, vàng và tùy chọn màu xanh lam mới và nó cũng được cung cấp với cùng dung lượng lưu trữ: 128GB, 256GB và 512GB.", new String[]{"128GB", "256GB", "512GB"}));
         highlight_list.add(new HomeChildItem("iPhone 13 Pro Max", 1099, R.drawable.iphone_13_pro_max_sierra_blue, 2021020930L, 2, 12, "24/09/2021", "iPhone 13 Pro Max là mẫu lớn nhất và đắt nhất trong dòng điện thoại thông minh năm 2021 của Apple và có màn hình Super Retina XDR 6,7 inch với độ phân giải 1284 x 2778 pixel. Giống như iPhone 13 Pro nhỏ hơn, nó được trang bị chipset A15 Bionic mới nhất của Apple và đi kèm với bộ nhớ trong lên đến 1TB.", new String[]{"128GB", "256GB", "512GB", "1TB"}));
 
-
-        parentItemList = new ArrayList<>();
-        parentItemList.add(new HomeParentItem("Dành cho bạn", forYou_list));
-        parentItemList.add(new HomeParentItem("Sản phẩm nổi bật", highlight_list));
-
-        //Dẫn xuất và gán ParentAdapter cho RecycleView cha
-        parentAdapter = new HomeParentAdapter(parentItemList);
-        rvCategory.setAdapter(parentAdapter);
-
+//
+//        parentItemList = new ArrayList<>();
+//        parentItemList.add(new HomeParentItem("Dành cho bạn", forYou_list));
+//        parentItemList.add(new HomeParentItem("Sản phẩm nổi bật", highlight_list));
+//
+//        //Dẫn xuất và gán ParentAdapter cho RecycleView cha
+//        parentAdapter = new HomeParentAdapter(parentItemList);
+//        rvCategory.setAdapter(parentAdapter);
+//
 
         return view;
     }

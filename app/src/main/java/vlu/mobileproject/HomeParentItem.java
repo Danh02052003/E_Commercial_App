@@ -2,28 +2,30 @@ package vlu.mobileproject;
 
 import java.util.List;
 
+import vlu.mobileproject.modle.Products;
+
 public class HomeParentItem {
     private String subCategory;
-    private List<HomeChildItem> childItemList;
+    private List<Products> products;
 
-    public HomeParentItem(String subCategory, List<HomeChildItem> childItemList) {
+    public HomeParentItem(String subCategory, List<Products> products) {
         this.subCategory = subCategory;
-        this.childItemList = childItemList;
+        this.products = products;
     }
 
     public String getSubCategory() {
         return subCategory;
     }
 
-    public List<HomeChildItem> getChildItemList() {
-        return childItemList;
+    public List<Products> getChildItemList() {
+        return products;
     }
 
     public void setSubCategory(String subCategory) {
         this.subCategory = subCategory;
     }
 
-    public void setChildItemList(List<HomeChildItem> childItemList) {
-        this.childItemList = childItemList;
+    public void setChildItemList(List<Products> products) {
+        this.products = products;
     }
 }

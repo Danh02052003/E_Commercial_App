@@ -46,7 +46,7 @@ public class ProductInCartAdapter extends RecyclerView.Adapter<ProductInCartAdap
         holder.tvCart_productName.setText(product.getProductName());
         holder.tvCart_productPrice.setText("$" + String.valueOf(product.getProductPrice()));
         holder.tvCart_quantityAdded.setText(String.valueOf(product.getProductQuantity()) + "x");
-        holder.ivCart_productImg.setImageResource(product.getProductImg());
+//        holder.ivCart_productImg.setImageResource(product.getProductImg());
         holder.rlRemoveProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

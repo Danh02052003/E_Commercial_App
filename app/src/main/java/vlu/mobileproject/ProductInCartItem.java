@@ -5,10 +5,10 @@ public class ProductInCartItem {
     private double productPrice;
     private int inCartId;
     private int productQuantity;
-    private int productImg;
+    private String productImg;
     private boolean isChecked = false;
 
-    public ProductInCartItem(String productName, double productPrice, int productQuantity, int productImg) {
+    public ProductInCartItem(String productName, double productPrice, int productQuantity, String productImg) {
         this.productName = productName;
         this.productPrice = productPrice;
         this.productQuantity = productQuantity;
@@ -47,11 +47,11 @@ public class ProductInCartItem {
         this.productQuantity = productQuantity;
     }
 
-    public int getProductImg() {
+    public String getProductImg() {
         return productImg;
     }
 
-    public void setProductImg(int productImg) {
+    public void setProductImg(String productImg) {
         this.productImg = productImg;
     }
 

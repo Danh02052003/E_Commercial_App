@@ -19,13 +19,14 @@ import java.util.List;
 import vlu.mobileproject.AllFrag;
 import vlu.mobileproject.HomeChildItem;
 import vlu.mobileproject.R;
+import vlu.mobileproject.modle.Products;
 
 public class ProductAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<HomeChildItem> productList;
+    private ArrayList<Products> productList;
 
-    public ProductAdapter(Context context, ArrayList<HomeChildItem> productList) {
+    public ProductAdapter(Context context, ArrayList<Products> productList) {
         this.context = context;
         this.productList = productList;
     }
@@ -52,23 +53,23 @@ public class ProductAdapter extends BaseAdapter {
         }
 
         // Get the current product item
-        HomeChildItem product = productList.get(position);
+        Products product = productList.get(position);
 
         ImageView imgProductId = convertView.findViewById(R.id.imgPhoneSearch);
         TextView textProductName = convertView.findViewById(R.id.txtNamePhone);
 
         // Set the product_id as the image resource
-        imgProductId.setImageResource(product.getProductImg());
+//        imgProductId.setImageResource(product.getProduct_img());
 
         // Set the product_name to the TextView
-        textProductName.setText(product.getProductName());
+        textProductName.setText(product.getProduct_name());
 
         return convertView;
     }
 
     // Add this method to update the adapter data
     @SuppressLint("RestrictedApi")
-    public void updateData(List<HomeChildItem> filteredData) {
+    public void updateData(List<Products> filteredData) {
         clear();
         addAll(filteredData); // Add the filtered data to the adapter
         notifyDataSetChanged(); // Notify the ListView that the data has changed

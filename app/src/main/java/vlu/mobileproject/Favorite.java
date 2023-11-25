@@ -20,7 +20,6 @@ import vlu.mobileproject.adapter.HomeChildAdapter;
 public class Favorite extends AppCompatActivity {
     RecyclerView rvForExpand;
 
-    List<HomeChildItem> childItemList;
     HomeChildAdapter adapter;
 
     ImageButton btnBack;

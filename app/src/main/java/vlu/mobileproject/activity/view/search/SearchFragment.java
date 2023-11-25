@@ -28,6 +28,7 @@ import vlu.mobileproject.ProductDetailsActivity;
 import vlu.mobileproject.R;
 import vlu.mobileproject.adapter.ProductAdapter;
 import vlu.mobileproject.globalfuction.GlobalData;
+import vlu.mobileproject.modle.Products;
 
 
 public class SearchFragment extends Fragment implements filterBottomSheetFragment.FilterListener  {
@@ -35,8 +36,8 @@ public class SearchFragment extends Fragment implements filterBottomSheetFragmen
     SearchView searchItem;
     ListView listViewProduct;
     int minPriceValue, maxPriceValue;
-    private ArrayList<HomeChildItem> allProducts;
-    private ArrayList<HomeChildItem> displayedProducts;
+    private ArrayList<Products> allProducts;
+    private ArrayList<Products> displayedProducts;
     ImageButton btnFilter;
     private ProductAdapter productAdapter;
     RangeSlider rangeSlider;
@@ -66,7 +67,7 @@ public class SearchFragment extends Fragment implements filterBottomSheetFragmen
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         // Call the initData() method to populate the allProducts list
-        GlobalData.initData();
+//        GlobalData.initData(getContext());
     }
 
     @SuppressLint("MissingInflatedId")
@@ -145,7 +146,7 @@ public class SearchFragment extends Fragment implements filterBottomSheetFragmen
         listViewProduct.setOnItemClickListener((parent, view, position, id) -> {
             // Get the selected product from the displayedProducts list
             if (position >= 0 && position < displayedProducts.size()) {
-                HomeChildItem selectedProduct = displayedProducts.get(position);
+                Products selectedProduct = displayedProducts.get(position);
 
                 // Check if the selected product is not null before proceeding
                 if (selectedProduct != null) {
@@ -173,14 +174,14 @@ public class SearchFragment extends Fragment implements filterBottomSheetFragmen
     // function
     private void filterProductList(String query, int minPriceValue, int maxPriceValue) {
         // Create a new list to store the filtered products
-        List<HomeChildItem> filteredProducts = new ArrayList<>();
+        List<Products> filteredProducts = new ArrayList<>();
 
         // Iterate through all products and check for matching names and price range
-        for (HomeChildItem product : allProducts) {
+        for (Products product : allProducts) {
             // Check for matching names
-            if (product.getProductName().toLowerCase(Locale.getDefault()).contains(query.toLowerCase(Locale.getDefault()))) {
+            if (product.getProduct_name().toLowerCase(Locale.getDefault()).contains(query.toLowerCase(Locale.getDefault()))) {
                 // Check for price range
-                int productPrice = (int) product.getProductPrice(); // Convert the price to int
+                int productPrice = (int) product.getPriceForMemory(); // Convert the price to int
                 if (productPrice >= this.minPriceValue && productPrice <= this.maxPriceValue) {
                     filteredProducts.add(product);
                 }

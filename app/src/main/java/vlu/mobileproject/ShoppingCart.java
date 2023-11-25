@@ -3,14 +3,16 @@ package vlu.mobileproject;
 import java.util.ArrayList;
 import java.util.List;
 
+import vlu.mobileproject.modle.Products;
+
 public class ShoppingCart {
     public static List<ShoppingCart> lstProduct = new ArrayList<>();
 
-    public HomeChildItem item;
+    public Products item;
     public int quantity;
     public double price;
 
-    public ShoppingCart(HomeChildItem item, int quantity, double price) {
+    public ShoppingCart(Products item, int quantity, double price) {
         this.item = item;
         this.quantity = quantity;
         this.price = price;

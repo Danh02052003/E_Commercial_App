@@ -15,11 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vlu.mobileproject.adapter.HomeChildAdapter;
+import vlu.mobileproject.modle.Products;
 
 public class ViewAllProduct extends AppCompatActivity {
     RecyclerView rvForExpand;
 
-    List<HomeChildItem> childItemList;
+    List<Products> childItemList;
     HomeChildAdapter adapter;
 
     ImageButton btnBack;
@@ -33,7 +34,7 @@ public class ViewAllProduct extends AppCompatActivity {
         rvForExpand.setLayoutManager(new GridLayoutManager(this, 2));
 
         Intent intent = getIntent();
-        childItemList = (List<HomeChildItem>) intent.getSerializableExtra("dataList");
+        childItemList = (List<Products>) intent.getSerializableExtra("dataList");
 
         adapter = new HomeChildAdapter(this, childItemList);
         rvForExpand.setAdapter(adapter);

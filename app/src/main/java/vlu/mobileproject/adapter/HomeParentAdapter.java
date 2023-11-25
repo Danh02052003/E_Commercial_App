@@ -18,6 +18,7 @@ import vlu.mobileproject.HomeChildItem;
 import vlu.mobileproject.HomeParentItem;
 import vlu.mobileproject.R;
 import vlu.mobileproject.ViewAllProduct;
+import vlu.mobileproject.modle.Products;
 
 public class HomeParentAdapter extends RecyclerView.Adapter<HomeParentAdapter.ViewHolder>{
     public List<HomeParentItem> parentItemList;
@@ -36,9 +37,9 @@ public class HomeParentAdapter extends RecyclerView.Adapter<HomeParentAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         HomeParentItem parentItem = parentItemList.get(position);
-        List<HomeChildItem> childItemList = parentItem.getChildItemList();
+        List<Products> products = parentItem.getChildItemList();
 
-        HomeChildAdapter childAdapter = new HomeChildAdapter(holder.itemView.getContext(), childItemList);
+        HomeChildAdapter childAdapter = new HomeChildAdapter(holder.itemView.getContext(), products);
         holder.rvChildList.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext(),LinearLayoutManager.HORIZONTAL,false ));
         holder.rvChildList.setAdapter(childAdapter);
         holder.tvSubCategory_name.setText(parentItem.getSubCategory());
@@ -46,7 +47,7 @@ public class HomeParentAdapter extends RecyclerView.Adapter<HomeParentAdapter.Vi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ViewAllProduct.class);
-                intent.putExtra("dataList", (Serializable) childItemList);
+                intent.putExtra("dataList", (Serializable) products);
                 v.getContext().startActivity(intent);
             }
         });

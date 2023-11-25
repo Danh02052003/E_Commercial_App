@@ -3,6 +3,7 @@ package vlu.mobileproject.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,19 +14,29 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.List;
 
 import vlu.mobileproject.Favorite;
 import vlu.mobileproject.HomeChildItem;
 import vlu.mobileproject.ProductDetailsActivity;
 import vlu.mobileproject.R;
+import vlu.mobileproject.modle.Products;
 
 public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.ViewHolder>{
-    public List<HomeChildItem> childItemList;
+//    public List<HomeChildItem> childItemList;
+    public List<Products> productsList;
     private Context mContext;
-    public HomeChildAdapter(Context context, List<HomeChildItem> childItemList) {
+//    public HomeChildAdapter(Context context, List<HomeChildItem> childItemList) {
+//        this.mContext = context;
+//        this.childItemList = childItemList;
+//    }
+    public HomeChildAdapter(Context context, List<Products> productsList) {
         this.mContext = context;
-        this.childItemList = childItemList;
+        this.productsList = productsList;
     }
 
     @NonNull
@@ -37,45 +48,76 @@ public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        HomeChildItem childItem = childItemList.get(position);
+//        HomeChildItem childItem = childItemList.get(position);
+//
+//        holder.tvProductName.setText(childItem.getProductName());
+//        holder.tvProductCategory.setText(childItem.getProductCategory());
+//        holder.tvProductPrice.setText("$" + String.valueOf(childItem.getProductPrice()));
+//        holder.ivProductImg.setImageResource(childItem.getProductImg());
+//        holder.layoutItem.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                onClickGoToDetail(childItem);
+//            }
+//        });
+        Products product = productsList.get(position);
 
-        holder.tvProductName.setText(childItem.getProductName());
-        holder.tvProductCategory.setText(childItem.getProductCategory());
-        holder.tvProductPrice.setText("$" + String.valueOf(childItem.getProductPrice()));
-        holder.ivProductImg.setImageResource(childItem.getProductImg());
+        holder.tvProductName.setText(product.getProduct_name());
+
+        switch (product.getProduct_categoryId()){
+            case 1:
+                holder.tvProductCategory.setText("Samsung");
+                break;
+            case 2:
+                holder.tvProductCategory.setText("Apple");
+                break;
+        }
+
+        holder.tvProductPrice.setText(String.valueOf(product.getProduct_memoryOptions()));
+
+        StorageReference imgRef = FirebaseStorage.getInstance("gs://e-commerce-73482.appspot.com").getReference().child(product.getProduct_img());
+        imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            product.setProduct_img(uri.toString());
+            String imageURL = product.getProduct_img();
+            Glide.with(mContext).load(imageURL).into(holder.ivProductImg);
+        }).addOnFailureListener(e -> {
+            Log.e(this.toString(), "Error loading image from Firebase: " + e.getMessage());
+            e.printStackTrace();
+        });
         holder.layoutItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                onClickGoToDetail(childItem);
+                onClickGoToDetail(product);
             }
         });
 
     }
-    public void onClickGoToDetail(HomeChildItem childItem){
+    public void onClickGoToDetail(Products product){
         Intent intent = new Intent(mContext, ProductDetailsActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("object_product",childItem);
+        bundle.putSerializable("object_product",product);
         intent.putExtras(bundle);
 
         mContext.startActivity(intent);
     }
 
-    public void setItems(List<HomeChildItem> items) {
+    public void setItems(List<Products> items) {
         int removedPosition = -1;
-        for (int i = 0; i < childItemList.size(); i++) {
-            if (!items.contains(childItemList.get(i))) {
+        for (int i = 0; i < productsList.size(); i++) {
+            if (!items.contains(productsList.get(i))) {
                 removedPosition = i;
                 break;
             }
         }
-        this.childItemList = items;
+        this.productsList = items;
         notifyItemRemoved(removedPosition);
     }
 
     @Override
     public int getItemCount() {
-        return childItemList.size();
+        return productsList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
