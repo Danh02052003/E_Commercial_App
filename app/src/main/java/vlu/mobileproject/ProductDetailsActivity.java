@@ -2,6 +2,7 @@ package vlu.mobileproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,6 +30,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -77,22 +80,15 @@ public class ProductDetailsActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
 
         product = (Products) bundle.getSerializable("object_product");
-        // Check if the product object is not null before accessing its properties
         if (product != null) {
 
             tvDetails_productName.setText(product.getProduct_name());
             tvDetails_productPrice.setText("$" + String.valueOf(product.getPriceForMemory()));
             tvDetails_productDescr.setText("Ngày sản xuất: " + product.getProduct_createdDate() + "\n" + product.getProduct_description());
-            StorageReference imgRef = FirebaseStorage.getInstance("gs://e-commerce-73482.appspot.com/product_image/samsung").getReference().child(product.getProduct_img());
-            imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                product.setProduct_img(uri.toString());
-                String imageURL = product.getProduct_img();
-                Glide.with(this).load(imageURL).into(ivDetails_productIllustration);
-                Glide.with(this).load(imageURL).into(ivDetailsAddProduct_productImg);
-            }).addOnFailureListener(e -> {
-                Log.e(this.toString(), "Error loading image from Firebase: " + e.getMessage());
-                e.printStackTrace();
-            });
+
+            Glide.with(this).load(product.getProduct_img()).into(ivDetails_productIllustration);
+            Glide.with(this).load(product.getProduct_img()).into(ivDetailsAddProduct_productImg);
+
             tvDetailsAddProduct_productPrice.setText("$" + String.valueOf(product.getPriceForMemory()));
             tvDetails_nProductLeft.setText("Còn " + 1 + " sản phẩm.");
 
@@ -110,16 +106,29 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
             capacitiesAdapter = new ArrayAdapter<>(this, R.layout.capacity_item, R.id.tvCapacity, product.getMemory());
             gvCapacities.setAdapter(capacitiesAdapter);
+            String[] memoryOptions = product.getMemory();
+
             gvCapacities.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                     if(gvCapacities.isItemChecked(position)) {
+                        for(int i = 0; i < gvCapacities.getChildCount(); i++) {
+                            if(i == position) {
+                                continue;
+                            }
+                            TextView textView = gvCapacities.getChildAt(i).findViewById(R.id.tvCapacity);
+                            textView.setTextColor(Color.BLACK);
+                            textView.setBackgroundColor(Color.WHITE);
+                            gvCapacities.setItemChecked(i, false);
+                            tvDetailsAddProduct_productPrice.setText(String.valueOf(product.getPriceForMemory(memoryOptions[position])));
+                            tvDetails_quantity_2.setText(String.valueOf(product.getQuantityForMemory(memoryOptions[position])));
+
+                        }
                         view = gvCapacities.getChildAt(position);
-                        view.setBackgroundColor(Color.BLUE);
-                        productPriceBasedCapacity = position * 50;
+                        TextView textView = view.findViewById(R.id.tvCapacity);
+                        textView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
+                        textView.setTextColor(Color.WHITE);
                     }else {
-                        view = gvCapacities.getChildAt(position);
-                        view.setBackgroundColor(124333);
 
                     }
                     capacitiesAdapter.notifyDataSetChanged();

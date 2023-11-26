@@ -76,7 +76,7 @@ public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.View
 
         holder.tvProductPrice.setText(String.valueOf(product.getProduct_memoryOptions()));
 
-        StorageReference imgRef = FirebaseStorage.getInstance("gs://e-commerce-73482.appspot.com").getReference().child(product.getProduct_img());
+        StorageReference imgRef = FirebaseStorage.getInstance().getReference().child(product.getProduct_img());
         imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
             product.setProduct_img(uri.toString());
             String imageURL = product.getProduct_img();

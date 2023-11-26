@@ -411,6 +411,7 @@
                     android:background="@color/greyVLUS"
                     android:horizontalSpacing="40dp"
                     android:numColumns="2"
+                    android:choiceMode="multipleChoice"
                     android:verticalSpacing="20dp" />
 
                 <LinearLayout
