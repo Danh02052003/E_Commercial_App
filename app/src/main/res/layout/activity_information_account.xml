@@ -70,18 +70,228 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="282dp"
-        android:text="Cài đặt"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:text="Cài đặt" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/acc_hor_rec"
+    <LinearLayout
+        android:id="@+id/lLanguage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/NameSetting"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="6dp"
-        android:layout_marginBottom="6dp" />
+        android:layout_marginTop="360dp"
+        android:orientation="horizontal">
 
+        <ImageView
+            android:id="@+id/imgLanguage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="24dp"
+            android:src="@drawable/language" />
+
+        <TextView
+            android:id="@+id/Language"
+            style="@style/TEXT"
+            android:layout_width="342dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:text="Ngôn ngữ"
+            android:textSize="9pt" />
+
+        <TextView
+            android:id="@+id/detailLanguage"
+            style="@style/SpecialText"
+            android:layout_width="16dp"
+            android:layout_height="14dp"
+            android:layout_gravity="center"
+            android:text="VI" />
+
+        <ImageButton
+            android:id="@+id/btnGoToLanguage"
+            style="@style/BUTTON"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+
+            android:src="@drawable/btn" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lNotify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lLanguage"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="24dp"
+            android:src="@drawable/notification" />
+
+        <TextView
+            style="@style/TEXT"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:text="Thông Báo"
+            android:textSize="9pt" />
+
+
+        <ImageButton
+            android:id="@+id/btnGoToNotification"
+            style="@style/BUTTON"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/btn" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lDarkmode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lNotify"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="24dp"
+            android:src="@drawable/darkmode" />
+
+        <TextView
+            style="@style/TEXT"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:text="Chế độ tối"
+            android:textSize="9pt" />
+
+
+        <Switch
+            android:id="@+id/switchDarkMode"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lDarkmode"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="24dp"
+            android:src="@drawable/information" />
+
+        <TextView
+            style="@style/TEXT"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:text="Thông tin"
+            android:textSize="9pt" />
+
+
+        <ImageButton
+            android:id="@+id/BtnGoToIn4Detail"
+            style="@style/BUTTON"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/btn" />
+
+
+    </LinearLayout>
+
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imgNotification"-->
+    <!--        android:layout_width="40dp"-->
+    <!--        android:layout_height="40dp"-->
+    <!--        android:layout_marginStart="24dp"-->
+    <!--        android:layout_marginTop="348dp"-->
+    <!--        android:src="@drawable/notification" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/Notification"-->
+    <!--        style="@style/TEXT"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="84dp"-->
+    <!--        android:layout_marginTop="361dp"-->
+    <!--        android:text="Thông Báo" />-->
+
+    <!--    <ImageButton-->
+    <!--        android:id="@+id/btnGoToNotification"-->
+    <!--        style="@style/BUTTON"-->
+    <!--        android:layout_width="30dp"-->
+    <!--        android:layout_height="30dp"-->
+    <!--        android:layout_marginStart="350dp"-->
+    <!--        android:layout_marginTop="350dp"-->
+    <!--        android:src="@drawable/btn" />-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imgDarkMode"-->
+    <!--        android:layout_width="40dp"-->
+    <!--        android:layout_height="40dp"-->
+    <!--        android:layout_marginStart="24dp"-->
+    <!--        android:layout_marginTop="418dp"-->
+    <!--        android:src="@drawable/darkmode" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/DarkMode"-->
+    <!--        style="@style/TEXT"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="84dp"-->
+    <!--        android:layout_marginTop="431dp"-->
+    <!--        android:text="Chế độ tối" />-->
+
+    <!--    <Switch-->
+    <!--        android:id="@+id/switchDarkMode"-->
+    <!--        android:layout_width="50dp"-->
+    <!--        android:layout_height="20dp"-->
+    <!--        android:layout_marginStart="350dp"-->
+    <!--        android:layout_marginTop="428dp" />-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imgInformation"-->
+    <!--        android:layout_width="40dp"-->
+    <!--        android:layout_height="40dp"-->
+    <!--        android:layout_marginStart="24dp"-->
+    <!--        android:layout_marginTop="488dp"-->
+    <!--        android:src="@drawable/information" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/Information"-->
+    <!--        style="@style/TEXT"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="84dp"-->
+    <!--        android:layout_marginTop="501dp"-->
+    <!--        android:text="Thông tin" />-->
+
+    <!--    <ImageButton-->
+    <!--        android:id="@+id/BtnGoToIn4Detail"-->
+    <!--        style="@style/BUTTON"-->
+    <!--        android:layout_width="30dp"-->
+    <!--        android:layout_height="30dp"-->
+    <!--        android:layout_marginStart="350dp"-->
+    <!--        android:layout_marginTop="488dp"-->
+    <!--        android:src="@drawable/btn" />-->
 </RelativeLayout>

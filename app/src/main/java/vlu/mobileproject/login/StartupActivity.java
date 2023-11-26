@@ -56,7 +56,7 @@ public class StartupActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(StartupActivity.this, "Đặng nhập Ko công" + e, Toast.LENGTH_SHORT).show();
-                        FirebaseAuthSettings
+                       // FirebaseAuthSettings
                     }
                 })
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
