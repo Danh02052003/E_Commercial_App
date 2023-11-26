@@ -98,6 +98,24 @@ public class Products implements Serializable {
         return firstMemoryOption.getProduct_price();
 
     }
+
+    public double getPriceForMemory(String memory) {
+        for (MemoryOption option : product_memoryOptions.values()) {
+            if (option.getMemory() == memory) {
+                return option.getProduct_price();
+            }
+        }
+        return 0.0;
+    }
+    public double getQuantityForMemory(String memory) {
+        for (MemoryOption option : product_memoryOptions.values()) {
+            if (option.getMemory() == memory) {
+                return option.getQuantity();
+            }
+        }
+        return 0.0;
+    }
+
     public String[] getMemory(){
         String[] memory = new String[product_memoryOptions.size()];
         int i = 0;
@@ -108,7 +126,7 @@ public class Products implements Serializable {
         return memory;
     }
 
-    public static class MemoryOption {
+    public static class MemoryOption implements Serializable {
         private String memory;
         private double product_price;
         private int quantity;
