@@ -63,7 +63,7 @@
             android:name=".activity.view.profile.Information_Account"
             android:exported="false" />
         <activity
-            android:name=".activity.view.home.MainActivity"
+            android:name=".login.loading"
             android:exported="false" />
     </application>
 
