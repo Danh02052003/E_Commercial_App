@@ -16,6 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,7 +37,6 @@ import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 import vlu.mobileproject.R;
 import vlu.mobileproject.globalfuction.ImageHandler;
-import vlu.mobileproject.login.UserManager;
 import vlu.mobileproject.modle.User;
 
 
@@ -46,7 +47,7 @@ public class Information_Account_Detail extends AppCompatActivity {
     static CircleImageView imgAvatarAccount;
     static String bet = "https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/";
     // email or sdt from login account
-    private String userEmail = UserManager.getInstance().getUserEmail();
+    private String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
     String emailAccountLogin = userEmail;
 
     // use for avatar
@@ -64,7 +65,6 @@ public class Information_Account_Detail extends AppCompatActivity {
         addEvents();
         storageRef = FirebaseStorage.getInstance().getReference();
         fetchUserDataFromFirebase(emailAccountLogin);
-
     }
 
     private void addEvents() {

@@ -6,8 +6,7 @@
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -46,11 +45,11 @@
             android:exported="false" />
 
         <activity
-            android:name=".login.start"
+            android:name=".login.StartupActivity"
             android:exported="false" />
 
         <activity
-            android:name=".login.sigup"
+            android:name=".login.SignupActivity"
             android:exported="false" />
 
         <activity

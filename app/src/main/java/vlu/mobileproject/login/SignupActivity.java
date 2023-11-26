@@ -3,7 +3,6 @@ package vlu.mobileproject.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,8 +21,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import vlu.mobileproject.R;
+import vlu.mobileproject.activity.view.home.MainActivity;
 
-public class sigup extends AppCompatActivity {
+public class SignupActivity extends AppCompatActivity {
     private EditText editTextUsername;
     private EditText editTextEmail;
     private EditText editTextPassword;
@@ -48,7 +48,7 @@ public class sigup extends AppCompatActivity {
         buttonSignup = findViewById(R.id.bttSignup);
         dangnhap = findViewById(R.id.dangNhap);
         dangnhap.setOnClickListener(view -> {
-            Intent intent = new Intent(sigup.this, LoginActivity.class);
+            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
             startActivity(intent);
         });
         buttonSignup.setOnClickListener(v -> signupUser());
@@ -89,7 +89,6 @@ public class sigup extends AppCompatActivity {
             return;
         }
 
-
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -99,7 +98,7 @@ public class sigup extends AppCompatActivity {
                             if (currentUser != null) {
                                 // User registration successful
                                 String verificationCode = generateVerificationCode();
-                                saveUserDataToDatabase(username, email, password,phone, verificationCode);
+                                saveUserDataToDatabase(username,phone, verificationCode);
                             }
                         } else {
                             // Handle specific registration failure cases
@@ -108,11 +107,11 @@ public class sigup extends AppCompatActivity {
                             } catch (Exception e) {
                                 // Check if the email is already in use by another user
                                 if (e instanceof FirebaseAuthUserCollisionException) {
-                                    Toast.makeText(sigup.this, "\n" +
+                                    Toast.makeText(SignupActivity.this, "\n" +
                                             "Email đã được sử dụng. Vui lòng chọn một email khác.", Toast.LENGTH_SHORT).show();
                                 } else {
                                     // Handle other registration errors
-                                    Toast.makeText(sigup.this, "\n" +
+                                    Toast.makeText(SignupActivity.this, "\n" +
                                             "Đăng ky thât bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -121,17 +120,9 @@ public class sigup extends AppCompatActivity {
                 });
     }
 
-    private void saveUserDataToDatabase(String user_name, String user_email, String user_password, String user_phone, String verificationCode) {
-
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("User");
-
-
+    private void saveUserDataToDatabase(String user_name, String user_phone, String verificationCode) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-
-        user newUser = new user(user_name, user_email, user_password, user_phone, verificationCode);
-
-
+        user newUser = new user(user_name, user_phone, verificationCode);
         usersRef.child(userId).setValue(newUser)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -139,7 +130,7 @@ public class sigup extends AppCompatActivity {
                         sendVerificationEmail();
                     } else {
 
-                        Toast.makeText(sigup.this, "\n" +
+                        Toast.makeText(SignupActivity.this, "\n" +
                                 "Không thể lưu thông tin người dùng", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -154,16 +145,19 @@ public class sigup extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
 
-                            Toast.makeText(sigup.this, "Email xác nhận đã được gửi", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignupActivity.this, "Email xác nhận đã được gửi", Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
 
                         } else {
 
-                            Toast.makeText(sigup.this, "Không thể gửi email xác minh\n", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignupActivity.this, "Không thể gửi email xác minh\n", Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {
-
-            Toast.makeText(sigup.this, "Không tìm thấy người dùng. Vui lòng thử lại", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignupActivity.this, "Không tìm thấy người dùng. Vui lòng thử lại", Toast.LENGTH_SHORT).show();
         }
     }
 

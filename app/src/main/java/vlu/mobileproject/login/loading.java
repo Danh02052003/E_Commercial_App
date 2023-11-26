@@ -21,7 +21,7 @@ public class loading extends AppCompatActivity {
             @Override
             public void run() {
 
-                Intent intent = new Intent(loading.this, start.class);
+                Intent intent = new Intent(loading.this, StartupActivity.class);
                 startActivity(intent);
                 finish(); // Finish the loading activity to prevent going back to it on back press
             }
