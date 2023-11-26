@@ -88,7 +88,6 @@ public class SignupActivity extends AppCompatActivity {
             Toast.makeText(this, "Mật khẩu không được chứa ký tự đặc biệt", Toast.LENGTH_SHORT).show();
             return;
         }
-
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override

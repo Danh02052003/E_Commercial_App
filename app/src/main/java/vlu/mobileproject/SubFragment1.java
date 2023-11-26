@@ -38,7 +38,7 @@ public class SubFragment1 extends Fragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.sample_fragment, container, false);
 
         TitleText = root.findViewById(R.id.Title);
-        TitleText.setText("Samsung");
+        TitleText.setText(typeOfPhone);
         // Connect to the parent fragment (AllFrag) and retrieve all products
         allProducts = new ArrayList<>();
         allProducts = new ArrayList<>(GlobalData.forYou_list);

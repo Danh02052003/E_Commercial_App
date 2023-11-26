@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
     private static final int POS_SUB_ITEM1 = 1;
     private static final int POS_SUB_ITEM2 = 2;
     private static final int POS_SUB_ITEM3 = 3;
-    private static final int POS_SETTING = 5;
+    private static final int POS_SETTING = 4;
 
     // bottom navigation View
     ActionBar actionBar;
@@ -303,8 +303,8 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
             SubFragment3 subFragment3 = new SubFragment3();
             transaction.replace(R.id.mainContainer, subFragment3);
         } else if (position == POS_SETTING) {
-            SettingFragment settingsFragment = new SettingFragment();
-            transaction.replace(R.id.mainContainer, settingsFragment);
+            Intent intent = new Intent(MainActivity.this, Information_Account.class);
+            startActivity(intent);
         }
 
         slidingRootNav.closeMenu();
