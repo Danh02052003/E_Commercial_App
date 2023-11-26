@@ -47,7 +47,8 @@ public class Information_Account_Detail extends AppCompatActivity {
     static CircleImageView imgAvatarAccount;
     static String bet = "https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/";
     // email or sdt from login account
-    private String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+    private String userEmail = FirebaseAuth.getInstance().getCurrentUser().getUid();
     String emailAccountLogin = userEmail;
 
     // use for avatar
