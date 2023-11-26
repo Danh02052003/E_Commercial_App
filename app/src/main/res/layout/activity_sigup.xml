@@ -18,6 +18,14 @@
         tools:layout_editor_absoluteX="19dp"
         tools:layout_editor_absoluteY="150dp" />
 
+    <FrameLayout
+        android:layout_marginTop="10dp"
+        android:id="@+id/SignupContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/textView5"
+        android:paddingBottom="70dp"/>
+
     <EditText
         android:id="@+id/passWord"
         android:layout_width="362dp"

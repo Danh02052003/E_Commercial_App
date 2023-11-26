@@ -114,7 +114,6 @@ private void addEvent(){
 
     private void loginUser() {
         final String email = emailEditText.getText().toString().trim();
-        UserManager.getInstance().setUserEmail(email);
         final String password = passwordEditText.getText().toString().trim();
 
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
@@ -122,6 +121,7 @@ private void addEvent(){
             return;
         }
 
+        UserManager.getInstance().setUserEmail(email);
         mAuthLog.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override

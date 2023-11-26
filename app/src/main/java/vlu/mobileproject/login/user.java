@@ -7,8 +7,8 @@ public class user {
     public String userPhone;
     private String verificationCode;
 
-    public user(String userPhone) {
-        this.userPhone = userPhone;
+    public user(String userName) {
+        this.userName = userName;
     }
 
     public String getUserPhone() {

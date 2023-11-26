@@ -10,22 +10,26 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthSettings;
+import com.google.firebase.auth.PhoneAuthCredential;
 
 import io.paperdb.Paper;
 import vlu.mobileproject.R;
+import vlu.mobileproject.activity.view.home.MainActivity;
 
 public class StartupActivity extends AppCompatActivity {
-    FirebaseAuth mAuthLog;
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        mAuthLog = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
         Paper.init(this);
     }
@@ -33,12 +37,41 @@ public class StartupActivity extends AppCompatActivity {
     public void onStartButtonClick(View view) {
         String UserEmail = Paper.book().read("UserEmailKey");
         String UserPass = Paper.book().read("UserPassKey");
+        PhoneAuthCredential credential = Paper.book().read("credential");
+        signInWithPhoneAuthCredential(credential);
 
-        if (!TextUtils.isEmpty(UserEmail) && !TextUtils.isEmpty(UserPass)) {
-            AllowUserAccess(UserEmail, UserPass);
+        if (!TextUtils.isEmpty(UserEmail) && !TextUtils.isEmpty(UserPass) || !TextUtils.isEmpty(credential.zzd())) {
+            if (!TextUtils.isEmpty(UserEmail) && !TextUtils.isEmpty(UserPass)) {
+                AllowUserAccess(UserEmail, UserPass);
+                return;
+            }
+
         } else {
             OpenLoginActivity();
         }
+    }
+
+    void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+        firebaseAuth.signInWithCredential(credential).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(StartupActivity.this, "Đặng nhập Ko công" + e, Toast.LENGTH_SHORT).show();
+                        FirebaseAuthSettings
+                    }
+                })
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(StartupActivity.this, "Đặng nhập thành công", Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(StartupActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+
+                });
     }
 
     void OpenLoginActivity() {
@@ -48,7 +81,7 @@ public class StartupActivity extends AppCompatActivity {
     }
 
     void AllowUserAccess(String email, String password) {
-        mAuthLog.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
