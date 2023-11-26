@@ -138,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
 
         screenTitles = loadScreenTitles();
 
-        //Hello World
         DrawerAdapter adapter = new DrawerAdapter(Arrays.asList(
                 createItemFor(POS_MAIN_MENU).setChecked(true),
                 createItemFor(POS_SUB_ITEM1),
@@ -235,51 +234,6 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
 
     }
 
-
-    private void fetchUserDataFromFirebase(String userEmail) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance(bet);
-        DatabaseReference myRef = database.getReference("User");
-
-        // Query for the specific user with the target email
-        Query query = myRef.orderByChild("user_email").equalTo(userEmail);
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists() && snapshot.hasChildren()) {
-                    // Assuming there is only one user with the given email, retrieve the first child
-                    DataSnapshot userSnapshot = snapshot.getChildren().iterator().next();
-
-                    // Get the user object from the snapshot
-                    User user = userSnapshot.getValue(User.class);
-
-                    if (snapshot.exists()) {
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            if (user != null) {
-                                String nameAcc = dataSnapshot.child("user_name").getValue(String.class);
-                                String emailAcc = dataSnapshot.child("user_email").getValue(String.class);
-
-                                tvDisplayName.setText(nameAcc);
-                                tvUserEmail.setText(emailAcc);
-                                Log.d("UserData", "Name: " + nameAcc + ", Email: " + emailAcc);
-
-                            }
-                        }
-                    }
-
-                } else {
-                    // Handle the case when no user with the given email is found
-                    Log.d("FirebaseError", "No user found with the email: " + userEmail);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Handle the error if needed
-                Log.e("FirebaseError", "Error loading data from Firebase: " + error.getMessage());
-            }
-        });
-    }
     public void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -340,11 +294,11 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
             HomeFragment homeFragment = new HomeFragment();
             transaction.replace(R.id.mainContainer, homeFragment);
         } else if (position == POS_SUB_ITEM1) {
-            SubFragment1 subFragment1 = new SubFragment1();
+            SubFragment1 subFragment1 = new SubFragment1("Iphone");
             transaction.replace(R.id.mainContainer, subFragment1);
         } else if (position == POS_SUB_ITEM2) {
-            SubFragment2 subFragment2 = new SubFragment2();
-            transaction.replace(R.id.mainContainer, subFragment2);
+            SubFragment1 subFragment1 = new SubFragment1("Samsung");
+            transaction.replace(R.id.mainContainer, subFragment1);
         } else if (position == POS_SUB_ITEM3) {
             SubFragment3 subFragment3 = new SubFragment3();
             transaction.replace(R.id.mainContainer, subFragment3);
