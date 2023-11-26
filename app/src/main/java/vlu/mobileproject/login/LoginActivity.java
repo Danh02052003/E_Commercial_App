@@ -56,11 +56,6 @@ public class LoginActivity extends AppCompatActivity {
             recreate();
         });
 
-
-        // Khởi tạo Firebase Database
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/");
-        usersRef = database.getReference("User");
-
         RememberUser = findViewById(R.id.RememberUser);
         emailEditText = findViewById(R.id.editTextUserName); // Updated to the correct ID for email input
         passwordEditText = findViewById(R.id.editTextPassword);
