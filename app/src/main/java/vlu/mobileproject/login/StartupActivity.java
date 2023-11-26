@@ -38,7 +38,7 @@ public class StartupActivity extends AppCompatActivity {
         String UserEmail = Paper.book().read("UserEmailKey");
         String UserPass = Paper.book().read("UserPassKey");
         PhoneAuthCredential credential = Paper.book().read("credential");
-        signInWithPhoneAuthCredential(credential);
+        //signInWithPhoneAuthCredential(credential);
 
         if (!TextUtils.isEmpty(UserEmail) && !TextUtils.isEmpty(UserPass) || !TextUtils.isEmpty(credential.zzd())) {
             if (!TextUtils.isEmpty(UserEmail) && !TextUtils.isEmpty(UserPass)) {
