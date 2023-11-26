@@ -44,7 +44,7 @@ public class Information_Account extends Information_Account_Detail {
     CircleImageView imgAvatarAccount;
     TextView NameAccount;
     ImageButton BtnGoToIn4Detail, btnGoToLanguage, btnGoToNotification, BtnBack;
-    private String userEmail = UserManager.getInstance().getUserEmail();
+    private String userID = UserManager.getInstance().getUserEmail();
 
 
     ArrayList<AccProfileSettingMenuModel> ProfileSettingList;
@@ -58,7 +58,7 @@ public class Information_Account extends Information_Account_Detail {
         setContentView(R.layout.activity_information_account);
         addControls();
         addEvents();
-        fetchUserDataFromFirebase(userEmail);
+        fetchUserDataFromFirebase(userID);
 
         ImageHandler.setImageFromFirebaseStorage(imgAvatarAccount, emailAccountLogin);
 
