@@ -47,6 +47,7 @@ import com.yarolegovich.slidingrootnav.callback.DragStateListener;
 import java.util.Arrays;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.paperdb.Paper;
 import vlu.mobileproject.DrawerItem;
 import vlu.mobileproject.Favorite;
 import vlu.mobileproject.HomeFragment;
@@ -66,6 +67,7 @@ import vlu.mobileproject.globalfuction.DarkModeUtils;
 import vlu.mobileproject.globalfuction.ImageHandler;
 import vlu.mobileproject.login.LoginActivity;
 import vlu.mobileproject.login.SignupActivity;
+import vlu.mobileproject.login.StartupActivity;
 import vlu.mobileproject.login.loading;
 import vlu.mobileproject.modle.User;
 
@@ -142,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
                 createItemFor(POS_SUB_ITEM1),
                 createItemFor(POS_SUB_ITEM2),
                 createItemFor(POS_SUB_ITEM3),
-                new SpaceItem(75),
                 createItemFor(POS_SETTING)
 
         ));
@@ -296,15 +297,19 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
     }
 
     public void onLayoutClicked(View view) {
-        if (view.getId() == R.id.ll_logout) {
-            this.finish();
-        } else if (view.getId() == R.id.ivCircle) {
-            this.finish();
-        } else if (view.getId() == R.id.ivRightArrow) {
-            this.finish();
-        } else if (view.getId() == R.id.tvLogout) {
-            this.finish();
+        if (view.getId() == R.id.ll_logout || view.getId() == R.id.ivCircle || view.getId() == R.id.ivCircle || view.getId() == R.id.tvLogout) {
+            Logout();
         }
+    }
+
+    void Logout(){
+        FirebaseAuth.getInstance().signOut();
+        Paper.init(MainActivity.this);
+        Paper.book().destroy();
+
+        Intent intent = new Intent(MainActivity.this, StartupActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private DrawerItem createItemFor(int position) {
