@@ -34,44 +34,40 @@ public class StartupActivity extends AppCompatActivity {
         String UserEmail = Paper.book().read("UserEmailKey");
         String UserPass = Paper.book().read("UserPassKey");
 
-        if (UserEmail != "" && UserPass != "") {
-            if (!TextUtils.isEmpty(UserEmail) && !TextUtils.isEmpty(UserPass)) {
-                AllowUserAccess(UserEmail, UserPass);
-            }
+        if (!TextUtils.isEmpty(UserEmail) && !TextUtils.isEmpty(UserPass)) {
+            AllowUserAccess(UserEmail, UserPass);
         } else {
             OpenLoginActivity();
         }
     }
 
-    void OpenLoginActivity(){
+    void OpenLoginActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
 
     void AllowUserAccess(String email, String password) {
-        mAuthLog.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            UserManager.getInstance().setUserEmail(email);
-                            Toast.makeText(StartupActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(StartupActivity.this, vlu.mobileproject.activity.view.home.MainActivity.class);
+        mAuthLog.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    UserManager.getInstance().setUserEmail(email);
+                    Toast.makeText(StartupActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(StartupActivity.this, vlu.mobileproject.activity.view.home.MainActivity.class);
 
-                            // Pass user-specific data if needed
-                            intent.putExtra("user_email", email);
-                            startActivity(intent);
-                            finish();
+                    // Pass user-specific data if needed
+                    intent.putExtra("user_email", email);
+                    startActivity(intent);
+                    finish();
 
-                        } else {
-                            Toast.makeText(StartupActivity.this, "Mật khẩu đã bị sửa đổi hoặc tài khoản đã bị xóa.",
-                                    Toast.LENGTH_SHORT).show();
-                            Paper.book().destroy();
-                            OpenLoginActivity();
-                        }
-                    }
-                });
+                } else {
+                    Toast.makeText(StartupActivity.this, "Mật khẩu đã bị sửa đổi hoặc tài khoản đã bị xóa.", Toast.LENGTH_SHORT).show();
+                    Paper.book().destroy();
+                    OpenLoginActivity();
+                }
+            }
+        });
     }
 }
 
