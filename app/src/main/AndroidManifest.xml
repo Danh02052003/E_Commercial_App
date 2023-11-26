@@ -27,7 +27,7 @@
         <activity
 
 
-            android:name=".activity.view.home.MainActivity"
+            android:name=".login.loading"
             android:exported="true" >
 
             <intent-filter>
@@ -77,8 +77,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".login.loading"
-
+            android:name=".activity.view.home.MainActivity"
             android:exported="false" />
 
     </application>

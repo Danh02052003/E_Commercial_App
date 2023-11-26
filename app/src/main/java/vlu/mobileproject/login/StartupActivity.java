@@ -1,4 +1,5 @@
 package vlu.mobileproject.login;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,16 +19,18 @@ import vlu.mobileproject.R;
 
 public class StartupActivity extends AppCompatActivity {
     FirebaseAuth mAuthLog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        mAuthLog=FirebaseAuth.getInstance();
+        mAuthLog = FirebaseAuth.getInstance();
 
         Paper.init(this);
-       // Paper.book().destroy();
+    }
 
+    public void onStartButtonClick(View view) {
         String UserEmail = Paper.book().read("UserEmailKey");
         String UserPass = Paper.book().read("UserPassKey");
 
@@ -35,11 +38,12 @@ public class StartupActivity extends AppCompatActivity {
             if (!TextUtils.isEmpty(UserEmail) && !TextUtils.isEmpty(UserPass)) {
                 AllowUserAccess(UserEmail, UserPass);
             }
+        } else {
+            OpenLoginActivity();
         }
     }
 
-    public void onStartButtonClick(View view) {
-
+    void OpenLoginActivity(){
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
@@ -53,7 +57,7 @@ public class StartupActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             UserManager.getInstance().setUserEmail(email);
                             Toast.makeText(StartupActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(StartupActivity.this,vlu.mobileproject.activity.view.home.MainActivity.class);
+                            Intent intent = new Intent(StartupActivity.this, vlu.mobileproject.activity.view.home.MainActivity.class);
 
                             // Pass user-specific data if needed
                             intent.putExtra("user_email", email);
@@ -61,9 +65,10 @@ public class StartupActivity extends AppCompatActivity {
                             finish();
 
                         } else {
-                            Toast.makeText(StartupActivity.this, "Mật khẩu hoặc Email không đúng.",
+                            Toast.makeText(StartupActivity.this, "Mật khẩu đã bị sửa đổi hoặc tài khoản đã bị xóa.",
                                     Toast.LENGTH_SHORT).show();
                             Paper.book().destroy();
+                            OpenLoginActivity();
                         }
                     }
                 });
