@@ -78,8 +78,8 @@ public class filterBottomSheetFragment extends BottomSheetDialogFragment {
         imgCancel = view.findViewById(R.id.imgCancel);
         // Set up your filter options and their functionality here
         rangeSlider.setValueFrom(0f);
-        rangeSlider.setValueTo(2000f);
-        rangeSlider.setValues(0f, 2000f);
+        rangeSlider.setValueTo(5000f);
+        rangeSlider.setValues(0f, 5000f);
         addEvent();
 
 

@@ -39,7 +39,7 @@ public class SearchFragment extends Fragment implements filterBottomSheetFragmen
     private ArrayList<Products> allProducts;
     private ArrayList<Products> displayedProducts;
 
-    int minPriceValue, maxPriceValue = 2000;
+    int minPriceValue, maxPriceValue = 5000;
 
     ImageButton btnFilter;
     private ProductAdapter productAdapter;
@@ -121,7 +121,7 @@ public class SearchFragment extends Fragment implements filterBottomSheetFragmen
         maxPriceValue = endValue;
 
         // Filter products based on the search query and price range
-        filterProductList(searchItem.getQuery().toString(), minPriceValue, maxPriceValue);
+        filterProductList(searchItem.getQuery().toString());
     }
 
     @Override
@@ -141,7 +141,7 @@ public class SearchFragment extends Fragment implements filterBottomSheetFragmen
             @Override
             public boolean onQueryTextChange(String newText) {
                 // Filter the product list on text change
-                filterProductList(newText, minPriceValue, maxPriceValue);
+                filterProductList(newText);
                 return true;
             }
         });
@@ -175,7 +175,7 @@ public class SearchFragment extends Fragment implements filterBottomSheetFragmen
     }
 
     // function
-    private void filterProductList(String query, int minPriceValue, int maxPriceValue) {
+    private void filterProductList(String query) {
         // Create a new list to store the filtered products
         List<Products> filteredProducts = new ArrayList<>();
 
