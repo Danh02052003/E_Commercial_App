@@ -52,25 +52,18 @@ public class StartupActivity extends AppCompatActivity {
     }
 
     void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        firebaseAuth.signInWithCredential(credential).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(StartupActivity.this, "Đặng nhập Ko công" + e, Toast.LENGTH_SHORT).show();
-                       // FirebaseAuthSettings
-                    }
-                })
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(StartupActivity.this, "Đặng nhập thành công", Toast.LENGTH_SHORT).show();
+        firebaseAuth.signInWithCredential(credential).addOnFailureListener(e -> {
+            Toast.makeText(StartupActivity.this, "Đặng nhập Ko công" + e, Toast.LENGTH_SHORT).show();
+           // FirebaseAuthSettings
+        })
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(StartupActivity.this, "Đặng nhập thành công", Toast.LENGTH_SHORT).show();
 
-                            Intent intent = new Intent(StartupActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
+                        Intent intent = new Intent(StartupActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
-
                 });
     }
 
