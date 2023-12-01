@@ -50,11 +50,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuthLog = FirebaseAuth.getInstance();
-        btnTranslate = findViewById(R.id.btnTranslate);
-        btnTranslate.setOnClickListener(v-> {
-            LanguageHelper.changeLanguage(getResources(), "vi");
-            recreate();
-        });
 
         RememberUser = findViewById(R.id.RememberUser);
         emailEditText = findViewById(R.id.editTextUserName); // Updated to the correct ID for email input
