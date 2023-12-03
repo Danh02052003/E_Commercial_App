@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthSettings;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 
 import io.paperdb.Paper;
@@ -35,36 +36,27 @@ public class StartupActivity extends AppCompatActivity {
     }
 
     public void onStartButtonClick(View view) {
-        String UserEmail = Paper.book().read("UserEmailKey");
-        String UserPass = Paper.book().read("UserPassKey");
-        PhoneAuthCredential credential = Paper.book().read("credential");
-        //signInWithPhoneAuthCredential(credential);
+        boolean RememberUser;
+        try {
+            RememberUser = Paper.book().read("RememberUser");
+        } catch (Exception e) {
+            RememberUser = false;
+        }
 
-        if (!TextUtils.isEmpty(UserEmail) && !TextUtils.isEmpty(UserPass)) {
-            if (!TextUtils.isEmpty(UserEmail) && !TextUtils.isEmpty(UserPass)) {
-                AllowUserAccess(UserEmail, UserPass);
-                return;
-            }
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if(currentUser != null && RememberUser){
+            UserManager.getInstance().setUserEmail(currentUser.getEmail());
+            Toast.makeText(StartupActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(StartupActivity.this, vlu.mobileproject.activity.view.home.MainActivity.class);
 
-        } else {
+            // Pass user-specific data if needed
+            intent.putExtra("user_email", currentUser.getEmail());
+            startActivity(intent);
+            finish();
+        }
+        else {
             OpenLoginActivity();
         }
-    }
-
-    void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        firebaseAuth.signInWithCredential(credential).addOnFailureListener(e -> {
-            Toast.makeText(StartupActivity.this, "Đặng nhập Ko công" + e, Toast.LENGTH_SHORT).show();
-           // FirebaseAuthSettings
-        })
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(StartupActivity.this, "Đặng nhập thành công", Toast.LENGTH_SHORT).show();
-
-                        Intent intent = new Intent(StartupActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
     }
 
     void OpenLoginActivity() {

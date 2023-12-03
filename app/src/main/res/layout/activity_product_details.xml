@@ -281,11 +281,11 @@
                     android:id="@+id/tvDetails_expand"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="6pt"
-                    android:textColor="@color/greenVLUS"
-                    android:layout_marginTop="5dp"
                     android:layout_marginLeft="24dp"
-                    android:text="Xem thêm >" />
+                    android:layout_marginTop="5dp"
+                    android:text="Xem thêm >"
+                    android:textColor="@color/greenVLUS"
+                    android:textSize="6pt" />
 
             </LinearLayout>
 

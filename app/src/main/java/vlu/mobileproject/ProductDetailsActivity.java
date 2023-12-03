@@ -249,50 +249,52 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         });
 
-//        ibtnDetails_remove_1.setOnClickListener(view -> {
-//            if (productQuantityAdded != 0){
-//                productQuantityAdded--;
-//            }
-//            SetTextForQuantity();
-//        });
-//
-//        ibtnDetails_remove_2.setOnClickListener(view -> {
-//            if (productQuantityAdded != 0){
-//                productQuantityAdded--;
-//            }
-//            SetTextForQuantity();
-//        });
-//
-//        ibtnDetails_add_1.setOnClickListener(view -> {
+        ibtnDetails_remove_1.setOnClickListener(view -> {
+            if (productQuantityAdded != 0){
+                productQuantityAdded--;
+            }
+            SetTextForQuantity();
+        });
+
+        ibtnDetails_remove_2.setOnClickListener(view -> {
+            if (productQuantityAdded != 0){
+                productQuantityAdded--;
+            }
+            SetTextForQuantity();
+        });
+
+        ibtnDetails_add_1.setOnClickListener(view -> {
+            productQuantityAdded++;
+
 //            if (productQuantityAdded < product.getQuantity()){
-//                productQuantityAdded++;
 //            }
-//            SetTextForQuantity();
-//        });
-//
-//        ibtnDetails_add_2.setOnClickListener(view -> {
+            SetTextForQuantity();
+        });
+
+        ibtnDetails_add_2.setOnClickListener(view -> {
+            productQuantityAdded++;
+
 //            if (productQuantityAdded < product.getQuantity()){
-//                productQuantityAdded++;
 //            }
-//            SetTextForQuantity();
-//        });
-//
-//        tvDetails_expand.setOnClickListener(view -> {
-//            if (tvDetails_expand.getText().equals("Xem thêm >")){
-//                tvDetails_productDescr.setMaxLines(10);
-//                tvDetails_expand.setText("Thu gọn <");
-//            }
-//            else {
-//                tvDetails_productDescr.setMaxLines(2);
-//                tvDetails_expand.setText("Xem thêm >");
-//            }
-//
-//
-//        });
-//
-//        btnBack.setOnClickListener(view -> {
-//            finish();
-//        });
+            SetTextForQuantity();
+        });
+
+        tvDetails_expand.setOnClickListener(view -> {
+            if (tvDetails_expand.getText().equals("Xem thêm >")){
+                tvDetails_productDescr.setMaxLines(10);
+                tvDetails_expand.setText("Thu gọn <");
+            }
+            else {
+                tvDetails_productDescr.setMaxLines(2);
+                tvDetails_expand.setText("Xem thêm >");
+            }
+
+
+        });
+
+        btnBack.setOnClickListener(view -> {
+            finish();
+        });
 
     }
 

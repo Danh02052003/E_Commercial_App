@@ -9,6 +9,7 @@
     <!--login-->
     <string name="login">Đăng nhập</string>
     <string name="email">Địa chỉ email</string>
+    <string name="emailorphonenumb">Địa chỉ email hoặc số điện thoại</string>
     <string name="pass">Mật khẩu</string>
     <string name="forgot">Quên mật khẩu</string>
     <string name="no_user">Chưa có tài khoản?</string>

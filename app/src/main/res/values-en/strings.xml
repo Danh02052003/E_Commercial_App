@@ -5,6 +5,7 @@
     <string name="start">Start</string>
     <string name="login">Login</string>
     <string name="email">Email</string>
+    <string name="emailorphonenumb">Email</string>
     <string name="pass">Password</string>
     <string name="forgot">Forgot password</string>
     <string name="no_user">Don\'t have account</string>
