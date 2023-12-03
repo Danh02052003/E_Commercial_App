@@ -11,7 +11,10 @@ public class ShoppingCart {
     public Products item;
 
     String productID;
+    public int quantity;
+    public double price;
 
+    String UserID;
     public String getProductID() {
         return productID;
     }
@@ -20,16 +23,14 @@ public class ShoppingCart {
         this.productID = productID;
     }
 
-    public int quantity;
-    public double price;
+    public ShoppingCart() {
 
-    String UserID;
+    }
 
-    public ShoppingCart(Products item, int quantity, double price) {
-        this.item = item;
+    public ShoppingCart(String productID, int quantity, double price) {
         this.quantity = quantity;
         this.price = price;
-        //lstProduct.add(this);
+        this.productID = productID;
     }
     public ShoppingCart(String productID, int quantity) {
         this.quantity = quantity;

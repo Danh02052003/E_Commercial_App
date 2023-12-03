@@ -1,20 +1,25 @@
 package vlu.mobileproject.activity.view.cart;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -22,8 +27,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import vlu.mobileproject.HomeChildItem;
-import vlu.mobileproject.ProductDetailsActivity;
 import vlu.mobileproject.ProductInCartItem;
 import vlu.mobileproject.R;
 import vlu.mobileproject.ShoppingCart;
@@ -45,6 +48,8 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
 
     String formattedValue;
 
+    DatabaseReference cartReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,71 +64,102 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         btnBack.setOnClickListener(view -> {
             finish();
         });
-
+        cartReference = FirebaseDatabase.getInstance().getReference("Cart");
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
 
-        if (bundle != null) {
-            if (bundle.containsKey("object_product")) {
-                product = (Products) bundle.getSerializable("object_product");
+        GetListFromShoppingCart();
+        if (inCartItemList.size() != 0) {
 
+            rvProductAdded = findViewById(R.id.rvProductAdded);
+            rvProductAdded.setLayoutManager(new LinearLayoutManager(this));
 
-                rvProductAdded = findViewById(R.id.rvProductAdded);
-                rvProductAdded.setLayoutManager(new LinearLayoutManager(this));
+            adapter = new ProductInCartAdapter(inCartItemList);
+            adapter.setOnCheckedChangeListener(this);
+            rvProductAdded.setAdapter(adapter);
+            rvProductAdded.setVisibility(View.VISIBLE);
 
-                inCartItemList = getListProductAdded();
-                adapter = new ProductInCartAdapter(inCartItemList);
-                adapter.setOnCheckedChangeListener(this);
-                rvProductAdded.setAdapter(adapter);
-                rvProductAdded.setVisibility(View.VISIBLE);
+            View cartItemView = getLayoutInflater().inflate(R.layout.cart_item,null);
 
-                View cartItemView = getLayoutInflater().inflate(R.layout.cart_item,null);
+            cbCartCheck = cartItemView.findViewById(R.id.cbCartCheck);
 
-                cbCartCheck = cartItemView.findViewById(R.id.cbCartCheck);
-
-                PayControl();
-                addControl();
-
-            } else {
-                tvCart_state = findViewById(R.id.tvCart_state);
-                tvCart_state.setVisibility(View.VISIBLE);
-
-            }
+            PayControl();
+            addControl();
         }
         else {
-            if(ShoppingCart.lstProduct.size() == 0){
-                tvCart_state = findViewById(R.id.tvCart_state);
-                tvCart_state.setVisibility(View.VISIBLE);
-            }
-            else {
-                rvProductAdded = findViewById(R.id.rvProductAdded);
-                rvProductAdded.setLayoutManager(new LinearLayoutManager(this));
-
-                inCartItemList = getListFromShoppingCartOBJ(ShoppingCart.lstProduct);
-                adapter = new ProductInCartAdapter(inCartItemList);
-                adapter.setOnCheckedChangeListener(this);
-                rvProductAdded.setAdapter(adapter);
-                rvProductAdded.setVisibility(View.VISIBLE);
-
-                View cartItemView = getLayoutInflater().inflate(R.layout.cart_item,null);
-                cbCartCheck = cartItemView.findViewById(R.id.cbCartCheck);
-                cbCartCheck.setChecked(true);
-
-//                RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-//                rvProductAdded.addItemDecoration(itemDecoration);
-
-                PayControl();
-                addControl();
-            }
-
+            tvCart_state = findViewById(R.id.tvCart_state);
+            tvCart_state.setVisibility(View.VISIBLE);
         }
+    }
 
 
+    void GetListFromShoppingCart() {
+        cartReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    ShoppingCart cartItem = dataSnapshot.getValue(ShoppingCart.class);
+                    String productId = cartItem.getProductID();
 
+                    DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("Products");
+                    productsRef.child(productId).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot productSnapshot) {
+                            if (productSnapshot.exists()) {
+                                Products productDetails = productSnapshot.getValue(Products.class);
+                                int quantity = cartItem.getQuantity();
+                                double totalPrice = quantity * cartItem.getPrice();
+
+                                inCartItemList.add(new ProductInCartItem(productDetails.getProduct_name(), cartItem.price, cartItem.quantity, productDetails.getProduct_img()));
+
+                                // Now you have the total price, you can use it as needed
+                                Log.d("TotalPrice", String.valueOf(totalPrice));
+                                LoadCartItem2View();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+                    // Break out of the loop since the product is found
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle errors
+            }
+        });
+    }
+
+    void LoadCartItem2View() {
+        if (inCartItemList.size() != 0) {
+
+            rvProductAdded = findViewById(R.id.rvProductAdded);
+            rvProductAdded.setLayoutManager(new LinearLayoutManager(this));
+
+            adapter = new ProductInCartAdapter(inCartItemList);
+            adapter.setOnCheckedChangeListener(this);
+            adapter.notifyDataSetChanged();
+            rvProductAdded.setAdapter(adapter);
+            rvProductAdded.setVisibility(View.VISIBLE);
+
+            View cartItemView = getLayoutInflater().inflate(R.layout.cart_item,null);
+
+            cbCartCheck = cartItemView.findViewById(R.id.cbCartCheck);
+
+            PayControl();
+            addControl();
+        }
+        else {
+            tvCart_state = findViewById(R.id.tvCart_state);
+            tvCart_state.setVisibility(View.VISIBLE);
+        }
     }
 
     private List<ProductInCartItem> getListProductAdded(){
-        inCartItemList = getListFromShoppingCartOBJ(ShoppingCart.lstProduct);
+        GetListFromShoppingCart();
         if (inCartItemList.size() != 0){
             ProductInCartItem lastProduct = new ProductInCartItem(product.getProduct_name(), ShoppingCart.lstProduct.get(ShoppingCart.lstProduct.size()-1).price, ShoppingCart.lstProduct.get(ShoppingCart.lstProduct.size()-1).quantity, product.getProduct_img());
             inCartItemList.remove(inCartItemList.size()-1);
@@ -137,29 +173,12 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
 
             SetIdForProduct();
             return inCartItemList;
-
         }
         else {
             inCartItemList.add(new ProductInCartItem(product.getProduct_name(), product.getPriceForMemory(), 1, product.getProduct_img()));
             inCartItemList.get(0).setInCartId(1);
             return inCartItemList;
         }
-
-    }
-
-    private List<ProductInCartItem> getListFromShoppingCartOBJ(List<ShoppingCart> lst){
-        for (ShoppingCart productInCart : lst) {
-            inCartItemList.add(new ProductInCartItem(productInCart.item.getProduct_name(), productInCart.price, productInCart.quantity, productInCart.item.getProduct_img()));
-        }
-        SetIdForProduct();
-        return inCartItemList;
-
-
-//        for ( HomeChildItem product : lst) {
-//            inCartItemList.add(new ProductInCartItem(product.getProductName(), product.getProductPrice(), product.getQuantity(), product.getProductImg()));
-//
-//        }
-
     }
 
     private void SetIdForProduct(){
@@ -168,7 +187,6 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
             x.setInCartId(i);
             i++;
         }
-
     }
 
     @Override

@@ -214,7 +214,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             Bundle bundleSender = new Bundle();
             bundleSender.putSerializable("object_product", product);
             intentt.putExtras(bundleSender);
-            ShoppingCart itemPutInCart = new ShoppingCart(product, productQuantityAdded, product.getPriceForMemory() + productPriceBasedCapacity);
+            //ShoppingCart itemPutInCart = new ShoppingCart(product, productQuantityAdded, product.getPriceForMemory() + productPriceBasedCapacity);
 //           ShoppingCart.lstProduct.add(product);
 //           ShoppingCart.lstQuantity.add(productQuantityAdded);
             startActivity(intentt);
@@ -226,9 +226,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
             cartReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    int i = 0;
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        Products CartItemProduct = dataSnapshot.getValue(Products.class);
+                        ShoppingCart CartItemProduct = dataSnapshot.getValue(ShoppingCart.class);
                         String productID = CartItemProduct.getProductID();
 
                         shouldCreateNewCartItem = productID.equals(product.getProductID());
@@ -239,7 +238,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         }
                     }
                     if (!shouldCreateNewCartItem) {
-                        ShoppingCart itemPutInCart = new ShoppingCart(product.getProductID(), productQuantityAdded);
+                        ShoppingCart itemPutInCart = new ShoppingCart(product.getProductID(), productQuantityAdded, product.getPriceForMemory() + productPriceBasedCapacity);
                         SaveCardItem(itemPutInCart);
                     }
                 }
@@ -248,8 +247,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError error) {
                 }
             });
-
-
 
             rlPopupWindow.setVisibility(View.INVISIBLE);
             btnDetails_wAddToCart.setVisibility(View.INVISIBLE);

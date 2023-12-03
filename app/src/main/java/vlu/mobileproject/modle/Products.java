@@ -13,16 +13,6 @@ public class Products implements Serializable {
     private Map<String, MemoryOption> product_memoryOptions;
     private String product_name;
 
-    private int quantity;
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     String ProductID;
 
     public String getProductID() {
