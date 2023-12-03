@@ -17,12 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MobileProject"
         tools:targetApi="31">
-        <activity
-            android:name=".login.SignInSMSTest"
-            android:exported="true" >
-
-
-        </activity>
 <!-- Activities -->
         <activity
             android:name=".login.LoginActivity"
