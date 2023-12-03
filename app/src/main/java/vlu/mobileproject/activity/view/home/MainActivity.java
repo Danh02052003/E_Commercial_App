@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
     Toolbar toolbar;
     RelativeLayout layoutBorder;
     ImageButton myImageButton, ibtnCart;
-    static String bet = "https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/";
+    public static String bet = "https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/";
 
     TextView tvDisplayName, tvUserEmail;
     private String[] screenTitles;

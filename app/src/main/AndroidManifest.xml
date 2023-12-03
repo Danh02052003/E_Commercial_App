@@ -22,7 +22,7 @@
             android:name=".login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".login.loading"
+            android:name=".activity.view.home.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -58,7 +58,7 @@
             android:name=".activity.view.profile.Information_Account"
             android:exported="false" />
         <activity
-            android:name=".activity.view.home.MainActivity"
+            android:name=".login.loading"
             android:exported="false" />
     </application>
 
