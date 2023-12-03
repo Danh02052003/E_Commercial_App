@@ -24,15 +24,20 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException;
+import com.google.firebase.auth.FirebaseAuthSettings;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import io.paperdb.Paper;
 import vlu.mobileproject.R;
@@ -127,6 +132,7 @@ public class SignupActivity extends AppCompatActivity {
                                     @Override
                                     public void onVerify(String code) {
                                         PhoneAuthCredential credential = VerifyCode(code);
+
                                         saveUserDataToDatabase(username , credential);
                                         signInWithPhoneAuthCredential(credential);
                                     }
@@ -153,17 +159,46 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     void SendVerificationCode(String phoneNumber) {
-        PhoneAuthOptions options =
-                PhoneAuthOptions.newBuilder(firebaseAuth)
-                        .setPhoneNumber(phoneNumber)       // Phone number to verify
-                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                        .setActivity(this)                 // (optional) Activity for callback binding
-                        // If no activity is passed, reCAPTCHA verification can not be used.
-                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
-                        .build();
-        PhoneAuthProvider.verifyPhoneNumber(options);
+        checkForPhoneNumber(phoneNumber, exists -> {
+            if (!exists) {
+                PhoneAuthOptions options =
+                        PhoneAuthOptions.newBuilder(firebaseAuth)
+                                .setPhoneNumber(phoneNumber)       // Phone number to verify
+                                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                                .setActivity(this)                 // (optional) Activity for callback binding
+                                .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+                                .build();
+                PhoneAuthProvider.verifyPhoneNumber(options);
 
+                VerifyDialog.showDialog(SignupActivity.this, new VerifyDialog.OnVerifyListener() {
+                    @Override
+                    public void onVerify(String code) {
+                        PhoneAuthCredential credential = VerifyCode(code);
+                        signInWithPhoneAuthCredential(credential);
+                    }
+                });
+            } else {
+                Toast.makeText(SignupActivity.this, "Số này đã được sử dụng", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
+    void checkForPhoneNumber(String number, Consumer<Boolean> callback) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+        ref.orderByChild("phone").equalTo(number).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                callback.accept(dataSnapshot.exists());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
 
@@ -226,9 +261,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        Paper.init(this);
         UserManager.getInstance().setUserEmail(firebaseAuth.getCurrentUser().getEmail());
-        Paper.book().write("credential", credential);
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -251,6 +284,8 @@ public class SignupActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         firebaseAuth.getCurrentUser().updatePhoneNumber(credential);
+                        Paper.init(this);
+                        Paper.book().write("RememberUser", true);
                         Toast.makeText(SignupActivity.this, "Đặng kí thành công", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(SignupActivity.this, "\n" +

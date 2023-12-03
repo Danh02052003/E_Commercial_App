@@ -13,6 +13,16 @@ public class Products implements Serializable {
     private Map<String, MemoryOption> product_memoryOptions;
     private String product_name;
 
+    String ProductID;
+
+    public String getProductID() {
+        return ProductID;
+    }
+
+    public void setProductID(String productID) {
+        ProductID = productID;
+    }
+
     public Products() {
         product_memoryOptions = new HashMap<>();
     }

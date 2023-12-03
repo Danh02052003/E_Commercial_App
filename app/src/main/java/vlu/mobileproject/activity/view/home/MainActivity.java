@@ -181,7 +181,6 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
 
         btnLogout = drawer_navigation.findViewById(R.id.btnLogout);
 
-
         cvBorderNavigation = findViewById(R.id.cvBorderNavigation);
     }
 
