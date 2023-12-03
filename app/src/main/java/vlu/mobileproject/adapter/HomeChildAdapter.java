@@ -97,7 +97,7 @@ public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.View
     public void onClickGoToDetail(Products product){
         Intent intent = new Intent(mContext, ProductDetailsActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("object_product",product);
+        bundle.putSerializable("object_product", product);
         intent.putExtras(bundle);
 
         mContext.startActivity(intent);

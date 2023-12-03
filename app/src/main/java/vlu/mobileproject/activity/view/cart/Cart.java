@@ -173,30 +173,31 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
 
     @Override
     public void onItemCheckedChanged(int position, boolean isChecked) {
-        ProductInCartItem product1 = inCartItemList.get(position);
+        ProductInCartItem SelectedProduct = inCartItemList.get(position);
         double totalPriceCheckedChanged = 0;
         if (isChecked) {
-            product1.setChecked(true);
-            inCartSelectedList.add(product1);
+            SelectedProduct.setChecked(true);
+            inCartSelectedList.add(SelectedProduct);
         }
         else {
-            product1.setChecked(false);
-            inCartSelectedList.remove(product1);
+            SelectedProduct.setChecked(false);
+            inCartSelectedList.remove(SelectedProduct);
         }
 
         for (ProductInCartItem x : inCartSelectedList) {
             if (x.isChecked()){
                 totalPriceCheckedChanged += x.getProductPrice() * x.getProductQuantity();
                 totalPrice = totalPriceCheckedChanged;
-                DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                formattedValue = decimalFormat.format(totalPrice);
-
             }
-
         }
+        if (inCartSelectedList.size() == 0) {
+            totalPrice = 0;
+        }
+
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        formattedValue = decimalFormat.format(totalPrice);
+        formattedValue = decimalFormat.format(totalPrice);
         tvCart_totalPrice.setText("$" + formattedValue);
-
-
     }
 
     private void PayControl(){
