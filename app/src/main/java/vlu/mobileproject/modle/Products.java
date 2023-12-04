@@ -126,6 +126,14 @@ public class Products implements Serializable {
         return 0.0;
     }
 
+    public double getTotalQuantity() {
+        double totalQuantity = 0.0;
+        for (MemoryOption option : product_memoryOptions.values()) {
+            totalQuantity += option.getQuantity();
+        }
+        return totalQuantity;
+    }
+
     public String[] getMemory(){
         String[] memory = new String[product_memoryOptions.size()];
         int i = 0;
@@ -134,6 +142,16 @@ public class Products implements Serializable {
             i++;
         }
         return memory;
+    }
+
+    public String[] getMemoryOptionName(){
+        String[] memoryOptName = new String[product_memoryOptions.size()];
+        int i = 0;
+        for (String option : product_memoryOptions.keySet()) {
+            memoryOptName[i] = String.valueOf(option);
+            i++;
+        }
+        return memoryOptName;
     }
 
     public static class MemoryOption implements Serializable {
