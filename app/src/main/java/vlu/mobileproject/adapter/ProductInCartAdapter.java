@@ -1,5 +1,7 @@
 package vlu.mobileproject.adapter;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +15,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -22,14 +27,22 @@ import vlu.mobileproject.HomeChildItem;
 import vlu.mobileproject.ProductInCartItem;
 import vlu.mobileproject.R;
 import vlu.mobileproject.ShoppingCart;
+import vlu.mobileproject.modle.Products;
 
 public class ProductInCartAdapter extends RecyclerView.Adapter<ProductInCartAdapter.ViewHolder> {
-    private List<ProductInCartItem> inCartItemList;
+    private List<Products> inCartItemList;
+    private List<Integer> quantityList;
+    private List<String> memoryList;
     private ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
+    private Context mContext;
     private OnCheckedChangeListener onCheckedChangeListener;
 
-    public ProductInCartAdapter(List<ProductInCartItem> inCartItemList) {
+    public ProductInCartAdapter(List<Products> inCartItemList, List<Integer> quantityList, List<String> memoryList, Context mContext) {
         this.inCartItemList = inCartItemList;
+        this.quantityList = quantityList;
+        this.memoryList = memoryList;
+        this.mContext = mContext;
+
     }
 
     @NonNull
@@ -41,25 +54,27 @@ public class ProductInCartAdapter extends RecyclerView.Adapter<ProductInCartAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ProductInCartItem product = inCartItemList.get(position);
-        viewBinderHelper.bind(holder.srl, String.valueOf(product.getInCartId()));
-        holder.tvCart_productName.setText(product.getProductName());
-        holder.tvCart_productPrice.setText("$" + String.valueOf(product.getProductPrice()));
-        holder.tvCart_quantityAdded.setText(String.valueOf(product.getProductQuantity()) + "x");
+        Products product = inCartItemList.get(position);
+        holder.tvCart_productName.setText(product.getProduct_name());
+        holder.tvCart_productPrice.setText("$" + String.valueOf(product.getPriceForMemory(memoryList.get(position))));
+        holder.tvCart_quantityAdded.setText("x"+String.valueOf(quantityList.get(position)));
+        Glide.with(mContext).load(product.getProduct_img()).into(holder.ivCart_productImg);
+//        holder.tvCart_productPrice.setText("$" + String.valueOf(product.getProductPrice()));
+//        holder.tvCart_quantityAdded.setText(String.valueOf(product.getProductQuantity()) + "x");
 //        holder.ivCart_productImg.setImageResource(product.getProductImg());
         holder.rlRemoveProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-
-                if (onCheckedChangeListener != null) {
-                    onCheckedChangeListener.onItemCheckedChanged(holder.getAdapterPosition(), false);
-                }
-                ShoppingCart.lstProduct.remove(holder.getAdapterPosition());
-//                ShoppingCart.lstQuantity.remove(holder.getAdapterPosition());
-
-                ProductInCartItem x = inCartItemList.remove(holder.getAdapterPosition());
-                notifyItemRemoved(holder.getAdapterPosition());
+//
+//                if (onCheckedChangeListener != null) {
+//                    onCheckedChangeListener.onItemCheckedChanged(holder.getAdapterPosition(), false);
+//                }
+//                ShoppingCart.lstProduct.remove(holder.getAdapterPosition());
+////                ShoppingCart.lstQuantity.remove(holder.getAdapterPosition());
+//
+//                ProductInCartItem x = inCartItemList.remove(holder.getAdapterPosition());
+//                notifyItemRemoved(holder.getAdapterPosition());
 
             }
         });
@@ -72,17 +87,17 @@ public class ProductInCartAdapter extends RecyclerView.Adapter<ProductInCartAdap
             }
         });
 
-        holder.ll_selectProduct.setOnClickListener(view -> {
-            if(holder.cbCartCheck.isChecked()){
-                holder.cbCartCheck.setChecked(false);
-                product.setChecked(false);
-            }
-
-            else{
-                holder.cbCartCheck.setChecked(true);
-                product.setChecked(true);
-            }
-        });
+//        holder.ll_selectProduct.setOnClickListener(view -> {
+//            if(holder.cbCartCheck.isChecked()){
+//                holder.cbCartCheck.setChecked(false);
+//                product.setChecked(false);
+//            }
+//
+//            else{
+//                holder.cbCartCheck.setChecked(true);
+//                product.setChecked(true);
+//            }
+//        });
 
     }
 
