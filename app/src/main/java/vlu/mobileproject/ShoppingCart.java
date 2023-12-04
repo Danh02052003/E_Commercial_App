@@ -2,7 +2,6 @@ package vlu.mobileproject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import vlu.mobileproject.modle.Products;
 
@@ -13,17 +12,16 @@ public class ShoppingCart {
 
     String productID;
     public int quantity;
-    public double price;
 
-    public String getSelectedMemoryOption() {
-        return SelectedMemoryOption;
+    public String getMemoryOptName() {
+        return MemoryOptName;
     }
 
-    public void setSelectedMemoryOption(String selectedMemoryOption) {
-        this.SelectedMemoryOption = selectedMemoryOption;
+    public void setMemoryOptName(String selectedMemoryOption) {
+        this.MemoryOptName = selectedMemoryOption;
     }
 
-    String SelectedMemoryOption;
+    String MemoryOptName;
 
     String UserID;
     public String getProductID() {
@@ -38,11 +36,10 @@ public class ShoppingCart {
 
     }
 
-    public ShoppingCart(String productID, int quantity, double price, String productMemoryOption) {
+    public ShoppingCart(String productID, int quantity, String MemoryOptName) {
         this.quantity = quantity;
-        this.price = price;
         this.productID = productID;
-        this.SelectedMemoryOption = productMemoryOption;
+        this.MemoryOptName = MemoryOptName;
     }
     public ShoppingCart(String productID, int quantity) {
         this.quantity = quantity;
@@ -79,13 +76,5 @@ public class ShoppingCart {
 
     public void setItem(Products item) {
         this.item = item;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 }

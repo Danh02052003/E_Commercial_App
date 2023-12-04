@@ -22,7 +22,7 @@
             android:name=".login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.view.home.MainActivity"
+            android:name=".login.StartupActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +34,7 @@
             android:name=".login.ForgotPassword"
             android:exported="false" />
         <activity
-            android:name=".login.StartupActivity"
+            android:name=".activity.view.home.MainActivity"
             android:exported="false" />
         <activity
             android:name=".login.SignupActivity"

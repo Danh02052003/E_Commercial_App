@@ -33,7 +33,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import vlu.mobileproject.activity.view.cart.Cart;
 import vlu.mobileproject.activity.view.home.MainActivity;
@@ -63,10 +62,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
     double productPriceBasedCapacity;
 
     int productQuantityAdded = 1;
-    int productQuantity;
+
     boolean isFavoritePresent;
 
-    boolean shouldCreateNewCartItem = false;
+    boolean shouldAddQuantty = false;
     private final String userEmail = UserManager.getInstance().getUserEmail();
 
     List<TextView> listPrice;
@@ -77,7 +76,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     String productSelectedOption = "";
     double selectedOptionPrice = 0.0;
-    double selectedOptionQuantity = 0;
+    int selectedOptionQuantity = 0;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -107,7 +106,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             String[] memoryOptions = product.getMemory();
 
             tvDetailsAddProduct_productPrice.setText("$" + String.valueOf(product.getPriceForMemory()));
-            tvDetails_nProductLeft.setText("Còn " + product.getTotalQuantity() + " sản phẩm.");
+            tvDetails_nProductLeft.setText("Tổng " + product.getTotalQuantity() + " sản phẩm.");
 
             cartReference = FirebaseDatabase.getInstance().getReference("Cart");
             productRef = FirebaseDatabase.getInstance().getReference("Products");
@@ -125,17 +124,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
                             textView.setTextColor(Color.BLACK);
                             textView.setBackgroundColor(Color.WHITE);
                             gvCapacities.setItemChecked(i, false);
-                            productSelectedOption = product.getMemoryOptionName()[position];
+                            productSelectedOption = product.getMemoryOptionNames()[position];
                             selectedOptionPrice = product.getPriceForMemory(memoryOptions[position]);
                             tvDetailsAddProduct_productPrice.setText(String.valueOf(product.getPriceForMemory(memoryOptions[position])));
-                            productQuantity = product.getQuantityForMemory(memoryOptions[position]);
+                            selectedOptionQuantity = product.getQuantityForMemory(memoryOptions[position]);
                             productQuantityAdded = 1;
                             SetTextForQuantity();
-                            if(productQuantity<=10)
-                                tvDetails_nProductLeft.setText("Chỉ còn " + productQuantity + " sản phẩm.");
-                            else {
-                                tvDetails_nProductLeft.setText("Còn nhiều sản phẩm.");
-                            }
+
+                            tvDetails_nProductLeft.setText(selectedOptionQuantity + " sản phẩm.");
 
                             btnDetails_wAddToCart.setEnabled(true);
                             btnDetails_wAddToCart.setBackgroundResource(R.color.greenVLUS);
@@ -228,48 +224,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
 
         btnDetails_wBuyNow.setOnClickListener(view -> {
-            Intent intentt = new Intent(ProductDetailsActivity.this, Cart.class);
-
-            Bundle bundleSender = new Bundle();
-            bundleSender.putSerializable("object_product", product);
-            intentt.putExtras(bundleSender);
-            //ShoppingCart itemPutInCart = new ShoppingCart(product, productQuantityAdded, product.getPriceForMemory() + productPriceBasedCapacity);
-//           ShoppingCart.lstProduct.add(product);
-//           ShoppingCart.lstQuantity.add(productQuantityAdded);
-            startActivity(intentt);
+            AddProductItem2Cart(true);
 
         });
 
         btnDetails_wAddToCart.setOnClickListener(view -> {
-
-            cartReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        ShoppingCart CartItemProduct = dataSnapshot.getValue(ShoppingCart.class);
-                        String productID = CartItemProduct.getProductID();
-                        String productMemOpt = CartItemProduct.getSelectedMemoryOption();
-
-                        shouldCreateNewCartItem = productID.equals(product.getProductID()) && productSelectedOption.equals(productMemOpt);
-                        if (shouldCreateNewCartItem) {
-                            int newQuantity = CartItemProduct.getQuantity() + productQuantityAdded;
-                            dataSnapshot.getRef().child("quantity").setValue(newQuantity);
-                            break;
-                        }
-                    }
-                    if (!shouldCreateNewCartItem) {
-                        ShoppingCart itemPutInCart = new ShoppingCart(product.getProductID(), productQuantityAdded, selectedOptionPrice + productPriceBasedCapacity, productSelectedOption);
-                        Map<String, Products.MemoryOption> x = product.getProduct_memoryOptions();
-                        Map<String, Products.MemoryOption> y = x;
-                        SaveCardItem(itemPutInCart);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                }
-            });
-
+            AddProductItem2Cart(false);
             rlPopupWindow.setVisibility(View.INVISIBLE);
             btnDetails_wAddToCart.setVisibility(View.INVISIBLE);
         });
@@ -310,7 +270,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
 
         ibtnDetails_add_2.setOnClickListener(view -> {
-            if (productQuantityAdded < productQuantity){
+            if (productQuantityAdded < selectedOptionQuantity){
                 productQuantityAdded++;
             }
             SetTextForQuantity();
@@ -329,6 +289,43 @@ public class ProductDetailsActivity extends AppCompatActivity {
         btnBack.setOnClickListener(view -> {
             finish();
         });
+    }
+
+    void AddProductItem2Cart(boolean shouldMove2Cart) {
+        cartReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    ShoppingCart CartItemProduct = dataSnapshot.getValue(ShoppingCart.class);
+                    String productID = CartItemProduct.getProductID();
+                    String productMemOpt = CartItemProduct.getMemoryOptName();
+
+                    shouldAddQuantty = productID.equals(product.getProductID()) && productSelectedOption.equals(productMemOpt);
+                    if (shouldAddQuantty) {
+                        int newQuantity = CartItemProduct.getQuantity() + productQuantityAdded;
+                        dataSnapshot.getRef().child("quantity").setValue(newQuantity);
+                        break;
+                    }
+                }
+
+                boolean shouldCreateNewCartItem = !shouldAddQuantty;
+                if (shouldCreateNewCartItem) {
+                    ShoppingCart itemPutInCart = new ShoppingCart(product.getProductID(), productQuantityAdded, productSelectedOption);
+                    SaveCardItem(itemPutInCart);
+                }
+                if (shouldMove2Cart) {
+                    Move2Cart();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    void Move2Cart(){
+        Intent intentt = new Intent(ProductDetailsActivity.this, Cart.class);
+        startActivity(intentt);
     }
 
     private void SaveCardItem(ShoppingCart CartItem) {
