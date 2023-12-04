@@ -35,6 +35,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import vlu.mobileproject.activity.view.cart.Cart;
+import vlu.mobileproject.activity.view.home.MainActivity;
 import vlu.mobileproject.login.UserManager;
 import vlu.mobileproject.modle.FavoriteFirebase;
 
@@ -44,7 +45,7 @@ import vlu.mobileproject.translate.UpdateLang;
 import vlu.mobileproject.translate.language;
 
 public class ProductDetailsActivity extends AppCompatActivity {
-    static String bet = "https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/";
+//    static String bet = "https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/";
 
     Button btnDetails_addToCart, btnDetails_buyNow;
 
@@ -61,6 +62,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     double productPriceBasedCapacity;
 
     int productQuantityAdded = 1;
+    int productQuantity;
     boolean isFavoritePresent;
 
     boolean shouldCreateNewCartItem = false;
@@ -93,7 +95,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             Glide.with(this).load(product.getProduct_img()).into(ivDetailsAddProduct_productImg);
 
             tvDetailsAddProduct_productPrice.setText("$" + String.valueOf(product.getPriceForMemory()));
-            tvDetails_nProductLeft.setText("Còn " + 1 + " sản phẩm.");
+
 
 //            tvDetails_productName.setText(product.getProduct_name());
 //            tvDetails_productPrice.setText("$" + product.getProductPrice());
@@ -127,7 +129,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
                             textView.setBackgroundColor(Color.WHITE);
                             gvCapacities.setItemChecked(i, false);
                             tvDetailsAddProduct_productPrice.setText(String.valueOf(product.getPriceForMemory(memoryOptions[position])));
-                            tvDetails_quantity_2.setText(String.valueOf(product.getQuantityForMemory(memoryOptions[position])));
+                            productQuantity = product.getQuantityForMemory(memoryOptions[position]);
+                            productQuantityAdded = 1;
+                            SetTextForQuantity();
+                            if(productQuantity<=10)
+                                tvDetails_nProductLeft.setText("Chỉ còn " + productQuantity + " sản phẩm.");
+                            else {
+                                tvDetails_nProductLeft.setText("Còn nhiều sản phẩm.");
+                            }
 
                         }
                         view = gvCapacities.getChildAt(position);
@@ -289,10 +298,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
 
         ibtnDetails_add_2.setOnClickListener(view -> {
-            productQuantityAdded++;
-
-//            if (productQuantityAdded < product.getQuantity()){
-//            }
+            if (productQuantityAdded < productQuantity){
+                productQuantityAdded++;
+            }
             SetTextForQuantity();
         });
 
@@ -327,7 +335,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     }
 
     private void saveDataToDatabase(String user_email, long product_id) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance(bet);
+        FirebaseDatabase database = FirebaseDatabase.getInstance(MainActivity.bet);
         DatabaseReference usersRef = database.getReference("favorite");
         FavoriteFirebase ff = new FavoriteFirebase(user_email, product_id);
         Log.d("ProductDetailsActivity", "User Email: " + userEmail); // Add this line to check the value in Logcat

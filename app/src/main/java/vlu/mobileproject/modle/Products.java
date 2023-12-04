@@ -111,19 +111,19 @@ public class Products implements Serializable {
 
     public double getPriceForMemory(String memory) {
         for (MemoryOption option : product_memoryOptions.values()) {
-            if (option.getMemory() == memory) {
+            if (option.getMemory().equals(memory)) {
                 return option.getProduct_price();
             }
         }
         return 0.0;
     }
-    public double getQuantityForMemory(String memory) {
+    public int getQuantityForMemory(String memory) {
         for (MemoryOption option : product_memoryOptions.values()) {
             if (option.getMemory() == memory) {
                 return option.getQuantity();
             }
         }
-        return 0.0;
+        return 0;
     }
 
     public String[] getMemory(){
