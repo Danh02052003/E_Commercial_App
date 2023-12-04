@@ -61,14 +61,18 @@ public class Cart extends AppCompatActivity implements GlobalData.AllCallBack {
         setContentView(R.layout.activity_cart);
         GlobalData.initData(this, this);
 
+        rvProductAdded = findViewById(R.id.rvProductAdded);
+        rvProductAdded.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        adapter = new ProductInCartAdapter(inCartItemList, quantityList, memoryList, getApplicationContext());
+        rvProductAdded.setAdapter(adapter);
+
         tvCart_totalPrice = findViewById(R.id.tvCart_totalPrice);
         btnPay = findViewById(R.id.btnPay);
         btnApplyDiscount = findViewById(R.id.btnApplyDiscount);
         edtDiscount = findViewById(R.id.edtDiscount);
         tvCart_discount = findViewById(R.id.tvCart_discount);
         btnBack = findViewById(R.id.btnBack);
-        rvProductAdded = findViewById(R.id.rvProductAdded);
-        rvProductAdded.setLayoutManager(new LinearLayoutManager(this));
+
 
         btnBack.setOnClickListener(view -> {
             finish();
@@ -122,7 +126,6 @@ public class Cart extends AppCompatActivity implements GlobalData.AllCallBack {
 //
 //                                inCartItemList.add(new ProductInCartItem(productDetails.getProduct_name(), cartItem.price, cartItem.quantity, productDetails.getProduct_img()));
 //
-//                                // Now you have the total price, you can use it as needed
 //                                Log.d("TotalPrice", String.valueOf(totalPrice));
 //                                LoadCartItem2View();
 //                            }
@@ -132,7 +135,6 @@ public class Cart extends AppCompatActivity implements GlobalData.AllCallBack {
 //                        public void onCancelled(@NonNull DatabaseError error) {
 //                        }
 //                    });
-//                    // Break out of the loop since the product is found
 //                }
 //            }
 //
@@ -275,8 +277,6 @@ public class Cart extends AppCompatActivity implements GlobalData.AllCallBack {
                  runOnUiThread(new Runnable() {
                      @Override
                      public void run() {
-                         adapter = new ProductInCartAdapter(inCartItemList, quantityList, memoryList, getApplicationContext());
-                         rvProductAdded.setAdapter(adapter);
                          adapter.notifyDataSetChanged();
                          Log.d("Adapter debug: ", "Cart " + String.valueOf(adapter.getItemCount()));
                      }
@@ -307,14 +307,6 @@ public class Cart extends AppCompatActivity implements GlobalData.AllCallBack {
         }
 
     }
-
-    void LoadCart() {
-        rvProductAdded = findViewById(R.id.rvProductAdded);
-        rvProductAdded.setLayoutManager(new LinearLayoutManager(this));
-        rvProductAdded.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-    }
-
 
     public static class CartItem {
         String memory;

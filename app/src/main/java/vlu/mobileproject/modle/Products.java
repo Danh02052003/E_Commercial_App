@@ -111,7 +111,7 @@ public class Products implements Serializable {
 
     public double getPriceForMemory(String memory) {
         for (MemoryOption option : product_memoryOptions.values()) {
-            if (option.getMemory() == memory) {
+            if (option.getMemory().equals(memory)) {
                 return option.getProduct_price();
             }
         }
