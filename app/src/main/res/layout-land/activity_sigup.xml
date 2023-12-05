@@ -13,12 +13,11 @@
         android:layout_height="35dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="4dp"
         android:text="Tạo tài khoản "
         android:textSize="31dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toTopOf="@+id/guideline6" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/passWord"
@@ -152,7 +151,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.068"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline3" />
 
     <TextView
@@ -161,12 +160,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/bttSignup"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="8dp"
         android:text="Đã có tài khoản? "
         android:textSize="14dp"
         app:layout_constraintBottom_toTopOf="@+id/dangNhap"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.204"
+        app:layout_constraintHorizontal_bias="0.053"
         app:layout_constraintStart_toEndOf="@+id/bttSignup" />
 
     <TextView
@@ -175,14 +174,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/bttSignup"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:layout_toEndOf="@+id/textView6"
         android:text="Đăng nhập"
         android:textColor="#00CC96"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.239"
+        app:layout_constraintHorizontal_bias="0.088"
         app:layout_constraintStart_toEndOf="@+id/bttSignup" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -190,7 +189,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.26" />
+        app:layout_constraintGuide_percent="0.3" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

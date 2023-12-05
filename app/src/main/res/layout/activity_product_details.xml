@@ -74,6 +74,7 @@
                         android:layout_below="@id/ivDetails_productIllustration"
                         android:layout_centerHorizontal="true"/>
 
+
                 </RelativeLayout>
 
                 <androidx.cardview.widget.CardView
@@ -309,7 +310,7 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnDetails_buyNow"
-                    android:layout_width="220dp"
+                    android:layout_width="200dp"
                     android:layout_height="60dp"
                     android:textSize="7pt"
                     android:background="@color/greenVLUS"
@@ -327,7 +328,7 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnDetails_addToCart"
-                    android:layout_width="220dp"
+                    android:layout_width="200dp"
                     android:layout_height="60dp"
                     android:textSize="7pt"
                     android:background="@color/greenVLUS"
