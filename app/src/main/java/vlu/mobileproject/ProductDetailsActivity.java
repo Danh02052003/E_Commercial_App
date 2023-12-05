@@ -116,28 +116,21 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                     if (gvCapacities.isItemChecked(position)) {
-                        for (int i = 0; i < gvCapacities.getChildCount(); i++) {
-                            if (i == position) {
-                                //continue;
-                            }
-                            TextView textView = gvCapacities.getChildAt(i).findViewById(R.id.tvCapacity);
-                            textView.setTextColor(Color.BLACK);
-                            textView.setBackgroundColor(Color.WHITE);
-                            gvCapacities.setItemChecked(i, false);
-                            productSelectedOption = product.getMemoryOptionNames()[position];
-                            selectedOptionPrice = product.getPriceForMemory(memoryOptions[position]);
-                            tvDetailsAddProduct_productPrice.setText(String.valueOf(product.getPriceForMemory(memoryOptions[position])));
-                            selectedOptionQuantity = product.getQuantityForMemory(memoryOptions[position]);
-                            productQuantityAdded = 1;
-                            SetTextForQuantity();
+                        reset_gvCapacitiesBtns();
+                        productSelectedOption = product.getMemoryOptionNames()[position];
+                        selectedOptionPrice = product.getPriceForMemory(memoryOptions[position]);
+                        tvDetailsAddProduct_productPrice.setText(String.valueOf(product.getPriceForMemory(memoryOptions[position])));
+                        selectedOptionQuantity = product.getQuantityForMemory(memoryOptions[position]);
+                        productQuantityAdded = 1;
+                        SetTextForQuantity();
 
-                            tvDetails_nProductLeft.setText(selectedOptionQuantity + " sản phẩm.");
+                        tvDetails_nProductLeft.setText(selectedOptionQuantity + " sản phẩm.");
 
-                            btnDetails_wAddToCart.setEnabled(true);
-                            btnDetails_wAddToCart.setBackgroundResource(R.color.greenVLUS);
-                            btnDetails_wBuyNow.setEnabled(true);
-                            btnDetails_wBuyNow.setBackgroundResource(R.color.greenVLUS);
-                        }
+                        btnDetails_wAddToCart.setEnabled(true);
+                        btnDetails_wAddToCart.setBackgroundResource(R.color.greenVLUS);
+                        btnDetails_wBuyNow.setEnabled(true);
+                        btnDetails_wBuyNow.setBackgroundResource(R.color.greenVLUS);
+
                         view = gvCapacities.getChildAt(position);
                         TextView textView = view.findViewById(R.id.tvCapacity);
                         textView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
@@ -195,6 +188,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             btnDetails_wAddToCart.setEnabled(false);
             btnDetails_wAddToCart.setBackgroundResource(R.color.greyIcon);
             btnDetails_wAddToCart.setVisibility(View.VISIBLE);
+            reset_gvCapacitiesBtns();
         });
 
         btnDetails_buyNow.setOnClickListener(view -> {
@@ -202,6 +196,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             btnDetails_wBuyNow.setEnabled(false);
             btnDetails_wBuyNow.setBackgroundResource(R.color.greyIcon);
             btnDetails_wBuyNow.setVisibility(View.VISIBLE);
+            reset_gvCapacitiesBtns();
         });
 
 
@@ -289,6 +284,15 @@ public class ProductDetailsActivity extends AppCompatActivity {
         btnBack.setOnClickListener(view -> {
             finish();
         });
+    }
+
+    void reset_gvCapacitiesBtns() {
+        for (int i = 0; i < gvCapacities.getChildCount(); i++) {
+            TextView textView = gvCapacities.getChildAt(i).findViewById(R.id.tvCapacity);
+            textView.setTextColor(Color.BLACK);
+            textView.setBackgroundColor(Color.WHITE);
+            gvCapacities.setItemChecked(i, false);
+        }
     }
 
     void AddProductItem2Cart(boolean shouldMove2Cart) {
