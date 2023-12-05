@@ -74,7 +74,7 @@ public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.View
                 break;
         }
 
-        holder.tvProductPrice.setText(String.valueOf(product.getProduct_memoryOptions()));
+        holder.tvProductPrice.setText(String.valueOf(product.getPriceForMemory()));
 
         StorageReference imgRef = FirebaseStorage.getInstance().getReference().child(product.getProduct_img());
         imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
