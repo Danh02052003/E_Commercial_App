@@ -12,7 +12,16 @@ public class ShoppingCart {
 
     String productID;
     public int quantity;
-    public double price;
+
+    public String getMemoryOptName() {
+        return MemoryOptName;
+    }
+
+    public void setMemoryOptName(String selectedMemoryOption) {
+        this.MemoryOptName = selectedMemoryOption;
+    }
+
+    String MemoryOptName;
 
     String UserID;
     public String getProductID() {
@@ -27,10 +36,10 @@ public class ShoppingCart {
 
     }
 
-    public ShoppingCart(String productID, int quantity, double price) {
+    public ShoppingCart(String productID, int quantity, String MemoryOptName) {
         this.quantity = quantity;
-        this.price = price;
         this.productID = productID;
+        this.MemoryOptName = MemoryOptName;
     }
     public ShoppingCart(String productID, int quantity) {
         this.quantity = quantity;
@@ -67,13 +76,5 @@ public class ShoppingCart {
 
     public void setItem(Products item) {
         this.item = item;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 }

@@ -62,10 +62,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
     double productPriceBasedCapacity;
 
     int productQuantityAdded = 1;
-    int productQuantity;
+
     boolean isFavoritePresent;
 
-    boolean shouldCreateNewCartItem = false;
+    boolean shouldAddQuantty = false;
     private final String userEmail = UserManager.getInstance().getUserEmail();
 
     List<TextView> listPrice;
@@ -73,6 +73,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
     DatabaseReference cartReference, productRef;
 
     FirebaseAuth auth;
+
+    String productSelectedOption = "";
+    double selectedOptionPrice = 0.0;
+    int selectedOptionQuantity = 0;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -94,23 +98,15 @@ public class ProductDetailsActivity extends AppCompatActivity {
             Glide.with(this).load(product.getProduct_img()).into(ivDetails_productIllustration);
             Glide.with(this).load(product.getProduct_img()).into(ivDetailsAddProduct_productImg);
 
-            tvDetailsAddProduct_productPrice.setText("$" + String.valueOf(product.getPriceForMemory()));
-
-
-//            tvDetails_productName.setText(product.getProduct_name());
-//            tvDetails_productPrice.setText("$" + product.getProductPrice());
-//            tvDetails_productDescr.setText("Ngày sản xuất: " + product.getCreatedDate() + "\n" + product.getProductDescription());
-//            ivDetails_productIllustration.setImageResource(product.getProductImg());
-//            ivDetailsAddProduct_productImg.setImageResource(product.getProductImg());
-//            tvDetailsAddProduct_productPrice.setText("$" + String.valueOf(product.getProductPrice()));
-//            tvDetails_nProductLeft.setText("Còn " + product.getQuantity() + " sản phẩm.");
-
             isFavoritePresent = FavoriteProduct.lstProduct.contains(product);
             if (isFavoritePresent) btnFavorite.setImageResource(R.drawable.red_heart_icon);
 
             capacitiesAdapter = new ArrayAdapter<>(this, R.layout.capacity_item, R.id.tvCapacity, product.getMemory());
             gvCapacities.setAdapter(capacitiesAdapter);
             String[] memoryOptions = product.getMemory();
+
+            tvDetailsAddProduct_productPrice.setText("$" + String.valueOf(product.getPriceForMemory()));
+            tvDetails_nProductLeft.setText("Tổng " + product.getTotalQuantity() + " sản phẩm.");
 
             cartReference = FirebaseDatabase.getInstance().getReference("Cart");
             productRef = FirebaseDatabase.getInstance().getReference("Products");
@@ -120,25 +116,21 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                     if (gvCapacities.isItemChecked(position)) {
-                        for (int i = 0; i < gvCapacities.getChildCount(); i++) {
-                            if (i == position) {
-                                continue;
-                            }
-                            TextView textView = gvCapacities.getChildAt(i).findViewById(R.id.tvCapacity);
-                            textView.setTextColor(Color.BLACK);
-                            textView.setBackgroundColor(Color.WHITE);
-                            gvCapacities.setItemChecked(i, false);
-                            tvDetailsAddProduct_productPrice.setText(String.valueOf(product.getPriceForMemory(memoryOptions[position])));
-                            productQuantity = product.getQuantityForMemory(memoryOptions[position]);
-                            productQuantityAdded = 1;
-                            SetTextForQuantity();
-                            if(productQuantity<=10)
-                                tvDetails_nProductLeft.setText("Chỉ còn " + productQuantity + " sản phẩm.");
-                            else {
-                                tvDetails_nProductLeft.setText("Còn nhiều sản phẩm.");
-                            }
+                        reset_gvCapacitiesBtns();
+                        productSelectedOption = product.getMemoryOptionNames()[position];
+                        selectedOptionPrice = product.getPriceForMemory(memoryOptions[position]);
+                        tvDetailsAddProduct_productPrice.setText(String.valueOf(product.getPriceForMemory(memoryOptions[position])));
+                        selectedOptionQuantity = product.getQuantityForMemory(memoryOptions[position]);
+                        productQuantityAdded = 1;
+                        SetTextForQuantity();
 
-                        }
+                        tvDetails_nProductLeft.setText(selectedOptionQuantity + " sản phẩm.");
+
+                        btnDetails_wAddToCart.setEnabled(true);
+                        btnDetails_wAddToCart.setBackgroundResource(R.color.greenVLUS);
+                        btnDetails_wBuyNow.setEnabled(true);
+                        btnDetails_wBuyNow.setBackgroundResource(R.color.greenVLUS);
+
                         view = gvCapacities.getChildAt(position);
                         TextView textView = view.findViewById(R.id.tvCapacity);
                         textView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
@@ -154,8 +146,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
         SetTextForQuantity();
         String lang = language.getPresentLang();
         UpdateLang.exchangeCurrency(listPrice.toArray(new TextView[0]), this);
-
-
     }
 
     private void addControl() {
@@ -195,12 +185,18 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private void addEvent() {
         btnDetails_addToCart.setOnClickListener(view -> {
             rlPopupWindow.setVisibility(View.VISIBLE);
+            btnDetails_wAddToCart.setEnabled(false);
+            btnDetails_wAddToCart.setBackgroundResource(R.color.greyIcon);
             btnDetails_wAddToCart.setVisibility(View.VISIBLE);
+            reset_gvCapacitiesBtns();
         });
 
         btnDetails_buyNow.setOnClickListener(view -> {
             rlPopupWindow.setVisibility(View.VISIBLE);
+            btnDetails_wBuyNow.setEnabled(false);
+            btnDetails_wBuyNow.setBackgroundResource(R.color.greyIcon);
             btnDetails_wBuyNow.setVisibility(View.VISIBLE);
+            reset_gvCapacitiesBtns();
         });
 
 
@@ -211,6 +207,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 rlPopupWindow.setVisibility(View.INVISIBLE);
                 btnDetails_wAddToCart.setVisibility(View.INVISIBLE);
                 btnDetails_wBuyNow.setVisibility(View.INVISIBLE);
+
+                view = gvCapacities;
+                TextView textView = view.findViewById(R.id.tvCapacity);
+                textView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.greyVLUS));
+                textView.setTextColor(Color.BLACK);
             }
         });
         cvPopupWindow_display.setOnClickListener(view -> {
@@ -218,45 +219,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
 
         btnDetails_wBuyNow.setOnClickListener(view -> {
-            Intent intentt = new Intent(ProductDetailsActivity.this, Cart.class);
-
-            Bundle bundleSender = new Bundle();
-            bundleSender.putSerializable("object_product", product);
-            intentt.putExtras(bundleSender);
-            //ShoppingCart itemPutInCart = new ShoppingCart(product, productQuantityAdded, product.getPriceForMemory() + productPriceBasedCapacity);
-//           ShoppingCart.lstProduct.add(product);
-//           ShoppingCart.lstQuantity.add(productQuantityAdded);
-            startActivity(intentt);
+            AddProductItem2Cart(true);
 
         });
 
         btnDetails_wAddToCart.setOnClickListener(view -> {
-
-            cartReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        ShoppingCart CartItemProduct = dataSnapshot.getValue(ShoppingCart.class);
-                        String productID = CartItemProduct.getProductID();
-
-                        shouldCreateNewCartItem = productID.equals(product.getProductID());
-                        if (shouldCreateNewCartItem) {
-                            int newQuantity = CartItemProduct.getQuantity() + productQuantityAdded;
-                            dataSnapshot.getRef().child("quantity").setValue(newQuantity);
-                            break;
-                        }
-                    }
-                    if (!shouldCreateNewCartItem) {
-                        ShoppingCart itemPutInCart = new ShoppingCart(product.getProductID(), productQuantityAdded, product.getPriceForMemory() + productPriceBasedCapacity);
-                        SaveCardItem(itemPutInCart);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                }
-            });
-
+            AddProductItem2Cart(false);
             rlPopupWindow.setVisibility(View.INVISIBLE);
             btnDetails_wAddToCart.setVisibility(View.INVISIBLE);
         });
@@ -276,29 +244,28 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
 
         ibtnDetails_remove_1.setOnClickListener(view -> {
-            if (productQuantityAdded != 0) {
+            if (productQuantityAdded >= 1) {
                 productQuantityAdded--;
             }
             SetTextForQuantity();
         });
 
         ibtnDetails_remove_2.setOnClickListener(view -> {
-            if (productQuantityAdded != 0) {
+            if (productQuantityAdded >= 1) {
                 productQuantityAdded--;
             }
             SetTextForQuantity();
         });
 
         ibtnDetails_add_1.setOnClickListener(view -> {
-            productQuantityAdded++;
-
-//            if (productQuantityAdded < product.getQuantity()){
-//            }
+            if (productQuantityAdded < selectedOptionQuantity){
+                productQuantityAdded++;
+            }
             SetTextForQuantity();
         });
 
         ibtnDetails_add_2.setOnClickListener(view -> {
-            if (productQuantityAdded < productQuantity){
+            if (productQuantityAdded < selectedOptionQuantity){
                 productQuantityAdded++;
             }
             SetTextForQuantity();
@@ -312,13 +279,57 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 tvDetails_productDescr.setMaxLines(2);
                 tvDetails_expand.setText("Xem thêm >");
             }
-
-
         });
 
         btnBack.setOnClickListener(view -> {
             finish();
         });
+    }
+
+    void reset_gvCapacitiesBtns() {
+        for (int i = 0; i < gvCapacities.getChildCount(); i++) {
+            TextView textView = gvCapacities.getChildAt(i).findViewById(R.id.tvCapacity);
+            textView.setTextColor(Color.BLACK);
+            textView.setBackgroundColor(Color.WHITE);
+            gvCapacities.setItemChecked(i, false);
+        }
+    }
+
+    void AddProductItem2Cart(boolean shouldMove2Cart) {
+        cartReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    ShoppingCart CartItemProduct = dataSnapshot.getValue(ShoppingCart.class);
+                    String productID = CartItemProduct.getProductID();
+                    String productMemOpt = CartItemProduct.getMemoryOptName();
+
+                    shouldAddQuantty = productID.equals(product.getProductID()) && productSelectedOption.equals(productMemOpt);
+                    if (shouldAddQuantty) {
+                        int newQuantity = CartItemProduct.getQuantity() + productQuantityAdded;
+                        dataSnapshot.getRef().child("quantity").setValue(newQuantity);
+                        break;
+                    }
+                }
+
+                boolean shouldCreateNewCartItem = !shouldAddQuantty;
+                if (shouldCreateNewCartItem) {
+                    ShoppingCart itemPutInCart = new ShoppingCart(product.getProductID(), productQuantityAdded, productSelectedOption);
+                    SaveCardItem(itemPutInCart);
+                }
+                if (shouldMove2Cart) {
+                    Move2Cart();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    void Move2Cart(){
+        Intent intentt = new Intent(ProductDetailsActivity.this, Cart.class);
+        startActivity(intentt);
     }
 
     private void SaveCardItem(ShoppingCart CartItem) {
