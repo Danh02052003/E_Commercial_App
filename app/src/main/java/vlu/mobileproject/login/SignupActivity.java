@@ -270,12 +270,14 @@ public class SignupActivity extends AppCompatActivity {
                                                 Toast.makeText(SignupActivity.this, "Đặng kí thành công", Toast.LENGTH_SHORT).show();
                                                 signInWithPhoneAuthCredential(credential);
                                             } else {
+                                                firebaseAuth.getCurrentUser().delete();
                                                 // Handle database save failure
                                                 Toast.makeText(SignupActivity.this, "\n" +
                                                         "Không thể lưu thông tin người dùng: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             } else {
+                                firebaseAuth.getCurrentUser().delete();
                                 // Handle phone number update failure
                                 Toast.makeText(SignupActivity.this, "Failed to update phone number: " + Objects.requireNonNull(phoneUpdateTask.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                             }
