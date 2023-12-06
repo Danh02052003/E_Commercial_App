@@ -7,6 +7,26 @@ public class ProductInCartItem {
     private int productQuantity;
     private String productImg;
 
+    String productOption;
+
+    public String getProductOption() {
+        return productOption;
+    }
+
+    public void setProductOption(String productOption) {
+        this.productOption = productOption;
+    }
+
+    public String getProductID() {
+        return productID;
+    }
+
+    public void setProductID(String productID) {
+        this.productID = productID;
+    }
+
+    private String productID;
+
     String CartItemID;
 
     public String getCartItemID() {
@@ -19,12 +39,14 @@ public class ProductInCartItem {
 
     private boolean isChecked = false;
 
-    public ProductInCartItem(String CartItemID, String productName, double productPrice, int productQuantity, String productImg) {
+    public ProductInCartItem(String CartItemID, String productName, double productPrice, int productQuantity, String productImg, String productID, String productOption) {
         this.productName = productName;
         this.productPrice = productPrice;
         this.productQuantity = productQuantity;
         this.productImg = productImg;
         this.CartItemID = CartItemID;
+        this.productID = productID;
+        this.productOption = productOption;
     }
 
     public String getProductName() {

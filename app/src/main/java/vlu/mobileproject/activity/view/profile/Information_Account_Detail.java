@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,11 +47,14 @@ public class Information_Account_Detail extends AppCompatActivity {
     static String bet = "https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/";
     // email or sdt from login account
 
-    private String userEmail = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private final String userEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
     String emailAccountLogin = userEmail;
 
     // use for avatar
     String shortEmailAccountLogin = emailAccountLogin.replace("@gmail.com", "");
+
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference UserReference;
 
     // Firebase Storage reference
     private StorageReference storageRef;
@@ -62,10 +64,15 @@ public class Information_Account_Detail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_information_account_detail);
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        UserReference = firebaseDatabase.getReference("User");
+
         addControls();
         addEvents();
         storageRef = FirebaseStorage.getInstance().getReference();
-        fetchUserDataFromFirebase(emailAccountLogin);
+        SetupUserData2View();
+
     }
 
     private void addEvents() {
@@ -101,7 +108,6 @@ public class Information_Account_Detail extends AppCompatActivity {
         if (newSdtAccount.length() != 12) {
             Toast.makeText(this, "\n" +
                     "Số điện thoại phải có chính xác 10 chữ số", Toast.LENGTH_SHORT).show();
-            return;
         }
         else if (!newNameAccount.equals("") && !newEmailAccount.equals("") && !newSdtAccount.equals("")) {
             // Create a HashMap to hold the updated values
@@ -122,6 +128,7 @@ public class Information_Account_Detail extends AppCompatActivity {
                         String userId = userSnapshot.getKey();
 
                         // Update the user information with the new values
+                        assert userId != null;
                         myRef.child(userId).updateChildren(updatedValues)
                                 .addOnSuccessListener(aVoid -> {
                                     // Update successful
@@ -149,62 +156,30 @@ public class Information_Account_Detail extends AppCompatActivity {
         }
     }
 
-    // show data User
-    private void fetchUserDataFromFirebase(String userEmail) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance(bet);
-        DatabaseReference myRef = database.getReference("User");
-
-        // Query for the specific user with the target email
-        Query query = myRef.orderByChild("user_email").equalTo(userEmail);
-
+    void SetupUserData2View() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        String UserID = auth.getCurrentUser().getUid();
+        Query query = UserReference.child(UserID);
+        String userEmail = auth.getCurrentUser().getEmail();
+        String userPhoneNumb = auth.getCurrentUser().getPhoneNumber();
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists() && snapshot.hasChildren()) {
-                    // Assuming there is only one user with the given email, retrieve the first child
-                    DataSnapshot userSnapshot = snapshot.getChildren().iterator().next();
-
-                    // Get the user object from the snapshot
-                    User user = userSnapshot.getValue(User.class);
-
-                    if (snapshot.exists()) {
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            if (user != null) {
-                                String nameAcc = dataSnapshot.child("user_name").getValue(String.class);
-
-                                String emailAcc = dataSnapshot.child("user_email").getValue(String.class);
-
-                                String sdtAcc = dataSnapshot.child("user_phone").getValue(String.class);
-                                if (sdtAcc != null) {
-                                    sdtAcc = sdtAcc.replace("\"", "");
-                                    sdtAcc = PhoneNumberUtils.formatNumber(sdtAcc);
-                                }
-
-                                edtNameAccount.setText(nameAcc);
-                                edtEmailAccount.setText(emailAcc);
-                                edtSDTAccount.setText(sdtAcc);
-                                // Assuming you have the Firebase Storage URL stored in a variable called 'avatarUrl'
-                                ImageHandler.setImageFromFirebaseStorage(imgAvatarAccount, emailAcc);
-
-                            }
-                        }
-                    }
-
-                } else {
-                    // Handle the case when no user with the given email is found
-                    Log.d("FirebaseError", "No user found with the email: " + userEmail);
+                if (snapshot.exists()) {
+                    edtNameAccount.setText(snapshot.child("userName").getValue(String.class));
+                    edtEmailAccount.setText(userEmail);
+                    edtSDTAccount.setText(userPhoneNumb);
+                    ImageHandler.setImageFromFirebaseStorage(imgAvatarAccount, userEmail);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle the error if needed
-                Log.e("FirebaseError", "Error loading data from Firebase: " + error.getMessage());
+
             }
         });
     }
 
-    //handle the selected image
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

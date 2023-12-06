@@ -1,10 +1,11 @@
 package vlu.mobileproject.modle;
 
 public class Order {
-    int buyer_id, order_id, total_amount;
+    String buyer_id, order_id;
+    double total_amount;
     String order_date, status;
 
-    public Order(int buyer_id, int order_id, int total_amount, String order_date, String status) {
+    public Order(String buyer_id, String order_id, double total_amount, String order_date, String status) {
         this.buyer_id = buyer_id;
         this.order_id = order_id;
         this.total_amount = total_amount;
@@ -14,27 +15,27 @@ public class Order {
 
     public Order(){}
 
-    public int getBuyer_id() {
+    public String getBuyer_id() {
         return buyer_id;
     }
 
-    public void setBuyer_id(int buyer_id) {
+    public void setBuyer_id(String buyer_id) {
         this.buyer_id = buyer_id;
     }
 
-    public int getOrder_id() {
+    public String getOrder_id() {
         return order_id;
     }
 
-    public void setOrder_id(int order_id) {
+    public void setOrder_id(String order_id) {
         this.order_id = order_id;
     }
 
-    public int getTotal_amount() {
+    public double getTotal_amount() {
         return total_amount;
     }
 
-    public void setTotal_amount(int total_amount) {
+    public void setTotal_amount(double total_amount) {
         this.total_amount = total_amount;
     }
 

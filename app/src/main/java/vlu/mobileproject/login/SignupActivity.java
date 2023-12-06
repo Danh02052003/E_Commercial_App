@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,15 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException;
-import com.google.firebase.auth.FirebaseAuthSettings;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
@@ -36,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -64,7 +60,16 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sigup);
+        addControl();
 
+        transaction = getSupportFragmentManager().beginTransaction();
+        dangnhap.setOnClickListener(view -> {
+            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+            startActivity(intent);
+        });
+        buttonSignup.setOnClickListener(v -> signupUser());
+    }
+    private void addControl(){
         firebaseAuth = FirebaseAuth.getInstance();
         usersRef = FirebaseDatabase.getInstance().getReference("User");
         editPhone =findViewById(R.id.phoneNumber);
@@ -73,17 +78,6 @@ public class SignupActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.passWord);
         buttonSignup = findViewById(R.id.bttSignup);
         dangnhap = findViewById(R.id.dangNhap);
-        transaction = getSupportFragmentManager().beginTransaction();
-        dangnhap.setOnClickListener(view -> {
-            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-            startActivity(intent);
-        });
-        buttonSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signupUser();
-            }
-        });
     }
     private boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
@@ -104,9 +98,8 @@ public class SignupActivity extends AppCompatActivity {
                     "Mật khẩu phải có độ dài ít nhất 6 ký tự", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (phone.length() != 10) {
+        if (phone.length() != 10) { // Kệ chỗ này. SDT nước ngoài khác vn, đéo test số ảo được lol.
             //Toast.makeText(this, "\n" + "Số điện thoại phải có chính xác 10 chữ số", Toast.LENGTH_SHORT).show();
-            //return;
         }
         if (!isValidEmail(email)) {
             Toast.makeText(this, "\n" +
@@ -121,35 +114,29 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         firebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-                            if (currentUser != null) {
-                                SendVerificationCode(phone);
-                                VerifyDialog.showDialog(SignupActivity.this, new VerifyDialog.OnVerifyListener() {
-                                    @Override
-                                    public void onVerify(String code) {
-                                        PhoneAuthCredential credential = VerifyCode(code);
-                                        saveUserDataToDatabase(username, credential);
-                                    }
-                                });
-                            }
-                        } else {
-                            // Handle specific registration failure cases
-                            try {
-                                throw task.getException();
-                            } catch (Exception e) {
-                                // Check if the email is already in use by another user
-                                if (e instanceof FirebaseAuthUserCollisionException) {
-                                    Toast.makeText(SignupActivity.this, "\n" +
-                                            "Email đã được sử dụng. Vui lòng chọn một email khác.", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    // Handle other registration errors
-                                    Toast.makeText(SignupActivity.this, "\n" +
-                                            "Đăng ky thât bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                        if (currentUser != null) {
+                            SendVerificationCode(phone);
+                            VerifyDialog.showDialog(SignupActivity.this, code -> {
+                                PhoneAuthCredential credential = VerifyCode(code);
+                                saveUserDataToDatabase(username, credential);
+                            });
+                        }
+                    } else {
+                        // Handle specific registration failure cases
+                        try {
+                            throw Objects.requireNonNull(task.getException());
+                        } catch (Exception e) {
+                            // Check if the email is already in use by another user
+                            if (e instanceof FirebaseAuthUserCollisionException) {
+                                Toast.makeText(SignupActivity.this, "\n" +
+                                        "Email đã được sử dụng. Vui lòng chọn một email khác.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // Handle other registration errors
+                                Toast.makeText(SignupActivity.this, "\n" +
+                                        "Đăng ky thât bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -190,7 +177,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
 
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks
+    private final PhoneAuthProvider.OnVerificationStateChangedCallbacks
 
             mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
@@ -247,36 +234,32 @@ public class SignupActivity extends AppCompatActivity {
     };
 
     PhoneAuthCredential VerifyCode(String code) {
-        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
-        return credential;
+        return PhoneAuthProvider.getCredential(verificationId, code);
     }
 
     void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        UserManager.getInstance().setUserEmail(firebaseAuth.getCurrentUser().getEmail());
+        UserManager.getInstance().setUserEmail(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail());
         firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(SignupActivity.this, "Đặng nhập thành công", Toast.LENGTH_SHORT).show();
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(SignupActivity.this, "Đặng nhập thành công", Toast.LENGTH_SHORT).show();
 
-                            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
+                        Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
                 });
     }
 
     private void saveUserDataToDatabase(String user_name, PhoneAuthCredential credential) {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         user newUser = new user(user_name);
 
         // Check if the phone number is not already associated with another account
         checkForPhoneNumber(phone, exists -> {
             if (!exists) {
                 // Update the phone number and save user data to the database
-                firebaseAuth.getCurrentUser().updatePhoneNumber(credential)
+                Objects.requireNonNull(firebaseAuth.getCurrentUser()).updatePhoneNumber(credential)
                         .addOnCompleteListener(phoneUpdateTask -> {
                             if (phoneUpdateTask.isSuccessful()) {
                                 usersRef.child(userId).setValue(newUser)
@@ -287,14 +270,16 @@ public class SignupActivity extends AppCompatActivity {
                                                 Toast.makeText(SignupActivity.this, "Đặng kí thành công", Toast.LENGTH_SHORT).show();
                                                 signInWithPhoneAuthCredential(credential);
                                             } else {
+                                                firebaseAuth.getCurrentUser().delete();
                                                 // Handle database save failure
                                                 Toast.makeText(SignupActivity.this, "\n" +
-                                                        "Không thể lưu thông tin người dùng: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                        "Không thể lưu thông tin người dùng: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             } else {
+                                firebaseAuth.getCurrentUser().delete();
                                 // Handle phone number update failure
-                                Toast.makeText(SignupActivity.this, "Failed to update phone number: " + phoneUpdateTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignupActivity.this, "Failed to update phone number: " + Objects.requireNonNull(phoneUpdateTask.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
             } else {

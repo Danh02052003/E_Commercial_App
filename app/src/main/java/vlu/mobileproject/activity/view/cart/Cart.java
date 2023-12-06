@@ -5,16 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,19 +22,26 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import vlu.mobileproject.ProductInCartItem;
 import vlu.mobileproject.R;
 import vlu.mobileproject.ShoppingCart;
 import vlu.mobileproject.adapter.ProductInCartAdapter;
+import vlu.mobileproject.modle.Order;
+import vlu.mobileproject.modle.OrderItem;
 import vlu.mobileproject.modle.Products;
 
 public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCheckedChangeListener {
     private static final String CART_REFERENCE_KEY = "Cart";
+    private static final String ORDER_REFERENCE_KEY = "Order";
+    private static final String ORDER_ITEM_REFERENCE_KEY = "OrderItem";
     private static final String PRODUCTS_REFERENCE_KEY = "Products_2";
 
     RecyclerView rvProductAdded;
@@ -48,7 +55,9 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
     List<ProductInCartItem> inCartSelectedList = new ArrayList<>();
     double totalPrice = 0;
     String formattedValue;
-    DatabaseReference cartReference;
+    DatabaseReference cartReference, orderReference, orderItemReference;
+
+    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,27 +71,16 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         tvCart_discount = findViewById(R.id.tvCart_discount);
         btnBack = findViewById(R.id.btnBack);
 
+        auth = FirebaseAuth.getInstance();
+
         btnBack.setOnClickListener(view -> {
             finish();
         });
 
         cartReference = FirebaseDatabase.getInstance().getReference(CART_REFERENCE_KEY);
-
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-
+        orderReference = FirebaseDatabase.getInstance().getReference(ORDER_REFERENCE_KEY);
+        orderItemReference = FirebaseDatabase.getInstance().getReference(ORDER_ITEM_REFERENCE_KEY);
         GetListFromShoppingCart();
-
-        if (inCartItemList.size() != 0) {
-            setupUI();
-            View cartItemView = getLayoutInflater().inflate(R.layout.cart_item, null);
-            cbCartCheck = cartItemView.findViewById(R.id.cbCartCheck);
-            PayControl();
-            addControl();
-        } else {
-            tvCart_state = findViewById(R.id.tvCart_state);
-            tvCart_state.setVisibility(View.VISIBLE);
-        }
     }
 
     private void setupUI() {
@@ -99,6 +97,16 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         cartReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    setupUI();
+                    View cartItemView = getLayoutInflater().inflate(R.layout.cart_item, null);
+                    cbCartCheck = cartItemView.findViewById(R.id.cbCartCheck);
+                    PayControl();
+                    addControl();
+                } else {
+                    tvCart_state = findViewById(R.id.tvCart_state);
+                    tvCart_state.setVisibility(View.VISIBLE);
+                }
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     ShoppingCart cartItem = dataSnapshot.getValue(ShoppingCart.class);
                     String productId = cartItem.getProductID();
@@ -109,9 +117,10 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
                         public void onDataChange(@NonNull DataSnapshot productSnapshot) {
                             if (productSnapshot.exists()) {
                                 Products productDetails = productSnapshot.getValue(Products.class);
-                                Products.MemoryOption MemoOptPackage = productDetails.GetMemoOptPackage(cartItem.getMemoryOptName());
+                                productDetails.setProductID(productSnapshot.getKey());
+                                Products.MemoryOption MemoOptPackage = productDetails.GetMemoOptPackage(cartItem.getMemoryOptID());
 
-                                inCartItemList.add(new ProductInCartItem(dataSnapshot.getKey(), productDetails.getProduct_name(), MemoOptPackage.getProduct_price(), cartItem.quantity, productDetails.getProduct_img()));
+                                inCartItemList.add(new ProductInCartItem(dataSnapshot.getKey(), productDetails.getProduct_name(), MemoOptPackage.getProduct_price(), cartItem.quantity, productDetails.getProduct_img(), productDetails.getProductID(), cartItem.getMemoryOptID()));
                                 LoadCartItem2View();
                             }
                         }
@@ -190,8 +199,12 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
                 cartReference.child(inCartSelectedList.get(i).getCartItemID()).removeValue();
             }
 
+            InitOrder(totalPrice, inCartSelectedList);
+
             setInCart.removeAll(setInCartSelected);
             inCartItemList = new ArrayList<>(setInCart);
+            setInCartSelected.removeAll(setInCartSelected);
+            inCartSelectedList = new ArrayList<>(setInCartSelected);
 
             adapter = new ProductInCartAdapter(inCartItemList);
             adapter.setOnCheckedChangeListener(this);
@@ -199,8 +212,32 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
 
             tvCart_totalPrice.setText("$00");
             totalPrice = 0;
-
         });
+    }
+
+    void InitOrder(double totalPrice, List<ProductInCartItem> CheckedItems) {
+        String UserID = auth.getCurrentUser().getUid();
+        String newOrderKey = orderReference.push().getKey();
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        Order newOrder = new Order(UserID, newOrderKey, totalPrice, currentDate, "");
+
+        orderReference.child(newOrderKey).setValue(newOrder).addOnCompleteListener(taskAddOrder -> {
+            if (taskAddOrder.isSuccessful()) {
+                for (ProductInCartItem item : CheckedItems) {
+                    String ProductID = item.getProductID();
+                    String ProductOption = item.getProductOption();
+                    int ProductQuantity = item.getProductQuantity();
+                    String newOrderItemID = orderItemReference.push().getKey();
+                    OrderItem neworderItem = new OrderItem(newOrderKey, ProductID, ProductOption, ProductQuantity);
+                    orderItemReference.child(newOrderItemID).setValue(neworderItem);
+                    Toast.makeText(Cart.this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(Cart.this, "Đặt không hàng thành công", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
     private void addControl() {

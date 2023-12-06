@@ -1,9 +1,13 @@
 package vlu.mobileproject.adapter;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,20 +24,14 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
-import vlu.mobileproject.Favorite;
-import vlu.mobileproject.HomeChildItem;
 import vlu.mobileproject.ProductDetailsActivity;
 import vlu.mobileproject.R;
 import vlu.mobileproject.modle.Products;
 
-public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.ViewHolder>{
-//    public List<HomeChildItem> childItemList;
+public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.ViewHolder> {
     public List<Products> productsList;
     private Context mContext;
-//    public HomeChildAdapter(Context context, List<HomeChildItem> childItemList) {
-//        this.mContext = context;
-//        this.childItemList = childItemList;
-//    }
+
     public HomeChildAdapter(Context context, List<Products> productsList) {
         this.mContext = context;
         this.productsList = productsList;
@@ -48,24 +46,11 @@ public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-//        HomeChildItem childItem = childItemList.get(position);
-//
-//        holder.tvProductName.setText(childItem.getProductName());
-//        holder.tvProductCategory.setText(childItem.getProductCategory());
-//        holder.tvProductPrice.setText("$" + String.valueOf(childItem.getProductPrice()));
-//        holder.ivProductImg.setImageResource(childItem.getProductImg());
-//        holder.layoutItem.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                onClickGoToDetail(childItem);
-//            }
-//        });
         Products product = productsList.get(position);
 
         holder.tvProductName.setText(product.getProduct_name());
 
-        switch (product.getProduct_categoryId()){
+        switch (product.getProduct_categoryId()) {
             case 1:
                 holder.tvProductCategory.setText("Samsung");
                 break;
@@ -73,34 +58,50 @@ public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.View
                 holder.tvProductCategory.setText("Apple");
                 break;
         }
-
         holder.tvProductPrice.setText(String.valueOf(product.getPriceForMemory()));
 
         StorageReference imgRef = FirebaseStorage.getInstance().getReference().child(product.getProduct_img());
         imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
             product.setProduct_img(uri.toString());
             String imageURL = product.getProduct_img();
-            Glide.with(mContext).load(imageURL).into(holder.ivProductImg);
+            loadGlideImageWithCheck(mContext, imageURL, holder.ivProductImg);
         }).addOnFailureListener(e -> {
             Log.e(this.toString(), "Error loading image from Firebase: " + e.getMessage());
             e.printStackTrace();
         });
-        holder.layoutItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                onClickGoToDetail(product);
-            }
-        });
-
+        holder.layoutItem.setOnClickListener(view -> onClickGoToDetail(product, holder));
     }
-    public void onClickGoToDetail(Products product){
+
+    private void loadGlideImageWithCheck(Context context, String imageUrl, ImageView imageView) {
+        if (isValidContextForGlide(context)) {
+            Glide.with(context)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.error)
+                    .into(imageView);
+        }
+    }
+
+    private static boolean isValidContextForGlide(Context context) {
+        if (context instanceof Activity) {
+            Activity activity = (Activity) context;
+            return !(activity.isDestroyed() || activity.isFinishing());
+        }
+        return true;
+    }
+
+    public void onClickGoToDetail(Products product, ViewHolder viewHolder) {
         Intent intent = new Intent(mContext, ProductDetailsActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_product", product);
         intent.putExtras(bundle);
 
-        mContext.startActivity(intent);
+        Pair<View, String> p1 = Pair.create((View) viewHolder.ivProductImg, "product_img");
+        Pair<View, String> p2 = Pair.create((View) viewHolder.tvProductName, "product_name");
+        Pair<View, String> p3 = Pair.create((View) viewHolder.tvProductPrice, "product_price");
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, p1, p2, p3);
+        mContext.startActivity(intent, options.toBundle());
     }
 
     public void setItems(List<Products> items) {
@@ -136,6 +137,4 @@ public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.View
             layoutItem = itemView.findViewById(R.id.layoutItem);
         }
     }
-
-
 }

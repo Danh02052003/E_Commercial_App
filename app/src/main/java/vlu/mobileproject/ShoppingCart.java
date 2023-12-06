@@ -13,15 +13,15 @@ public class ShoppingCart {
     String productID;
     public int quantity;
 
-    public String getMemoryOptName() {
-        return MemoryOptName;
+    public String getMemoryOptID() {
+        return MemoryOptID;
     }
 
-    public void setMemoryOptName(String selectedMemoryOption) {
-        this.MemoryOptName = selectedMemoryOption;
+    public void setMemoryOptID(String selectedMemoryOption) {
+        this.MemoryOptID = selectedMemoryOption;
     }
 
-    String MemoryOptName;
+    String MemoryOptID;
 
     String UserID;
     public String getProductID() {
@@ -36,10 +36,10 @@ public class ShoppingCart {
 
     }
 
-    public ShoppingCart(String productID, int quantity, String MemoryOptName) {
+    public ShoppingCart(String productID, int quantity, String MemoryOptID) {
         this.quantity = quantity;
         this.productID = productID;
-        this.MemoryOptName = MemoryOptName;
+        this.MemoryOptID = MemoryOptID;
     }
     public ShoppingCart(String productID, int quantity) {
         this.quantity = quantity;
