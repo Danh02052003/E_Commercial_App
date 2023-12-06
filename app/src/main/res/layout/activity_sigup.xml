@@ -100,6 +100,7 @@
         android:layout_marginTop="40dp"
         android:background="@drawable/rounded_edittext"
         android:drawablePadding="10dp"
+        android:text="+840962267576"
         android:ems="10"
         android:hint="PhoneNumber"
         android:inputType="text"
