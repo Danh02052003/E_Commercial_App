@@ -145,7 +145,7 @@
         android:layout_width="327dp"
         android:layout_height="56dp"
         android:layout_below="@+id/passWord"
-        android:layout_marginBottom="292dp"
+        android:layout_marginBottom="100dp"
         android:background="@drawable/rounded_button"
         android:text="Tạo tài khoản "
         android:textColor="@color/white"

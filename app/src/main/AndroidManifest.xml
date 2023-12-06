@@ -27,11 +27,7 @@
         <activity
             android:name=".activity.view.home.MainActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity> <!-- This activity has the LAUNCHER category to act as the main entry point -->
         <activity
             android:name=".login.ForgotPassword"
@@ -62,7 +58,13 @@
             android:exported="false" />
         <activity
             android:name=".login.loading"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
