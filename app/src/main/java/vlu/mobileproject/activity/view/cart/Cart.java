@@ -187,6 +187,8 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
 
             setInCart.removeAll(setInCartSelected);
             inCartItemList = new ArrayList<>(setInCart);
+            setInCartSelected.removeAll(setInCartSelected);
+            inCartSelectedList = new ArrayList<>(setInCartSelected);
 
             adapter = new ProductInCartAdapter(inCartItemList);
             adapter.setOnCheckedChangeListener(this);
@@ -194,7 +196,6 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
 
             tvCart_totalPrice.setText("$00");
             totalPrice = 0;
-
         });
     }
 
