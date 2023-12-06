@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,7 +47,7 @@ public class Information_Account_Detail extends AppCompatActivity {
     static String bet = "https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/";
     // email or sdt from login account
 
-    private String userEmail = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private final String userEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
     String emailAccountLogin = userEmail;
 
     // use for avatar
@@ -101,7 +100,6 @@ public class Information_Account_Detail extends AppCompatActivity {
         if (newSdtAccount.length() != 12) {
             Toast.makeText(this, "\n" +
                     "Số điện thoại phải có chính xác 10 chữ số", Toast.LENGTH_SHORT).show();
-            return;
         }
         else if (!newNameAccount.equals("") && !newEmailAccount.equals("") && !newSdtAccount.equals("")) {
             // Create a HashMap to hold the updated values
@@ -122,6 +120,7 @@ public class Information_Account_Detail extends AppCompatActivity {
                         String userId = userSnapshot.getKey();
 
                         // Update the user information with the new values
+                        assert userId != null;
                         myRef.child(userId).updateChildren(updatedValues)
                                 .addOnSuccessListener(aVoid -> {
                                     // Update successful

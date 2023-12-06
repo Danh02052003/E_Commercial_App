@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.Switch;
@@ -22,12 +21,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import vlu.mobileproject.ChooseLanguage;
 import vlu.mobileproject.R;
 import vlu.mobileproject.globalfuction.ImageHandler;
 import vlu.mobileproject.login.UserManager;
 import vlu.mobileproject.login.user;
-import vlu.mobileproject.modle.User;
 
 
 public class Information_Account extends Information_Account_Detail {
@@ -40,7 +41,7 @@ public class Information_Account extends Information_Account_Detail {
     CircleImageView imgAvatarAccount;
     TextView NameAccount;
     ImageButton BtnGoToIn4Detail, btnGoToLanguage, btnGoToNotification, BtnBack;
-    private String userEmail = UserManager.getInstance().getUserEmail();
+    private final String userEmail = UserManager.getInstance().getUserEmail();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +80,6 @@ public class Information_Account extends Information_Account_Detail {
     @SuppressLint("CutPasteId")
     private void addControls() {
         switchMode = findViewById(R.id.switchDarkMode);
-        ImageButton[] imageButtons = new ImageButton[]{
-                findViewById(R.id.BtnGoToIn4Detail),
-                findViewById(R.id.btnGoToLanguage),
-                findViewById(R.id.btnGoToNotification),
-        };
         BtnGoToIn4Detail = findViewById(R.id.BtnGoToIn4Detail);
         btnGoToLanguage = findViewById(R.id.btnGoToLanguage);
         btnGoToNotification = findViewById(R.id.btnGoToNotification);
@@ -99,27 +95,21 @@ public class Information_Account extends Information_Account_Detail {
             editor = sharedPreferences.edit();
             editor.putBoolean("night", isChecked);
             editor.apply();
-
             // Apply the selected mode to the entire app
             applyNightMode(isChecked);
         });
 
-        // change to activity_information_account_detail
-
-        BtnGoToIn4Detail.setOnClickListener(v -> {
-            // Start Information_Account_Detail activity
-            Intent intent = new Intent(Information_Account.this, Information_Account_Detail.class);
-            startActivity(intent);
-        });
+        btnGoToLanguage.setOnClickListener(v-> startNewActivity(ChooseLanguage.class));
+        BtnGoToIn4Detail.setOnClickListener(v -> startNewActivity(Information_Account_Detail.class));
 
 
-        BtnBack.setOnClickListener(v -> {
-            // Go back to the previous fragment or finish the activity if no fragments in the back stack
-            onBackPressed();
-        });
+        BtnBack.setOnClickListener(v -> finish());
     }
 
-    protected void applyNightMode(boolean isNightMode) {
+    private void startNewActivity(Class<?> activityClass) {
+        Intent intent = new Intent(Information_Account.this, activityClass);
+        startActivity(intent);
+    }    protected void applyNightMode(boolean isNightMode) {
         // Apply the selected mode to the entire app
         if (isNightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -132,13 +122,14 @@ public class Information_Account extends Information_Account_Detail {
         DatabaseReference myRef = database.getReference("User");
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
-        Query query = myRef.child(auth.getCurrentUser().getUid());
+        Query query = myRef.child(Objects.requireNonNull(auth.getCurrentUser()).getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean snapshotExists = snapshot.exists() && snapshot.hasChildren();
                 if (snapshotExists) {
                     user CurUser = snapshot.getValue(user.class);
+                    assert CurUser != null;
                     NameAccount.setText(CurUser.getUserName());
                     ImageHandler.setImageFromFirebaseStorage(imgAvatarAccount, auth.getCurrentUser().getEmail());
 

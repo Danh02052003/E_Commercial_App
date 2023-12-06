@@ -17,7 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MobileProject"
         tools:targetApi="31">
-<!-- Activities -->
+        <activity
+            android:name=".ChooseLanguage"
+            android:exported="false" />
+        <!-- Activities -->
         <activity
             android:name=".login.LoginActivity"
             android:exported="false" />
@@ -26,10 +29,10 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <!-- This activity has the LAUNCHER category to act as the main entry point -->
+        </activity> <!-- This activity has the LAUNCHER category to act as the main entry point -->
         <activity
             android:name=".login.ForgotPassword"
             android:exported="false" />

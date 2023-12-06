@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -19,15 +18,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
@@ -37,18 +32,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import io.paperdb.Paper;
 import vlu.mobileproject.R;
-import vlu.mobileproject.translate.LanguageHelper;
 import vlu.mobileproject.activity.view.home.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
-
-    Button btnTranslate;
-
 
     private EditText emailEditText; // Updated to the correct EditText for email input
     private EditText passwordEditText;
@@ -71,6 +63,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        addControl();
+        addEvent();
+    }
+
+
+    private void addControl(){
         mAuthLog = FirebaseAuth.getInstance();
 
         RememberUser = findViewById(R.id.RememberUser);
@@ -78,18 +76,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.editTextPassword);
         loginButton = findViewById(R.id.button);
         showPasswordIcon = findViewById(R.id.showPasswordIcon);
-        addEvent();
-        // Set click listener to the ImageView
-        showPasswordIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                togglePasswordVisibility();
-            }
-        });
-
-        Paper.init(this);
     }
-
     private void addEvent() {
         quenmk = findViewById(R.id.quenmk);
         quenmk.setOnClickListener(view -> {
@@ -103,6 +90,8 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         loginButton.setOnClickListener(v -> loginUser());
+        showPasswordIcon.setOnClickListener(v -> togglePasswordVisibility());
+        Paper.init(this);
     }
 
     private void togglePasswordVisibility() {
@@ -143,23 +132,20 @@ public class LoginActivity extends AppCompatActivity {
 
         UserManager.getInstance().setUserEmail(email);
         if (isEmail) {
-            mAuthLog.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
+            mAuthLog.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
 
-                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                        Paper.book().write("RememberUser", RememberUser.isChecked());
+                    Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                    Paper.book().write("RememberUser", RememberUser.isChecked());
 
-                        Intent intent = new Intent(LoginActivity.this, vlu.mobileproject.activity.view.home.MainActivity.class);
-                        // Pass user-specific data if needed
-                        intent.putExtra("user_email", email);
-                        startActivity(intent);
-                        finish();
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    // Pass user-specific data if needed
+                    intent.putExtra("user_email", email);
+                    startActivity(intent);
+                    finish();
 
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Mật khẩu hoặc Email không đúng.", Toast.LENGTH_SHORT).show();
-                    }
+                } else {
+                    Toast.makeText(LoginActivity.this, "Mật khẩu hoặc Email không đúng.", Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
@@ -179,12 +165,9 @@ public class LoginActivity extends AppCompatActivity {
                                 .build();
                 PhoneAuthProvider.verifyPhoneNumber(options);
 
-                VerifyDialog.showDialog(LoginActivity.this, new VerifyDialog.OnVerifyListener() {
-                    @Override
-                    public void onVerify(String code) {
-                        PhoneAuthCredential credential = VerifyCode(code);
-                        signInWithPhoneAuthCredential(credential);
-                    }
+                VerifyDialog.showDialog(LoginActivity.this, code -> {
+                    PhoneAuthCredential credential = VerifyCode(code);
+                    signInWithPhoneAuthCredential(credential);
                 });
             } else {
                 Toast.makeText(LoginActivity.this, "Tài khoản không tồn tại", Toast.LENGTH_SHORT).show();
@@ -208,7 +191,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks
+    private final PhoneAuthProvider.OnVerificationStateChangedCallbacks
 
             mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
@@ -264,23 +247,19 @@ public class LoginActivity extends AppCompatActivity {
     };
 
     PhoneAuthCredential VerifyCode(String code) {
-        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
-        return credential;
+        return PhoneAuthProvider.getCredential(verificationId, code);
     }
 
     void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        UserManager.getInstance().setUserEmail(firebaseAuth.getCurrentUser().getEmail());
+        UserManager.getInstance().setUserEmail(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail());
         firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "Đặng nhập thành công", Toast.LENGTH_SHORT).show();
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(LoginActivity.this, "Đặng nhập thành công", Toast.LENGTH_SHORT).show();
 
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
                 });
     }
