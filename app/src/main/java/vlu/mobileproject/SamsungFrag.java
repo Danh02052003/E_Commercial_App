@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vlu.mobileproject.adapter.HomeParentAdapter;
+import vlu.mobileproject.globalfuction.GlobalData;
 import vlu.mobileproject.modle.Products;
 
 /**
@@ -30,7 +31,7 @@ import vlu.mobileproject.modle.Products;
  * Use the {@link SamsungFrag#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SamsungFrag extends Fragment {
+public class SamsungFrag extends Fragment implements GlobalData.AllCallBack {
     RecyclerView rvCategory;
     RecyclerView rvChildList;
     private HomeParentAdapter parentAdapter;
@@ -139,5 +140,10 @@ public class SamsungFrag extends Fragment {
         parentAdapter = new HomeParentAdapter(parentItemList);
         rvCategory.setAdapter(parentAdapter);
 
+    }
+
+    @Override
+    public void onCompleted(List<Products> products) {
+        this.products = products;
     }
 }

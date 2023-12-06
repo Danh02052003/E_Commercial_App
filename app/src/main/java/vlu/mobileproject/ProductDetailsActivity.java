@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,6 +13,8 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -49,7 +52,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     Button btnDetails_addToCart, btnDetails_buyNow;
 
-    ImageButton btnFavorite, ibtnDetails_remove_1, ibtnDetails_add_1, btnBack;
+    ImageButton btnFavorite_empty, btnFavorite_full, ibtnDetails_remove_1, ibtnDetails_add_1, btnBack;
 
     RelativeLayout btnDetails_wAddToCart, btnDetails_wBuyNow;
     RelativeLayout rlPopupWindow;
@@ -98,8 +101,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
             Glide.with(this).load(product.getProduct_img()).into(ivDetails_productIllustration);
             Glide.with(this).load(product.getProduct_img()).into(ivDetailsAddProduct_productImg);
 
-            isFavoritePresent = FavoriteProduct.lstProduct.contains(product);
-            if (isFavoritePresent) btnFavorite.setImageResource(R.drawable.red_heart_icon);
+//            isFavoritePresent = FavoriteProduct.lstProduct.contains(product);
+//            if (isFavoritePresent) btnFavorite.setImageResource(R.drawable.red_heart_icon);
 
             capacitiesAdapter = new ArrayAdapter<>(this, R.layout.capacity_item, R.id.tvCapacity, product.getMemory());
             gvCapacities.setAdapter(capacitiesAdapter);
@@ -156,9 +159,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
         rlPopupWindow = findViewById(R.id.rlPopupWindow);
         cvPopupWindow_display = findViewById(R.id.cvPopupWindow_display);
         tvDetails_productName = findViewById(R.id.tvDetails_productName);
+        tvDetails_productName.setTransitionName("product_name");
         tvDetails_productPrice = findViewById(R.id.tvDetails_productPrice);
+        tvDetails_productPrice.setTransitionName("product_price");
         tvDetails_productDescr = findViewById(R.id.tvDetails_productDescr);
         ivDetails_productIllustration = findViewById(R.id.ivDetails_productIllustration);
+        ivDetails_productIllustration.setTransitionName("product_img");
         ivDetailsAddProduct_productImg = findViewById(R.id.ivDetailsAddProduct_productImg);
         tvDetailsAddProduct_productPrice = findViewById(R.id.tvDetailsAddProduct_productPrice);
         ibtnDetails_remove_1 = findViewById(R.id.ibtnDetails_remove_1);
@@ -174,7 +180,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
         tvDetails_quantity = findViewById(R.id.tvDetails_quantity);
         tvDetails_quantity_2 = findViewById(R.id.tvDetails_quantity_2);
 
-        btnFavorite = findViewById(R.id.btnFavorite);
+        btnFavorite_empty = findViewById(R.id.btnFavorite_empty);
+        btnFavorite_empty.setBackground(null);
+        btnFavorite_full = findViewById(R.id.btnFavorite_full);
+        btnFavorite_full.setBackground(null);
         gvCapacities = findViewById(R.id.gvCapacities);
 
         listPrice = Arrays.asList(tvDetails_productPrice);
@@ -229,18 +238,32 @@ public class ProductDetailsActivity extends AppCompatActivity {
             btnDetails_wAddToCart.setVisibility(View.INVISIBLE);
         });
 
-        btnFavorite.setOnClickListener(view -> {
-            if (isFavoritePresent) {
-                FavoriteProduct.lstProduct.remove(product);
-                btnFavorite.setImageResource(R.drawable.grey_heart_icon);
-                isFavoritePresent = false;
-            } else {
-                FavoriteProduct.lstProduct.add(product);
-                btnFavorite.setImageResource(R.drawable.red_heart_icon);
-                isFavoritePresent = true;
-                saveDataToDatabase(userEmail, product.getProduct_id());
-            }
+        btnFavorite_empty.setOnClickListener(view -> {
+//            if (isFavoritePresent) {
+//                FavoriteProduct.lstProduct.remove(product);
+//                btnFavorite.setImageResource(R.drawable.grey_heart_icon);
+//                isFavoritePresent = false;
+//            } else {
+//                FavoriteProduct.lstProduct.add(product);
+//                btnFavorite.setImageResource(R.drawable.red_heart_icon);
+//                isFavoritePresent = true;
+//                saveDataToDatabase(userEmail, product.getProduct_id());
+//            }
+            btnFavorite_full.setVisibility(View.VISIBLE);
+            Animation animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_in_heart);
+            btnFavorite_full.startAnimation(animation);
+            animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_out_heart);
+            btnFavorite_full.startAnimation(animation);
+            btnFavorite_empty.setVisibility(View.INVISIBLE);
+            btnFavorite_full.setClickable(true);
 
+        });
+        btnFavorite_full.setOnClickListener(view -> {
+            btnFavorite_empty.setVisibility(View.VISIBLE);
+            Animation animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_heart);
+            btnFavorite_full.startAnimation(animation);
+            btnFavorite_full.setVisibility(View.INVISIBLE);
+            btnFavorite_full.setClickable(false);
         });
 
         ibtnDetails_remove_1.setOnClickListener(view -> {
@@ -258,14 +281,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
 
         ibtnDetails_add_1.setOnClickListener(view -> {
-            if (productQuantityAdded < selectedOptionQuantity){
+            if (productQuantityAdded < selectedOptionQuantity) {
                 productQuantityAdded++;
             }
             SetTextForQuantity();
         });
 
         ibtnDetails_add_2.setOnClickListener(view -> {
-            if (productQuantityAdded < selectedOptionQuantity){
+            if (productQuantityAdded < selectedOptionQuantity) {
                 productQuantityAdded++;
             }
             SetTextForQuantity();
@@ -282,7 +305,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
 
         btnBack.setOnClickListener(view -> {
-            finish();
+            supportFinishAfterTransition();
+
         });
     }
 

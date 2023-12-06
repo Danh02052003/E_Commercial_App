@@ -1,9 +1,11 @@
 package vlu.mobileproject.adapter;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,16 +26,13 @@ import vlu.mobileproject.Favorite;
 import vlu.mobileproject.HomeChildItem;
 import vlu.mobileproject.ProductDetailsActivity;
 import vlu.mobileproject.R;
+import vlu.mobileproject.activity.view.home.MainActivity;
 import vlu.mobileproject.modle.Products;
 
 public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.ViewHolder>{
-//    public List<HomeChildItem> childItemList;
     public List<Products> productsList;
     private Context mContext;
-//    public HomeChildAdapter(Context context, List<HomeChildItem> childItemList) {
-//        this.mContext = context;
-//        this.childItemList = childItemList;
-//    }
+
     public HomeChildAdapter(Context context, List<Products> productsList) {
         this.mContext = context;
         this.productsList = productsList;
@@ -48,19 +47,6 @@ public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-//        HomeChildItem childItem = childItemList.get(position);
-//
-//        holder.tvProductName.setText(childItem.getProductName());
-//        holder.tvProductCategory.setText(childItem.getProductCategory());
-//        holder.tvProductPrice.setText("$" + String.valueOf(childItem.getProductPrice()));
-//        holder.ivProductImg.setImageResource(childItem.getProductImg());
-//        holder.layoutItem.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                onClickGoToDetail(childItem);
-//            }
-//        });
         Products product = productsList.get(position);
 
         holder.tvProductName.setText(product.getProduct_name());
@@ -73,7 +59,6 @@ public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.View
                 holder.tvProductCategory.setText("Apple");
                 break;
         }
-
         holder.tvProductPrice.setText(String.valueOf(product.getPriceForMemory()));
 
         StorageReference imgRef = FirebaseStorage.getInstance().getReference().child(product.getProduct_img());
@@ -89,18 +74,22 @@ public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.View
             @Override
             public void onClick(View view) {
 
-                onClickGoToDetail(product);
+                onClickGoToDetail(product, holder);
             }
         });
 
     }
-    public void onClickGoToDetail(Products product){
+    public void onClickGoToDetail(Products product, ViewHolder viewHolder){
         Intent intent = new Intent(mContext, ProductDetailsActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_product", product);
         intent.putExtras(bundle);
 
-        mContext.startActivity(intent);
+        Pair<View, String> p1 = Pair.create((View)viewHolder.ivProductImg, "product_img");
+        Pair<View, String> p2 = Pair.create((View)viewHolder.tvProductName, "product_name");
+        Pair<View, String> p3 = Pair.create((View)viewHolder.tvProductPrice, "product_price");
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((MainActivity)mContext, p1, p2, p3);
+        mContext.startActivity(intent, options.toBundle());
     }
 
     public void setItems(List<Products> items) {
@@ -136,6 +125,4 @@ public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.View
             layoutItem = itemView.findViewById(R.id.layoutItem);
         }
     }
-
-
 }

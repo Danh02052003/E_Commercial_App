@@ -32,6 +32,7 @@
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         style="@style/IMAGEBUTTON"
+                        android:layout_centerVertical="true"
                         android:src="@drawable/back_icon" />
 
                     <TextView
@@ -42,15 +43,32 @@
                         android:text="Chi tiết"
                         android:textSize="10pt" />
 
-                    <ImageButton
-                        android:id="@+id/btnFavorite"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:src="@drawable/grey_heart_icon"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        style="@style/IMAGEBUTTON"
-                        android:scaleType="centerCrop"/>
+                    <RelativeLayout
+                        android:layout_width="58dp"
+                        android:layout_height="58dp"
+                        android:layout_alignParentRight="true">
+
+                        <ImageButton
+                            android:id="@+id/btnFavorite_empty"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_centerInParent="true"
+
+                            android:layout_centerHorizontal="true"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/grey_heart_icon" />
+
+                        <ImageButton
+                            android:layout_centerInParent="true"
+                            android:id="@+id/btnFavorite_full"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/red_heart_icon"
+                            android:visibility="gone"
+                            android:scaleType="centerCrop"/>
+
+                    </RelativeLayout>
+
 
                 </RelativeLayout>
 
