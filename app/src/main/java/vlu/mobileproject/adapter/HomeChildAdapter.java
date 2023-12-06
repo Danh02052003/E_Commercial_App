@@ -1,8 +1,10 @@
 package vlu.mobileproject.adapter;
 
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -22,14 +24,11 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
-import vlu.mobileproject.Favorite;
-import vlu.mobileproject.HomeChildItem;
 import vlu.mobileproject.ProductDetailsActivity;
 import vlu.mobileproject.R;
-import vlu.mobileproject.activity.view.home.MainActivity;
 import vlu.mobileproject.modle.Products;
 
-public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.ViewHolder>{
+public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.ViewHolder> {
     public List<Products> productsList;
     private Context mContext;
 
@@ -51,7 +50,7 @@ public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.View
 
         holder.tvProductName.setText(product.getProduct_name());
 
-        switch (product.getProduct_categoryId()){
+        switch (product.getProduct_categoryId()) {
             case 1:
                 holder.tvProductCategory.setText("Samsung");
                 break;
@@ -65,30 +64,43 @@ public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.View
         imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
             product.setProduct_img(uri.toString());
             String imageURL = product.getProduct_img();
-            Glide.with(mContext).load(imageURL).into(holder.ivProductImg);
+            loadGlideImageWithCheck(mContext, imageURL, holder.ivProductImg);
         }).addOnFailureListener(e -> {
             Log.e(this.toString(), "Error loading image from Firebase: " + e.getMessage());
             e.printStackTrace();
         });
-        holder.layoutItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                onClickGoToDetail(product, holder);
-            }
-        });
-
+        holder.layoutItem.setOnClickListener(view -> onClickGoToDetail(product, holder));
     }
-    public void onClickGoToDetail(Products product, ViewHolder viewHolder){
+
+    private void loadGlideImageWithCheck(Context context, String imageUrl, ImageView imageView) {
+        if (isValidContextForGlide(context)) {
+            Glide.with(context)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.error)
+                    .into(imageView);
+        }
+    }
+
+    private static boolean isValidContextForGlide(Context context) {
+        if (context instanceof Activity) {
+            Activity activity = (Activity) context;
+            return !(activity.isDestroyed() || activity.isFinishing());
+        }
+        return true;
+    }
+
+    public void onClickGoToDetail(Products product, ViewHolder viewHolder) {
         Intent intent = new Intent(mContext, ProductDetailsActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_product", product);
         intent.putExtras(bundle);
 
-        Pair<View, String> p1 = Pair.create((View)viewHolder.ivProductImg, "product_img");
-        Pair<View, String> p2 = Pair.create((View)viewHolder.tvProductName, "product_name");
-        Pair<View, String> p3 = Pair.create((View)viewHolder.tvProductPrice, "product_price");
-        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((MainActivity)mContext, p1, p2, p3);
+        Pair<View, String> p1 = Pair.create((View) viewHolder.ivProductImg, "product_img");
+        Pair<View, String> p2 = Pair.create((View) viewHolder.tvProductName, "product_name");
+        Pair<View, String> p3 = Pair.create((View) viewHolder.tvProductPrice, "product_price");
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, p1, p2, p3);
         mContext.startActivity(intent, options.toBundle());
     }
 
