@@ -98,8 +98,8 @@ public class SignupActivity extends AppCompatActivity {
                     "Mật khẩu phải có độ dài ít nhất 6 ký tự", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (phone.length() != 10) {
-            Toast.makeText(this, "\n" + "Số điện thoại phải có chính xác 10 chữ số", Toast.LENGTH_SHORT).show();
+        if (phone.length() != 10) { // Kệ chỗ này. SDT nước ngoài khác vn, đéo test số ảo được lol.
+            //Toast.makeText(this, "\n" + "Số điện thoại phải có chính xác 10 chữ số", Toast.LENGTH_SHORT).show();
         }
         if (!isValidEmail(email)) {
             Toast.makeText(this, "\n" +
