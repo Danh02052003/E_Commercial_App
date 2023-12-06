@@ -128,42 +128,41 @@ public class ForgotPassword extends AppCompatActivity {
                     });
         } else {
             SendVerificationCode(emailPhone);
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            user.updatePassword(edtNewPassword.toString())
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(ForgotPassword.this, "Đổi mật khẩu thành công.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(ForgotPassword.this, "Đổi mật khẩu không thành công.", Toast.LENGTH_SHORT).show();
-                            Exception exception = task.getException();
-                        }
-                    });
+
         }
     }
 
     void SendVerificationCode(String phoneNumber) {
-        checkForPhoneNumber(phoneNumber, exists -> {
-            if (exists) {
-                PhoneAuthOptions options =
-                        PhoneAuthOptions.newBuilder(firebaseAuth)
-                                .setPhoneNumber(phoneNumber)       // Phone number to verify
-                                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                                .setActivity(this)                 // (optional) Activity for callback binding
-                                .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
-                                .build();
-                PhoneAuthProvider.verifyPhoneNumber(options);
+        PhoneAuthOptions options =
+                PhoneAuthOptions.newBuilder(firebaseAuth)
+                        .setPhoneNumber(phoneNumber)       // Phone number to verify
+                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                        .setActivity(this)                 // (optional) Activity for callback binding
+                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+                        .build();
+        PhoneAuthProvider.verifyPhoneNumber(options);
 
-                VerifyDialog.showDialog(ForgotPassword.this, new VerifyDialog.OnVerifyListener() {
-                    @Override
-                    public void onVerify(String code) {
-                        PhoneAuthCredential credential = VerifyCode(code);
-                        signInWithPhoneAuthCredential(credential);
-                    }
-                });
-            } else {
-                Toast.makeText(ForgotPassword.this, "Tài khoản không tồn tại", Toast.LENGTH_SHORT).show();
+        VerifyDialog.showDialog(ForgotPassword.this, new VerifyDialog.OnVerifyListener() {
+            @Override
+            public void onVerify(String code) {
+                PhoneAuthCredential credential = VerifyCode(code);
+                signInWithPhoneAuthCredential(credential);
             }
         });
+    }
+
+    void ChangeUserPassword() {
+        FirebaseUser user2ChangePass = FirebaseAuth.getInstance().getCurrentUser();
+        String newPassword = edtNewPassword.getText().toString().trim();
+        user2ChangePass.updatePassword(newPassword)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(ForgotPassword.this, "Đổi mật khẩu thành công.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ForgotPassword.this, "Đổi mật khẩu không thành công.", Toast.LENGTH_SHORT).show();
+                        Exception exception = task.getException();
+                    }
+                });
     }
 
     void checkForPhoneNumber(String number, Consumer<Boolean> callback) {
@@ -195,6 +194,7 @@ public class ForgotPassword extends AppCompatActivity {
             //     detect the incoming verification SMS and perform verification without
             //     user action.
             //signInWithPhoneAuthCredential(credential);
+
 
             final  String code = credential.getSmsCode();
             if (code != null) {
@@ -243,12 +243,14 @@ public class ForgotPassword extends AppCompatActivity {
     }
 
     void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        UserManager.getInstance().setUserEmail(firebaseAuth.getCurrentUser().getEmail());
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            ChangeUserPassword();
+                            UserManager.getInstance().setUserEmail(firebaseAuth.getCurrentUser().getEmail());
+
                             Intent intent = new Intent(ForgotPassword.this, MainActivity.class);
                             startActivity(intent);
                             finish();

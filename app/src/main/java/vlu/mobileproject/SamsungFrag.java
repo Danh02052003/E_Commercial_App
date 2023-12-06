@@ -102,16 +102,15 @@ public class SamsungFrag extends Fragment implements GlobalData.AllCallBack {
 
         FirebaseApp.initializeApp(getContext());
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/");
-        DatabaseReference productRef = database.getReference("Products");
+        DatabaseReference productRef = database.getReference("Products_2");
         productRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Products product = dataSnapshot.getValue(Products.class);
 
-                    String imgUrl = dataSnapshot.child("productImage").getValue().toString();
-
-                    product.setProduct_img(imgUrl);
+                    String imageCategory_path = "samsung";
+                    product.setProduct_img("product_image/"+imageCategory_path+"/"+product.getProduct_img());
                     products.add(product);
                     product.setProductID(dataSnapshot.getKey());
                 }

@@ -359,6 +359,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private void SaveCardItem(ShoppingCart CartItem) {
         String productId = cartReference.push().getKey();
         CartItem.setUserID(auth.getCurrentUser().getUid());
+        String x = auth.getCurrentUser().getEmail();
+        String y = auth.getCurrentUser().getPhoneNumber();
         cartReference.child(productId).setValue(CartItem);
 
         Toast.makeText(this, "Sản phẩm đã được thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();

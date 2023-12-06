@@ -7,6 +7,10 @@ public class user {
     public String userPhone;
     private String verificationCode;
 
+    public user() {
+
+    }
+
     public user(String userName) {
         this.userName = userName;
     }

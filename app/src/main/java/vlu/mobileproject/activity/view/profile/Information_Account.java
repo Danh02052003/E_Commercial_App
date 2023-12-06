@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +26,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import vlu.mobileproject.R;
 import vlu.mobileproject.globalfuction.ImageHandler;
 import vlu.mobileproject.login.UserManager;
+import vlu.mobileproject.login.user;
 import vlu.mobileproject.modle.User;
 
 
@@ -128,31 +130,24 @@ public class Information_Account extends Information_Account_Detail {
         // You can also apply the mode to other activities here (if needed) using the same method.
     }
     private void fetchUserDataFromFirebase(String userEmail) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance(bet);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("User");
+        FirebaseAuth auth = FirebaseAuth.getInstance();
 
-        // Query for the specific user with the target email
-        Query query = myRef.orderByChild("user_email").equalTo(userEmail);
-
+        Query query = myRef.child(auth.getCurrentUser().getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists() && snapshot.hasChildren()) {
+                boolean snapshotExists = snapshot.exists() && snapshot.hasChildren();
+                if (snapshotExists) {
                     // Assuming there is only one user with the given email, retrieve the first child
                     DataSnapshot userSnapshot = snapshot.getChildren().iterator().next();
 
+                    user CurUser = snapshot.getValue(user.class);
                     // Get the user object from the snapshot
-                    User user = userSnapshot.getValue(User.class);
-
-                    if (snapshot.exists()) {
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            if (user != null) {
-                                String nameAcc = dataSnapshot.child("user_name").getValue(String.class);
-                                NameAccount.setText(nameAcc);
-                                ImageHandler.setImageFromFirebaseStorage(imgAvatarAccount, userEmail);
-                            }
-                        }
-                    }
+                    NameAccount.setText(CurUser.getUserName());
+                    auth.getCurrentUser().updatePassword("1231231");
+                    ImageHandler.setImageFromFirebaseStorage(imgAvatarAccount, auth.getCurrentUser().getEmail());
 
                 } else {
                     // Handle the case when no user with the given email is found
