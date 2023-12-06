@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,7 +12,6 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -326,7 +324,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     ShoppingCart CartItemProduct = dataSnapshot.getValue(ShoppingCart.class);
                     String productID = CartItemProduct.getProductID();
-                    String productMemOpt = CartItemProduct.getMemoryOptName();
+                    String productMemOpt = CartItemProduct.getMemoryOptID();
 
                     shouldAddQuantty = productID.equals(product.getProductID()) && productSelectedOption.equals(productMemOpt);
                     if (shouldAddQuantty) {
