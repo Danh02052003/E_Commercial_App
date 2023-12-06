@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,6 +36,7 @@ import java.util.Set;
 import vlu.mobileproject.ProductInCartItem;
 import vlu.mobileproject.R;
 import vlu.mobileproject.ShoppingCart;
+import vlu.mobileproject.activity.view.order.OrderActivity;
 import vlu.mobileproject.adapter.ProductInCartAdapter;
 import vlu.mobileproject.modle.Order;
 import vlu.mobileproject.modle.OrderItem;
@@ -229,8 +233,17 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
                     int ProductQuantity = item.getProductQuantity();
                     String newOrderItemID = orderItemReference.push().getKey();
                     OrderItem neworderItem = new OrderItem(newOrderKey, ProductID, ProductOption, ProductQuantity);
-                    orderItemReference.child(newOrderItemID).setValue(neworderItem);
-                    Toast.makeText(Cart.this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
+                    orderItemReference.child(newOrderItemID).setValue(neworderItem).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(Cart.this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(Cart.this, OrderActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("OrderID", newOrderKey); // Replace "key" and "value" with your actual data
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+
+                        }
+                    });
                 }
             } else {
                 Toast.makeText(Cart.this, "Đặt không hàng thành công", Toast.LENGTH_SHORT).show();
