@@ -67,22 +67,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         });
 
         cartReference = FirebaseDatabase.getInstance().getReference(CART_REFERENCE_KEY);
-
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-
         GetListFromShoppingCart();
-
-        if (inCartItemList.size() != 0) {
-            setupUI();
-            View cartItemView = getLayoutInflater().inflate(R.layout.cart_item, null);
-            cbCartCheck = cartItemView.findViewById(R.id.cbCartCheck);
-            PayControl();
-            addControl();
-        } else {
-            tvCart_state = findViewById(R.id.tvCart_state);
-            tvCart_state.setVisibility(View.VISIBLE);
-        }
     }
 
     private void setupUI() {
@@ -99,6 +84,16 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         cartReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    setupUI();
+                    View cartItemView = getLayoutInflater().inflate(R.layout.cart_item, null);
+                    cbCartCheck = cartItemView.findViewById(R.id.cbCartCheck);
+                    PayControl();
+                    addControl();
+                } else {
+                    tvCart_state = findViewById(R.id.tvCart_state);
+                    tvCart_state.setVisibility(View.VISIBLE);
+                }
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     ShoppingCart cartItem = dataSnapshot.getValue(ShoppingCart.class);
                     String productId = cartItem.getProductID();
