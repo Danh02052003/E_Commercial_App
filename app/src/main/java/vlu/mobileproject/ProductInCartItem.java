@@ -39,6 +39,10 @@ public class ProductInCartItem {
 
     private boolean isChecked = false;
 
+    public ProductInCartItem() {
+
+    }
+
     public ProductInCartItem(String CartItemID, String productName, double productPrice, int productQuantity, String productImg, String productID, String productOption) {
         this.productName = productName;
         this.productPrice = productPrice;

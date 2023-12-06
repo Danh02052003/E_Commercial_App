@@ -38,6 +38,8 @@ import vlu.mobileproject.R;
 import vlu.mobileproject.ShoppingCart;
 import vlu.mobileproject.activity.view.order.OrderActivity;
 import vlu.mobileproject.adapter.ProductInCartAdapter;
+import vlu.mobileproject.data.DeliveryStatus;
+import vlu.mobileproject.data.PaymentMethod;
 import vlu.mobileproject.modle.Order;
 import vlu.mobileproject.modle.OrderItem;
 import vlu.mobileproject.modle.Products;
@@ -48,6 +50,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
     private static final String ORDER_ITEM_REFERENCE_KEY = "OrderItem";
     private static final String PRODUCTS_REFERENCE_KEY = "Products_2";
 
+    DeliveryStatus deliveryStatus;
     RecyclerView rvProductAdded;
     List<ProductInCartItem> inCartItemList = new ArrayList<>();
     ProductInCartAdapter adapter;
@@ -60,7 +63,6 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
     double totalPrice = 0;
     String formattedValue;
     DatabaseReference cartReference, orderReference, orderItemReference;
-
     FirebaseAuth auth;
 
     @Override
@@ -74,6 +76,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         edtDiscount = findViewById(R.id.edtDiscount);
         tvCart_discount = findViewById(R.id.tvCart_discount);
         btnBack = findViewById(R.id.btnBack);
+
 
         auth = FirebaseAuth.getInstance();
 
@@ -115,7 +118,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
                     ShoppingCart cartItem = dataSnapshot.getValue(ShoppingCart.class);
                     String productId = cartItem.getProductID();
 
-                    DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("Products_2");
+                    DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference(PRODUCTS_REFERENCE_KEY);
                     productsRef.child(productId).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot productSnapshot) {
@@ -223,7 +226,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         String UserID = auth.getCurrentUser().getUid();
         String newOrderKey = orderReference.push().getKey();
         String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        Order newOrder = new Order(UserID, newOrderKey, totalPrice, currentDate, "");
+        Order newOrder = new Order(UserID, newOrderKey, totalPrice, currentDate, DeliveryStatus.PENDING, PaymentMethod.COD);
 
         orderReference.child(newOrderKey).setValue(newOrder).addOnCompleteListener(taskAddOrder -> {
             if (taskAddOrder.isSuccessful()) {

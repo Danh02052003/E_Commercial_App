@@ -1,16 +1,30 @@
 package vlu.mobileproject.modle;
 
+import vlu.mobileproject.data.DeliveryStatus;
+import vlu.mobileproject.data.PaymentMethod;
+
 public class Order {
     String buyer_id, order_id;
     double total_amount;
-    String order_date, status;
+    String order_date;
+    DeliveryStatus status;
+    PaymentMethod paymentMethod;
 
-    public Order(String buyer_id, String order_id, double total_amount, String order_date, String status) {
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public Order(String buyer_id, String order_id, double total_amount, String order_date, DeliveryStatus status, PaymentMethod paymentMethod) {
         this.buyer_id = buyer_id;
         this.order_id = order_id;
         this.total_amount = total_amount;
         this.order_date = order_date;
         this.status = status;
+        this.paymentMethod = paymentMethod;
     }
 
     public Order(){}
@@ -47,11 +61,11 @@ public class Order {
         this.order_date = order_date;
     }
 
-    public String getStatus() {
+    public DeliveryStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(DeliveryStatus status) {
         this.status = status;
     }
 }

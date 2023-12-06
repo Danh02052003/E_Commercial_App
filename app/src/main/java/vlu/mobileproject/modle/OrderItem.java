@@ -1,7 +1,7 @@
 package vlu.mobileproject.modle;
 
 public class OrderItem {
-    String order_id, orderItemID, price_per_unit, product_id, ProductMemoryOption;
+    String order_id, orderItemID, price_per_unit, product_id, ProductMemoryOption, productName;
 
     int quantity;
 
@@ -19,6 +19,23 @@ public class OrderItem {
         this.product_id = product_id;
         this.quantity = quantity;
         this.ProductMemoryOption = ProductMemoryOption;
+    }
+
+    public OrderItem(String order_id, String product_id, String ProductMemoryOption, int quantity, String productName) {
+        this.order_id = order_id;
+        this.orderItemID = orderItemID;
+        this.product_id = product_id;
+        this.quantity = quantity;
+        this.ProductMemoryOption = ProductMemoryOption;
+        this.productName = productName;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public String getProductMemoryOption() {
