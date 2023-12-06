@@ -56,8 +56,10 @@ public class SignupActivity extends AppCompatActivity {
 
     FragmentTransaction transaction;
 
-    String verificationId;
+    String username;
 
+    String verificationId;
+    String phone;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,10 +89,10 @@ public class SignupActivity extends AppCompatActivity {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
     private void signupUser() {
-        final String username = editTextUsername.getText().toString().trim();
+        username = editTextUsername.getText().toString().trim();
         final String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
-        String phone = editPhone.getText().toString().trim();
+        phone = editPhone.getText().toString().trim();
 
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             Toast.makeText(this, "\n" +
@@ -125,16 +127,12 @@ public class SignupActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             FirebaseUser currentUser = firebaseAuth.getCurrentUser();
                             if (currentUser != null) {
-                                // User registration successful
-
                                 SendVerificationCode(phone);
                                 VerifyDialog.showDialog(SignupActivity.this, new VerifyDialog.OnVerifyListener() {
                                     @Override
                                     public void onVerify(String code) {
                                         PhoneAuthCredential credential = VerifyCode(code);
-
-                                        saveUserDataToDatabase(username , credential);
-                                        signInWithPhoneAuthCredential(credential);
+                                        saveUserDataToDatabase(username, credential);
                                     }
                                 });
                             }
@@ -169,14 +167,6 @@ public class SignupActivity extends AppCompatActivity {
                                 .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
                                 .build();
                 PhoneAuthProvider.verifyPhoneNumber(options);
-
-                VerifyDialog.showDialog(SignupActivity.this, new VerifyDialog.OnVerifyListener() {
-                    @Override
-                    public void onVerify(String code) {
-                        PhoneAuthCredential credential = VerifyCode(code);
-                        signInWithPhoneAuthCredential(credential);
-                    }
-                });
             } else {
                 Toast.makeText(SignupActivity.this, "Số này đã được sử dụng", Toast.LENGTH_SHORT).show();
             }
@@ -218,6 +208,7 @@ public class SignupActivity extends AppCompatActivity {
             if (code != null) {
                 VerifyCode(code);
             }
+            saveUserDataToDatabase(username, credential);
         }
 
         @Override
@@ -280,43 +271,37 @@ public class SignupActivity extends AppCompatActivity {
     private void saveUserDataToDatabase(String user_name, PhoneAuthCredential credential) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         user newUser = new user(user_name);
-        usersRef.child(userId).setValue(newUser)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        firebaseAuth.getCurrentUser().updatePhoneNumber(credential);
-                        Paper.init(this);
-                        Paper.book().write("RememberUser", true);
-                        Toast.makeText(SignupActivity.this, "Đặng kí thành công", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(SignupActivity.this, "\n" +
-                                "Không thể lưu thông tin người dùng", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
 
-    private void sendVerificationEmail() {
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-
-            user.sendEmailVerification()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-
-                            Toast.makeText(SignupActivity.this, "Email xác nhận đã được gửi", Toast.LENGTH_SHORT).show();
-
-                            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                            finish();
-
-                        } else {
-
-                            Toast.makeText(SignupActivity.this, "Không thể gửi email xác minh\n", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } else {
-            Toast.makeText(SignupActivity.this, "Không tìm thấy người dùng. Vui lòng thử lại", Toast.LENGTH_SHORT).show();
-        }
+        // Check if the phone number is not already associated with another account
+        checkForPhoneNumber(phone, exists -> {
+            if (!exists) {
+                // Update the phone number and save user data to the database
+                firebaseAuth.getCurrentUser().updatePhoneNumber(credential)
+                        .addOnCompleteListener(phoneUpdateTask -> {
+                            if (phoneUpdateTask.isSuccessful()) {
+                                usersRef.child(userId).setValue(newUser)
+                                        .addOnCompleteListener(task -> {
+                                            if (task.isSuccessful()) {
+                                                Paper.init(this);
+                                                Paper.book().write("RememberUser", true);
+                                                Toast.makeText(SignupActivity.this, "Đặng kí thành công", Toast.LENGTH_SHORT).show();
+                                                signInWithPhoneAuthCredential(credential);
+                                            } else {
+                                                // Handle database save failure
+                                                Toast.makeText(SignupActivity.this, "\n" +
+                                                        "Không thể lưu thông tin người dùng: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            } else {
+                                // Handle phone number update failure
+                                Toast.makeText(SignupActivity.this, "Failed to update phone number: " + phoneUpdateTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            } else {
+                // The phone number is already associated with another account
+                Toast.makeText(SignupActivity.this, "Số điện thoại này đã được sử dụng", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private String generateVerificationCode() {
