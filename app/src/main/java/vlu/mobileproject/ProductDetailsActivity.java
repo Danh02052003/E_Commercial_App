@@ -330,8 +330,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
                     shouldAddQuantty = productID.equals(product.getProductID()) && productSelectedOption.equals(productMemOpt);
                     if (shouldAddQuantty) {
-                        int newQuantity = CartItemProduct.getQuantity() + productQuantityAdded;
-                        dataSnapshot.getRef().child("quantity").setValue(newQuantity);
+                        if (selectedOptionQuantity >= CartItemProduct.getQuantity() + productQuantityAdded) {
+                            int newQuantity = CartItemProduct.getQuantity() + productQuantityAdded;
+                            dataSnapshot.getRef().child("quantity").setValue(newQuantity);
+                            Toast.makeText(ProductDetailsActivity.this, "Sản phẩm đã được thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(ProductDetailsActivity.this, "Thêm thất bại. Số lượng sản phẩm có thể thêm: " + (selectedOptionQuantity - CartItemProduct.getQuantity()), Toast.LENGTH_SHORT).show();
+                        }
                         break;
                     }
                 }

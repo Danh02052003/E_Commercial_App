@@ -126,8 +126,6 @@ public class Information_Account extends Information_Account_Detail {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-
-        // You can also apply the mode to other activities here (if needed) using the same method.
     }
     private void fetchUserDataFromFirebase(String userEmail) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -140,24 +138,17 @@ public class Information_Account extends Information_Account_Detail {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean snapshotExists = snapshot.exists() && snapshot.hasChildren();
                 if (snapshotExists) {
-                    // Assuming there is only one user with the given email, retrieve the first child
-                    DataSnapshot userSnapshot = snapshot.getChildren().iterator().next();
-
                     user CurUser = snapshot.getValue(user.class);
-                    // Get the user object from the snapshot
                     NameAccount.setText(CurUser.getUserName());
-                    auth.getCurrentUser().updatePassword("1231231");
                     ImageHandler.setImageFromFirebaseStorage(imgAvatarAccount, auth.getCurrentUser().getEmail());
 
                 } else {
-                    // Handle the case when no user with the given email is found
                     Log.d("FirebaseError", "No user found with the email: " + userEmail);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle the error if needed
                 Log.e("FirebaseError", "Error loading data from Firebase: " + error.getMessage());
             }
         });
