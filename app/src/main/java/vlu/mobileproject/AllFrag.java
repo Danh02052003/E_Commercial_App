@@ -1,8 +1,5 @@
 package vlu.mobileproject;
 
-import static vlu.mobileproject.globalfuction.GlobalData.forYou_list;
-import static vlu.mobileproject.globalfuction.GlobalData.highlight_list;
-
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -26,6 +23,10 @@ public class AllFrag extends Fragment implements GlobalData.Callback {
     RecyclerView rvChildList;
     private HomeParentAdapter parentAdapter;
     private List<HomeParentItem> parentItemList;
+    List<Products> products = new ArrayList<>();
+    List<Products> foryou_list = new ArrayList<>();
+    List<Products> highlight_list = new ArrayList<>();
+    boolean isDataLoaded = false;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -56,7 +57,6 @@ public class AllFrag extends Fragment implements GlobalData.Callback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_all, container, false);
         rvCategory = view.findViewById(R.id.rvCategory);
 
@@ -71,17 +71,26 @@ public class AllFrag extends Fragment implements GlobalData.Callback {
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
         if (parentItemList == null || parentItemList.isEmpty()) {
-            GlobalData.initData(getContext(),this);
+            GlobalData.initData(getContext(), this);
+
         }
         rvChildList = anotherLayout.findViewById(R.id.rvChildList);
         rvChildList.setLayoutManager(layoutManager);
 
         return view;
     }
-
+    void separateData() {
+        for (int i = 0; i < products.size(); i++) {
+            if (i < products.size() / 2)
+                foryou_list.add(products.get(i));
+            else highlight_list.add(products.get(i));
+        }
+    };
 
     @Override
-    public void onCompleted(List<Products> foryou_list, List<Products> highlight_list) {
+    public void onCompleted(List<Products> products) {
+        this.products = products;
+        separateData();
         parentItemList = new ArrayList<>();
 
         parentItemList.add(new HomeParentItem("Dành cho bạn", foryou_list));

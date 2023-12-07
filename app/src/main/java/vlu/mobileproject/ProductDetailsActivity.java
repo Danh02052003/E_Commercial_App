@@ -157,9 +157,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
         rlPopupWindow = findViewById(R.id.rlPopupWindow);
         cvPopupWindow_display = findViewById(R.id.cvPopupWindow_display);
         tvDetails_productName = findViewById(R.id.tvDetails_productName);
-        tvDetails_productName.setTransitionName("product_name");
+//        tvDetails_productName.setTransitionName("product_name");
         tvDetails_productPrice = findViewById(R.id.tvDetails_productPrice);
-        tvDetails_productPrice.setTransitionName("product_price");
+//        tvDetails_productPrice.setTransitionName("product_price");
         tvDetails_productDescr = findViewById(R.id.tvDetails_productDescr);
         ivDetails_productIllustration = findViewById(R.id.ivDetails_productIllustration);
         ivDetails_productIllustration.setTransitionName("product_img");

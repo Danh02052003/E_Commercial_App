@@ -45,6 +45,7 @@ import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 import com.yarolegovich.slidingrootnav.callback.DragStateListener;
 
 import java.util.Arrays;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
@@ -64,11 +65,13 @@ import vlu.mobileproject.adapter.DrawerAdapter;
 import vlu.mobileproject.activity.view.profile.Information_Account;
 import vlu.mobileproject.databinding.ActivityMainBinding;
 import vlu.mobileproject.globalfuction.DarkModeUtils;
+import vlu.mobileproject.globalfuction.GlobalData;
 import vlu.mobileproject.globalfuction.ImageHandler;
 import vlu.mobileproject.login.LoginActivity;
 import vlu.mobileproject.login.SignupActivity;
 import vlu.mobileproject.login.StartupActivity;
 import vlu.mobileproject.login.loading;
+import vlu.mobileproject.modle.Products;
 import vlu.mobileproject.modle.User;
 
 public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener {
@@ -92,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
     private SlidingRootNav slidingRootNav;
     CardView cvBorderNavigation;
     boolean toReverseCorner = true;
+    boolean isDataLoaded = false;
     RelativeLayout btnLogout;
 
 
@@ -337,6 +341,5 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
         float density = getResources().getDisplayMetrics().density;
         return dp * density;
     }
-
 
 }

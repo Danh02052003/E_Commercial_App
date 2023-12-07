@@ -31,12 +31,13 @@ import vlu.mobileproject.modle.Products;
  * Use the {@link SamsungFrag#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SamsungFrag extends Fragment implements GlobalData.AllCallBack {
+public class SamsungFrag extends Fragment implements GlobalData.Callback {
     RecyclerView rvCategory;
     RecyclerView rvChildList;
     private HomeParentAdapter parentAdapter;
     private List<HomeParentItem> parentItemList;
     List<Products> products = new ArrayList<>();
+    boolean isDataLoaded = false;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -81,7 +82,6 @@ public class SamsungFrag extends Fragment implements GlobalData.AllCallBack {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_samsung, container, false);
         rvCategory = view.findViewById(R.id.rvCategory);
 
@@ -99,29 +99,8 @@ public class SamsungFrag extends Fragment implements GlobalData.AllCallBack {
 
         rvChildList = anotherLayout.findViewById(R.id.rvChildList);
         rvChildList.setLayoutManager(layoutManager);
+        GlobalData.initData(getContext(),this);
 
-        FirebaseApp.initializeApp(getContext());
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/");
-        DatabaseReference productRef = database.getReference("Products_2");
-        productRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Products product = dataSnapshot.getValue(Products.class);
-
-                    String imageCategory_path = "samsung";
-                    product.setProduct_img("product_image/"+imageCategory_path+"/"+product.getProduct_img());
-                    products.add(product);
-                    product.setProductID(dataSnapshot.getKey());
-                }
-                loadUI();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(this.toString(), "Error loading products from Firebase: " + error.getMessage());
-            }
-        });
         return view;
     }
     void loadUI(){
@@ -143,6 +122,10 @@ public class SamsungFrag extends Fragment implements GlobalData.AllCallBack {
 
     @Override
     public void onCompleted(List<Products> products) {
-        this.products = products;
+        for (Products product : products) {
+            if(product.getProduct_categoryId() == 1)
+                this.products.add(product);
+        }
+        loadUI();
     }
 }

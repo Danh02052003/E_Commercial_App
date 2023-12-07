@@ -65,6 +65,7 @@ public class ProductAdapter extends BaseAdapter {
 
         // Set the product_id as the image resource
 //        imgProductId.setImageResource(product.getProduct_img());
+        Glide.with(context).load(product.getProduct_img()).into(imgProductId);
 
         // Set the product_name to the TextView
         textProductName.setText(product.getProduct_name());

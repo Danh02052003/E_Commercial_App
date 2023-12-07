@@ -60,16 +60,8 @@ public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.View
         }
         holder.tvProductPrice.setText(String.valueOf(product.getPriceForMemory()));
 
-        StorageReference imgRef = FirebaseStorage.getInstance().getReference().child(product.getProduct_img());
-        imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
-            product.setProduct_img(uri.toString());
-            String imageURL = product.getProduct_img();
-            loadGlideImageWithCheck(mContext, imageURL, holder.ivProductImg);
-        }).addOnFailureListener(e -> {
-            Log.e(this.toString(), "Error loading image from Firebase: " + e.getMessage());
-            e.printStackTrace();
-        });
 
+        loadGlideImageWithCheck(mContext, product.getProduct_img(), holder.ivProductImg);
         holder.layoutItem.setOnClickListener(view -> onClickGoToDetail(product, holder));
     }
 
@@ -97,10 +89,10 @@ public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.View
         bundle.putSerializable("object_product", product);
         intent.putExtras(bundle);
 
-        Pair<View, String> p1 = Pair.create((View) viewHolder.ivProductImg, "product_img");
-        Pair<View, String> p2 = Pair.create((View) viewHolder.tvProductName, "product_name");
-        Pair<View, String> p3 = Pair.create((View) viewHolder.tvProductPrice, "product_price");
-        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, p1, p2, p3);
+//        Pair<View, String> p1 = Pair.create((View) viewHolder.ivProductImg, "product_img");
+//        Pair<View, String> p2 = Pair.create((View) viewHolder.tvProductName, "product_name");
+//        Pair<View, String> p3 = Pair.create((View) viewHolder.tvProductPrice, "product_price");
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, viewHolder.ivProductImg, "product_img");
         mContext.startActivity(intent, options.toBundle());
     }
 
