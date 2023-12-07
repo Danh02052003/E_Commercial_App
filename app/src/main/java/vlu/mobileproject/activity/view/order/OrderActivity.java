@@ -46,7 +46,7 @@ public class OrderActivity extends AppCompatActivity {
 
     RecyclerView cardTitle;
 
-    TextView orderStatus, orderTime, orderItemCount, paymentMethod, totalPrice, DestinationEnd;
+    TextView orderStatus, orderTime, orderItemCount, paymentMethod, totalPrice, DestinationEnd, btnDetail2;
     ProgressBar pendingBar, inprogressBar, Delivering2YouBar;
     ImageView btnBack;
     Button btnDetail;
@@ -67,6 +67,7 @@ public class OrderActivity extends AppCompatActivity {
         Delivering2YouBar = findViewById(R.id.Delivering2You);
         btnBack = findViewById(R.id.btnBack);
         btnDetail = findViewById(R.id.btnDetail);
+        btnDetail2 = findViewById(R.id.btnDetail2);
         DestinationEnd = findViewById(R.id.DestinationEnd);
 
         orderStatus = findViewById(R.id.orderStatus);
@@ -93,12 +94,19 @@ public class OrderActivity extends AppCompatActivity {
 
     void SetupDetailBtn(String orderID) {
         btnDetail.setOnClickListener(v -> {
-            Intent intent = new Intent(OrderActivity.this, OrderDetailActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("OrderID", orderID);
-            intent.putExtras(bundle);
-            startActivity(intent);
+            OpenOrderDetail(orderID);
         });
+        btnDetail2.setOnClickListener(v -> {
+            OpenOrderDetail(orderID);
+        });
+    }
+
+    void OpenOrderDetail(String orderID) {
+        Intent intent = new Intent(OrderActivity.this, OrderDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("OrderID", orderID);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     void LoadInitOrder(String newOrderID) {
