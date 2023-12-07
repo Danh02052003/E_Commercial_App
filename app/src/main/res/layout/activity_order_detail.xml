@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/title"
@@ -42,11 +40,11 @@
 
         <TextView
             android:id="@+id/orderItemCount"
-            android:padding="5dp"
-
             android:layout_width="wrap_content"
+
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:padding="5dp"
             android:text="2 đơn hàng"
             android:textColor="#6D6D78"
             android:textSize="15sp"
@@ -99,22 +97,22 @@
                 <ProgressBar
                     android:id="@+id/inprogressBer"
                     style="?android:attr/progressBarStyleHorizontal"
-                    android:progressTint="@color/greenVLUS"
                     android:layout_width="95dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="28dp"
+                    android:progressTint="@color/greenVLUS"
                     app:layout_constraintStart_toEndOf="@+id/pendingBar"
                     app:layout_constraintTop_toBottomOf="@+id/orderStatus" />
 
                 <ProgressBar
                     android:id="@+id/Delivering2You"
-                    android:progressTint="@color/greenVLUS"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="95dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="28dp"
+                    android:progressTint="@color/greenVLUS"
                     app:layout_constraintStart_toEndOf="@+id/inprogressBer"
                     app:layout_constraintTop_toBottomOf="@+id/orderStatus" />
 
@@ -167,7 +165,7 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView3"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="300dp"
                     android:layout_margin="10dp"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="20dp"
@@ -194,49 +192,11 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/RecOrder"
                             android:layout_width="match_parent"
-                            android:layout_height="130dp"
+                            android:layout_height="250dp"
                             android:layout_marginTop="10dp"
                             android:paddingLeft="10dp"
                             android:paddingRight="5dp"
-                            app:layout_constraintBottom_toTopOf="@+id/textView14"
                             app:layout_constraintTop_toBottomOf="@id/cardTitle" />
-
-                        <TextView
-                            android:id="@+id/textView14"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:text="Tổng tiền:"
-                            android:textStyle="bold"
-                            app:layout_constraintBaseline_toBottomOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
-
-                        <TextView
-                            android:id="@+id/totalPrice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:text="9999"
-                            android:textStyle="bold"
-                            app:layout_constraintBaseline_toBottomOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.017"
-                            app:layout_constraintStart_toEndOf="@+id/textView14" />
-
-                        <Button
-                            android:id="@+id/btnDetail"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:text="chi tiet"
-                            android:textStyle="bold"
-                            app:layout_constraintBaseline_toBottomOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.017"
-                            app:layout_constraintStart_toEndOf="@+id/textView14" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -269,7 +229,7 @@
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/cardTitle2"
+                            android:id="@+id/urOrder"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
@@ -280,15 +240,29 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <ImageView
-                            android:id="@+id/imageView12"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/textView15"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:scaleType="fitXY"
+                            android:layout_marginStart="16dp"
+                            android:text="tổng: "
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="@+id/urOrder"
+                            app:layout_constraintTop_toBottomOf="@+id/urOrder" />
+
+
+                        <TextView
+                            android:id="@+id/totalAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="16dp"
+                            android:text="999"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/cardTitle2"
-                            app:srcCompat="@drawable/lighskinned" />
+                            app:layout_constraintTop_toBottomOf="@+id/urOrder" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -304,8 +278,7 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        >
+                        android:layout_height="match_parent">
 
                         <ImageView
                             android:id="@+id/imageView13"
@@ -375,8 +348,7 @@
                     android:layout_marginTop="30dp"
                     app:cardBackgroundColor="#055A44"
                     app:cardCornerRadius="25dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    >
+                    app:layout_constraintStart_toStartOf="parent">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -397,7 +369,6 @@
 
 
                 </androidx.cardview.widget.CardView>
-
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,11 +1,13 @@
 package vlu.mobileproject.modle;
 
 public class OrderItem {
-    String order_id, orderItemID, price_per_unit, product_id, ProductMemoryOption, productName;
+    String order_id, orderItemID, product_id, ProductMemoryOption, productName;
+
+    double price_per_unit;
 
     int quantity;
 
-    public OrderItem(String order_id, String orderItemID, String price_per_unit, String product_id, int quantity) {
+    public OrderItem(String order_id, String orderItemID, double price_per_unit, String product_id, int quantity) {
         this.order_id = order_id;
         this.orderItemID = orderItemID;
         this.price_per_unit = price_per_unit;
@@ -64,11 +66,11 @@ public class OrderItem {
         this.orderItemID = orderItemID;
     }
 
-    public String getPrice_per_unit() {
+    public double getPrice_per_unit() {
         return price_per_unit;
     }
 
-    public void setPrice_per_unit(String price_per_unit) {
+    public void setPrice_per_unit(double price_per_unit) {
         this.price_per_unit = price_per_unit;
     }
 

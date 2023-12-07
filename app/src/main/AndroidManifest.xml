@@ -18,6 +18,9 @@
         android:theme="@style/Theme.MobileProject"
         tools:targetApi="31">
         <activity
+            android:name=".activity.view.order.OrderDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.view.order.OrderActivity"
             android:exported="false" />
         <activity
@@ -31,7 +34,7 @@
             android:exported="false" />
         <activity
             android:name=".activity.view.order.order"
-            android:exported="true"></activity> <!-- This activity has the LAUNCHER category to act as the main entry point -->
+            android:exported="true" /> <!-- This activity has the LAUNCHER category to act as the main entry point -->
         <activity
             android:name=".login.ForgotPassword"
             android:exported="false" />
