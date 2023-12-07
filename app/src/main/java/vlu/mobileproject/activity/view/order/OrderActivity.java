@@ -41,7 +41,7 @@ public class OrderActivity extends AppCompatActivity {
 
     RecyclerView cardTitle;
 
-    TextView orderStatus, orderTime, orderItemCount, paymentMethod;
+    TextView orderStatus, orderTime, orderItemCount, paymentMethod, totalPrice;
     ProgressBar pendingBar, inprogressBar, Delivering2YouBar;
     private int progressStatus = 0;
     private ValueAnimator progressAnimator;
@@ -63,6 +63,7 @@ public class OrderActivity extends AppCompatActivity {
         orderTime = findViewById(R.id.orderTime);
         orderItemCount = findViewById(R.id.orderItemCount);
         paymentMethod = findViewById(R.id.paymentMethod);
+        totalPrice = findViewById(R.id.totalPrice);
 
         layoutManager = new LinearLayoutManager(this);
         cardTitle = findViewById(R.id.RecOrder);
@@ -94,20 +95,9 @@ public class OrderActivity extends AppCompatActivity {
                         orderStatus.setText(order.getStatus().getStatus());
                         orderTime.setText(order.getOrder_date());
                         paymentMethod.setText(order.getPaymentMethod().getPaymentMethod());
+                        totalPrice.setText("$ " + String.valueOf(order.getTotal_amount()));
 
-                        if (order.getStatus().getStatus().equals(DeliveryStatus.PENDING.getStatus())) {
-                            inprogressBar.setProgress(0);
-                            Delivering2YouBar.setProgress(0);
-                            startSmoothAnimation(pendingBar);
-                        } else if (order.getStatus().getStatus().equals(DeliveryStatus.IN_PROGRESS.getStatus())) {
-                            startSmoothAnimation(inprogressBar);
-                            pendingBar.setProgress(100);
-                            Delivering2YouBar.setProgress(0);
-                        } else if (order.getStatus().getStatus().equals(DeliveryStatus.DELIVERING_TO_YOU.getStatus())) {
-                            pendingBar.setProgress(100);
-                            inprogressBar.setProgress(100);
-                            startSmoothAnimation(Delivering2YouBar);
-                        }
+                        ProgressBarAnimation(order);
 
                         Query orderItemQuery = orderItemReference.orderByChild("order_id").equalTo(orderID);
                         orderItemQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -155,6 +145,22 @@ public class OrderActivity extends AppCompatActivity {
                 // Handle onCancelled if needed
             }
         });
+    }
+
+    void ProgressBarAnimation(Order order) {
+        if (order.getStatus().getStatus().equals(DeliveryStatus.PENDING.getStatus())) {
+            inprogressBar.setProgress(0);
+            Delivering2YouBar.setProgress(0);
+            startSmoothAnimation(pendingBar);
+        } else if (order.getStatus().getStatus().equals(DeliveryStatus.IN_PROGRESS.getStatus())) {
+            startSmoothAnimation(inprogressBar);
+            pendingBar.setProgress(100);
+            Delivering2YouBar.setProgress(0);
+        } else if (order.getStatus().getStatus().equals(DeliveryStatus.DELIVERING_TO_YOU.getStatus())) {
+            pendingBar.setProgress(100);
+            inprogressBar.setProgress(100);
+            startSmoothAnimation(Delivering2YouBar);
+        }
     }
 
     private void startSmoothAnimation(ProgressBar progressBar) {
