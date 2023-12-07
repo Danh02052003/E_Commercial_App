@@ -142,12 +142,9 @@ public class ForgotPassword extends AppCompatActivity {
                         .build();
         PhoneAuthProvider.verifyPhoneNumber(options);
 
-        VerifyDialog.showDialog(ForgotPassword.this, new VerifyDialog.OnVerifyListener() {
-            @Override
-            public void onVerify(String code) {
-                PhoneAuthCredential credential = VerifyCode(code);
-                signInWithPhoneAuthCredential(credential);
-            }
+        VerifyDialog.showDialog(ForgotPassword.this, code -> {
+            PhoneAuthCredential credential = VerifyCode(code);
+            signInWithPhoneAuthCredential(credential);
         });
     }
 

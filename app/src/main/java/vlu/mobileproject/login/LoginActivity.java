@@ -42,7 +42,7 @@ import vlu.mobileproject.activity.view.home.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText emailEditText; // Updated to the correct EditText for email input
+    private EditText emailEditText;
     private EditText passwordEditText;
     private Button loginButton;
     private TextView taotaikhoan, quenmk;
@@ -54,8 +54,6 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
 
     CheckBox RememberUser;
-
-    FirebaseAuth mAuthLog;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -69,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void addControl(){
-        mAuthLog = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
         RememberUser = findViewById(R.id.RememberUser);
         emailEditText = findViewById(R.id.editTextUserName); // Updated to the correct ID for email input
@@ -123,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
     private void loginUser() {
         final String email = emailEditText.getText().toString().trim();
         boolean isEmail = email.contains("@");
+
         final String password = passwordEditText.getText().toString().trim();
 
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
@@ -132,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
 
         UserManager.getInstance().setUserEmail(email);
         if (isEmail) {
-            mAuthLog.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
 
                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
@@ -149,13 +148,14 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         } else {
-            SendVerificationCode(email);
+            String phone = emailEditText.getText().toString();
+            SendVerificationCode(phone);
         }
     }
 
     void SendVerificationCode(String phoneNumber) {
         checkForPhoneNumber(phoneNumber, exists -> {
-            if (exists) {
+            if (!exists) {
                 PhoneAuthOptions options =
                         PhoneAuthOptions.newBuilder(firebaseAuth)
                                 .setPhoneNumber(phoneNumber)       // Phone number to verify
@@ -251,17 +251,24 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        UserManager.getInstance().setUserEmail(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail());
-        firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(LoginActivity.this, "Đặng nhập thành công", Toast.LENGTH_SHORT).show();
+        try {
+            firebaseAuth.signInWithCredential(credential)
+                    .addOnFailureListener(command -> {
+                        Toast.makeText(LoginActivity.this, "CAN'T signInWithCredential " + command, Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Đặng nhập thành công", Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+
+        } catch (Exception e) {
+            Toast.makeText(LoginActivity.this, "Đặng nhập thất bại " + e, Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
