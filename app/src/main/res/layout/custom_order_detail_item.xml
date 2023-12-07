@@ -66,7 +66,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/totalAmount"
+        android:id="@+id/totalTemp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

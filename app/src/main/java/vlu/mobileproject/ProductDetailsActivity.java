@@ -99,9 +99,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
             Glide.with(this).load(product.getProduct_img()).into(ivDetails_productIllustration);
             Glide.with(this).load(product.getProduct_img()).into(ivDetailsAddProduct_productImg);
 
-//            isFavoritePresent = FavoriteProduct.lstProduct.contains(product);
-//            if (isFavoritePresent) btnFavorite.setImageResource(R.drawable.red_heart_icon);
-
             capacitiesAdapter = new ArrayAdapter<>(this, R.layout.capacity_item, R.id.tvCapacity, product.getMemory());
             gvCapacities.setAdapter(capacitiesAdapter);
             String[] memoryOptions = product.getMemory();

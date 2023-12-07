@@ -35,6 +35,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import io.paperdb.Paper;
+import vlu.mobileproject.ProductDetailsActivity;
 import vlu.mobileproject.ProductInCartItem;
 import vlu.mobileproject.R;
 import vlu.mobileproject.ShoppingCart;
@@ -43,6 +44,7 @@ import vlu.mobileproject.activity.view.order.PaymentActivity;
 import vlu.mobileproject.adapter.ProductInCartAdapter;
 import vlu.mobileproject.data.DeliveryStatus;
 import vlu.mobileproject.data.PaymentMethod;
+import vlu.mobileproject.modle.Discount;
 import vlu.mobileproject.modle.Order;
 import vlu.mobileproject.modle.OrderItem;
 import vlu.mobileproject.modle.Products;
@@ -52,6 +54,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
     private static final String ORDER_REFERENCE_KEY = "Order";
     private static final String ORDER_ITEM_REFERENCE_KEY = "OrderItem";
     private static final String PRODUCTS_REFERENCE_KEY = "Products_2";
+    private static final String DISCOUNT_REFERENCE_KEY = "Discount";
 
     DeliveryStatus deliveryStatus;
     RecyclerView rvProductAdded;
@@ -64,8 +67,9 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
     EditText edtDiscount;
     List<ProductInCartItem> inCartSelectedList = new ArrayList<>();
     double totalPrice = 0;
+    double discountPercent = 0;
     String formattedValue;
-    DatabaseReference cartReference, orderReference, orderItemReference;
+    DatabaseReference cartReference, orderReference, orderItemReference, discountReference;
     FirebaseAuth auth;
 
     @Override
@@ -80,6 +84,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         tvCart_discount = findViewById(R.id.tvCart_discount);
         btnBack = findViewById(R.id.btnBack);
 
+        Paper.init(this);
 
         auth = FirebaseAuth.getInstance();
 
@@ -90,7 +95,12 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         cartReference = FirebaseDatabase.getInstance().getReference(CART_REFERENCE_KEY);
         orderReference = FirebaseDatabase.getInstance().getReference(ORDER_REFERENCE_KEY);
         orderItemReference = FirebaseDatabase.getInstance().getReference(ORDER_ITEM_REFERENCE_KEY);
+        discountReference = FirebaseDatabase.getInstance().getReference(DISCOUNT_REFERENCE_KEY);
         GetListFromShoppingCart();
+
+        btnApplyDiscount.setOnClickListener(view -> {
+            applyDiscount(edtDiscount.getText().toString());
+        });
     }
 
     private void setupUI() {
@@ -112,7 +122,6 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
                     View cartItemView = getLayoutInflater().inflate(R.layout.cart_item, null);
                     cbCartCheck = cartItemView.findViewById(R.id.cbCartCheck);
                     PayControl();
-                    addControl();
                 } else {
                     tvCart_state = findViewById(R.id.tvCart_state);
                     tvCart_state.setVisibility(View.VISIBLE);
@@ -165,7 +174,6 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
             cbCartCheck = cartItemView.findViewById(R.id.cbCartCheck);
 
             PayControl();
-            addControl();
         } else {
             tvCart_state = findViewById(R.id.tvCart_state);
             tvCart_state.setVisibility(View.VISIBLE);
@@ -195,9 +203,8 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         }
 
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
-        formattedValue = decimalFormat.format(totalPrice);
-        formattedValue = decimalFormat.format(totalPrice);
-        tvCart_totalPrice.setText("$" + formattedValue);
+        formattedValue = decimalFormat.format(totalPrice - totalPrice * (discountPercent == 0 ? 1 : (discountPercent / 100)));
+        tvCart_totalPrice.setText("$" + (formattedValue));
     }
 
     private void PayControl() {
@@ -210,7 +217,6 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
             }
 
             Intent intent = new Intent(Cart.this, PaymentActivity.class);
-            Paper.init(this);
             Paper.book().write("inCartSelectedList", inCartSelectedList);
             Paper.book().write("totalPrice", totalPrice);
             startActivity(intent);
@@ -229,58 +235,25 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         });
     }
 
-    void InitOrder(double totalPrice, List<ProductInCartItem> CheckedItems) {
-        String UserID = auth.getCurrentUser().getUid();
-        String newOrderKey = orderReference.push().getKey();
-        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        Order newOrder = new Order(UserID, newOrderKey, totalPrice, currentDate, DeliveryStatus.PENDING, PaymentMethod.COD, "");
-
-        orderReference.child(newOrderKey).setValue(newOrder).addOnCompleteListener(taskAddOrder -> {
-            if (taskAddOrder.isSuccessful()) {
-                for (ProductInCartItem item : CheckedItems) {
-                    String ProductID = item.getProductID();
-                    String ProductOption = item.getProductOption();
-                    int ProductQuantity = item.getProductQuantity();
-                    String newOrderItemID = orderItemReference.push().getKey();
-                    OrderItem neworderItem = new OrderItem(newOrderKey, ProductID, ProductOption, ProductQuantity);
-                    orderItemReference.child(newOrderItemID).setValue(neworderItem).addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-
-                        } else {
-                            Toast.makeText(Cart.this, "không thể thêm kiện hàng" + neworderItem.getProductName(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+    private void applyDiscount(String discountCode) {
+        discountReference.child(discountCode).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Discount discount = snapshot.getValue(Discount.class);
+                    discountPercent = discount.getDiscountValue() * 100;
+                    tvCart_discount.setText(String.valueOf(discountPercent) + " %");
+                    tvCart_totalPrice.setText("$ " + String.valueOf(tvCart_totalPrice.getText().length() == 0 ? 0 : discountPercent * Double.valueOf(tvCart_totalPrice.getText().toString().replaceAll("\\$", ""))));
+                    Paper.book().write("discount", discount.getDiscountValue());
+                } else {
+                    Toast.makeText(Cart.this, "Không thấy mã giảm giá", Toast.LENGTH_SHORT).show();
                 }
+            }
 
-                Toast.makeText(Cart.this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(Cart.this, OrderActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("OrderID", newOrderKey);
-                intent.putExtras(bundle);
-                startActivity(intent);
-
-            } else {
-                Toast.makeText(Cart.this, "Đặt không hàng thành công", Toast.LENGTH_SHORT).show();
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(Cart.this, "Lỗi: " + error, Toast.LENGTH_SHORT).show();
             }
         });
-
-
-    }
-
-    private void addControl() {
-        btnApplyDiscount.setOnClickListener(view -> {
-            applyDiscount();
-        });
-    }
-
-    private void applyDiscount() {
-        String discountCode = edtDiscount.getText().toString();
-        if ("VLUS".equals(discountCode)) {
-            double discountAmount = totalPrice * 0.25;
-            double discountedPrice = totalPrice * 0.75;
-
-            tvCart_discount.setText(String.valueOf(discountAmount));
-            tvCart_totalPrice.setText(String.valueOf(discountedPrice));
-        }
     }
 }

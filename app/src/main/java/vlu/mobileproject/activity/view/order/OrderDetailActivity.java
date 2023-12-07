@@ -7,8 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,12 +32,10 @@ public class OrderDetailActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     FirebaseAuth auth;
     DatabaseReference orderReference, orderItemReference, productItemReference;
-
     LinearLayoutManager layoutManager;
-
     RecyclerView cartRec;
     ImageView btnBack;
-    TextView  totalPrice, DestinationEnd;
+    TextView  totalPrice, DestinationEnd, orderId, totalTemp, otherFeesText, discountText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +49,13 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         layoutManager = new LinearLayoutManager(this);
         cartRec = findViewById(R.id.RecOrder);
+        orderId = findViewById(R.id.orderId);
         cartRec.setLayoutManager(new LinearLayoutManager(this));
 
-        totalPrice = findViewById(R.id.totalAmount);
+        totalPrice = findViewById(R.id.totalTemp);
+        totalTemp = findViewById(R.id.totalPrice);
+        otherFeesText = findViewById(R.id.otherFeesText);
+        discountText = findViewById(R.id.discountText);
         DestinationEnd = findViewById(R.id.DestinationEnd);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -80,8 +80,16 @@ public class OrderDetailActivity extends AppCompatActivity {
                     for (DataSnapshot orderSnapshot : Snapshot.getChildren()) {
                         Order order = orderSnapshot.getValue(Order.class);
                         String orderID = order.getOrder_id();
-                        totalPrice.setText("$ " + String.valueOf(order.getTotal_amount()));
+                        double totalAmount = order.getTotal_amount();
+                        double otherFees = order.getOtherFees();
+                        double discount = order.getDiscount();
+                        double finTotalAmount = totalAmount - discount * totalAmount + otherFees;
+                        totalTemp.setText("$ " + totalAmount);
+                        discountText.setText(discount + " %");
+                        otherFeesText.setText("$ " + otherFees);
+                        totalPrice.setText("$ " + finTotalAmount);
                         DestinationEnd.setText(order.getShippingAddress());
+                        orderId.setText(orderID);
 
                         Query orderItemQuery = orderItemReference.orderByChild("order_id").equalTo(orderID);
                         orderItemQuery.addListenerForSingleValueEvent(new ValueEventListener() {

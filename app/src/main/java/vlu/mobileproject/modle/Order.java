@@ -5,13 +5,21 @@ import vlu.mobileproject.data.PaymentMethod;
 
 public class Order {
     String buyer_id, order_id, shippingAddress;
-    double total_amount;
+    double total_amount, discount, otherFees;
     String order_date;
     DeliveryStatus status;
     PaymentMethod paymentMethod;
 
     public PaymentMethod getPaymentMethod() {
         return paymentMethod;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
     }
 
     public String getShippingAddress() {
@@ -26,7 +34,15 @@ public class Order {
         this.paymentMethod = paymentMethod;
     }
 
-    public Order(String buyer_id, String order_id, double total_amount, String order_date, DeliveryStatus status, PaymentMethod paymentMethod, String shippingAddress) {
+    public double getOtherFees() {
+        return otherFees;
+    }
+
+    public void setOtherFees(double otherFees) {
+        this.otherFees = otherFees;
+    }
+
+    public Order(String buyer_id, String order_id, double total_amount, double discount, double otherFees, String order_date, DeliveryStatus status, PaymentMethod paymentMethod, String shippingAddress) {
         this.buyer_id = buyer_id;
         this.order_id = order_id;
         this.total_amount = total_amount;
@@ -34,6 +50,8 @@ public class Order {
         this.status = status;
         this.paymentMethod = paymentMethod;
         this.shippingAddress = shippingAddress;
+        this.discount = discount;
+        this.otherFees = otherFees;
     }
 
     public Order(){}

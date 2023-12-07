@@ -1,7 +1,6 @@
 package vlu.mobileproject.activity.view.order;
 
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +53,7 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
             itemNameTextView = itemView.findViewById(R.id.productName);
             quantityTextView = itemView.findViewById(R.id.quantity);
             color = itemView.findViewById(R.id.color);
-            total = itemView.findViewById(R.id.totalAmount);
+            total = itemView.findViewById(R.id.totalTemp);
         }
     }
 }

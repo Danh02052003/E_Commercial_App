@@ -43,7 +43,7 @@ public class PaymentActivity extends AppCompatActivity {
     Button btnProceedToPayment;
     EditText shippingAddress;
     List<ProductInCartItem> inCartSelectedList;
-    double totalPrice;
+    double otherFees, totalPrice, discount;
     RadioGroup radioGroup;
     RadioButton checkedRadioButton;
 
@@ -65,16 +65,22 @@ public class PaymentActivity extends AppCompatActivity {
 
         totalPrice = Paper.book().read("totalPrice");
         inCartSelectedList = Paper.book().read("inCartSelectedList");
+        if (Paper.book().contains("discount")) {
+            discount = Paper.book().read("discount");
+        } else {
+            discount = 0;
+        }
+        otherFees = 0;
 
         PaymentMethod paymentMethod;
         paymentMethodMap.put("Cash on Delivery", PaymentMethod.COD);
         paymentMethodMap.put("Banking", PaymentMethod.BANKING);
         paymentMethodMap.put("Credit Card", PaymentMethod.CREDIT_CARD);
-
+        Paper.delete("totalPrice");
+        Paper.delete("inCartSelectedList");
+        Paper.delete("discount");
         btnProceedToPayment.setOnClickListener(v -> {
             InitOrder(totalPrice, inCartSelectedList);
-            Paper.delete("totalPrice");
-            Paper.delete("inCartSelectedList");
         });
     }
 
@@ -89,7 +95,7 @@ public class PaymentActivity extends AppCompatActivity {
         checkedRadioButton = findViewById(radioGroup.getCheckedRadioButtonId());
         PaymentMethod paymentMethod = getDisplayString(checkedRadioButton.getText().toString());
 
-        Order newOrder = new Order(UserID, newOrderKey, totalPrice, currentDate, DeliveryStatus.PENDING, paymentMethod, shippingAddress.getText().toString());
+        Order newOrder = new Order(UserID, newOrderKey, totalPrice, discount, otherFees, currentDate, DeliveryStatus.PENDING, paymentMethod, shippingAddress.getText().toString());
 
         orderReference.child(newOrderKey).setValue(newOrder).addOnCompleteListener(taskAddOrder -> {
             if (taskAddOrder.isSuccessful()) {
