@@ -1,55 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <layer-list
-
-        xmlns:android="http://schemas.android.com/apk/res/android">
-
-
-
-        <item>
-
-
-            <shape
-
-                android:shape="rectangle">
-
-
-                <solid
-
-                    android:color="#F5F5F5" />
-
-
-                <corners
-
-                    android:radius="4dp" />
-            </shape>
-        </item>
-
-        <item
-
-            android:bottom="4dp"
-
-            android:left="4dp"
-
-            android:right="4dp"
-
-            android:top="4dp">
-
-
-            <shape
-
-                android:shape="rectangle">
-
-
-                <corners
-
-                    android:radius="4dp" />
-                <gradient
-                    android:angle="270"
-                    android:endColor="#D3D3D3"
-                    android:startColor="#F5F5F5" />
-            </shape>
-        </item>
-
-    </layer-list>
+    <shape xmlns:android="http://schemas.android.com/apk/res/android">
+        <solid android:color="@color/colorPrimary" /> <!-- Change colorPrimary to your desired color -->
+        <corners android:radius="50dp" /> <!-- Set radius to half of the button's width or height to make it a circle -->
+    </shape>
 </selector>
