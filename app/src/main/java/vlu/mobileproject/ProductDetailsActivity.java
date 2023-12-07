@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -188,7 +190,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void addEvent() {
         btnDetails_addToCart.setOnClickListener(view -> {
+            Animation animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in_window);
+            rlPopupWindow.startAnimation(animation);
             rlPopupWindow.setVisibility(View.VISIBLE);
+            animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up_window);
+            cvPopupWindow_display.startAnimation(animation);
+
             btnDetails_wAddToCart.setEnabled(false);
             btnDetails_wAddToCart.setBackgroundResource(R.color.greyIcon);
             btnDetails_wAddToCart.setVisibility(View.VISIBLE);
@@ -196,7 +203,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
 
         btnDetails_buyNow.setOnClickListener(view -> {
+            Animation animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in_window);
+            rlPopupWindow.startAnimation(animation);
             rlPopupWindow.setVisibility(View.VISIBLE);
+            animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up_window);
+            cvPopupWindow_display.startAnimation(animation);
             btnDetails_wBuyNow.setEnabled(false);
             btnDetails_wBuyNow.setBackgroundResource(R.color.greyIcon);
             btnDetails_wBuyNow.setVisibility(View.VISIBLE);
@@ -208,9 +219,17 @@ public class ProductDetailsActivity extends AppCompatActivity {
             Rect cardViewRect = new Rect();
             cvPopupWindow_display.getHitRect(cardViewRect);
             if (!cardViewRect.contains((int) view.getX(), (int) view.getY())) {
-                rlPopupWindow.setVisibility(View.INVISIBLE);
-                btnDetails_wAddToCart.setVisibility(View.INVISIBLE);
-                btnDetails_wBuyNow.setVisibility(View.INVISIBLE);
+                Animation animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down_window);
+                cvPopupWindow_display.startAnimation(animation);
+                animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out_window);
+                rlPopupWindow.startAnimation(animation);
+
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    rlPopupWindow.clearAnimation();
+                    rlPopupWindow.setVisibility(View.INVISIBLE);
+                    btnDetails_wAddToCart.setVisibility(View.INVISIBLE);
+                    btnDetails_wBuyNow.setVisibility(View.INVISIBLE);
+                }, 300);
 
                 view = gvCapacities;
                 TextView textView = view.findViewById(R.id.tvCapacity);
