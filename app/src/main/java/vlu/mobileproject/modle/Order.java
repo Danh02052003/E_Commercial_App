@@ -4,7 +4,7 @@ import vlu.mobileproject.data.DeliveryStatus;
 import vlu.mobileproject.data.PaymentMethod;
 
 public class Order {
-    String buyer_id, order_id;
+    String buyer_id, order_id, shippingAddress;
     double total_amount;
     String order_date;
     DeliveryStatus status;
@@ -14,17 +14,26 @@ public class Order {
         return paymentMethod;
     }
 
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
-    public Order(String buyer_id, String order_id, double total_amount, String order_date, DeliveryStatus status, PaymentMethod paymentMethod) {
+    public Order(String buyer_id, String order_id, double total_amount, String order_date, DeliveryStatus status, PaymentMethod paymentMethod, String shippingAddress) {
         this.buyer_id = buyer_id;
         this.order_id = order_id;
         this.total_amount = total_amount;
         this.order_date = order_date;
         this.status = status;
         this.paymentMethod = paymentMethod;
+        this.shippingAddress = shippingAddress;
     }
 
     public Order(){}

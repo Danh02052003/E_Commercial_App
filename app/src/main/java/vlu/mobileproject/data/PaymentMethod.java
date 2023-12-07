@@ -1,11 +1,9 @@
 package vlu.mobileproject.data;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 public enum PaymentMethod {
-    COD("COD"),
+    COD("Cash on Delivery"),
     BANKING("BANKING"),
-    CREDIT_CART("CREDIT CART");
+    CREDIT_CARD("CREDIT CARD");
 
     private final String paymentMethod;
 

@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,10 +34,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import io.paperdb.Paper;
 import vlu.mobileproject.ProductInCartItem;
 import vlu.mobileproject.R;
 import vlu.mobileproject.ShoppingCart;
 import vlu.mobileproject.activity.view.order.OrderActivity;
+import vlu.mobileproject.activity.view.order.PaymentActivity;
 import vlu.mobileproject.adapter.ProductInCartAdapter;
 import vlu.mobileproject.data.DeliveryStatus;
 import vlu.mobileproject.data.PaymentMethod;
@@ -206,7 +209,11 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
                 cartReference.child(inCartSelectedList.get(i).getCartItemID()).removeValue();
             }
 
-            InitOrder(totalPrice, inCartSelectedList);
+            Intent intent = new Intent(Cart.this, PaymentActivity.class);
+            Paper.init(this);
+            Paper.book().write("inCartSelectedList", inCartSelectedList);
+            Paper.book().write("totalPrice", totalPrice);
+            startActivity(intent);
 
             setInCart.removeAll(setInCartSelected);
             inCartItemList = new ArrayList<>(setInCart);
@@ -226,7 +233,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         String UserID = auth.getCurrentUser().getUid();
         String newOrderKey = orderReference.push().getKey();
         String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        Order newOrder = new Order(UserID, newOrderKey, totalPrice, currentDate, DeliveryStatus.PENDING, PaymentMethod.COD);
+        Order newOrder = new Order(UserID, newOrderKey, totalPrice, currentDate, DeliveryStatus.PENDING, PaymentMethod.COD, "");
 
         orderReference.child(newOrderKey).setValue(newOrder).addOnCompleteListener(taskAddOrder -> {
             if (taskAddOrder.isSuccessful()) {

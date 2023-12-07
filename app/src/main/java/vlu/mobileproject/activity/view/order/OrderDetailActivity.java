@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +39,8 @@ public class OrderDetailActivity extends AppCompatActivity {
 
     RecyclerView cartRec;
     ImageView btnBack;
-    TextView  totalPrice;
+    TextView  totalPrice, DestinationEnd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +56,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         cartRec.setLayoutManager(new LinearLayoutManager(this));
 
         totalPrice = findViewById(R.id.totalAmount);
+        DestinationEnd = findViewById(R.id.DestinationEnd);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -77,6 +81,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                         Order order = orderSnapshot.getValue(Order.class);
                         String orderID = order.getOrder_id();
                         totalPrice.setText("$ " + String.valueOf(order.getTotal_amount()));
+                        DestinationEnd.setText(order.getShippingAddress());
 
                         Query orderItemQuery = orderItemReference.orderByChild("order_id").equalTo(orderID);
                         orderItemQuery.addListenerForSingleValueEvent(new ValueEventListener() {

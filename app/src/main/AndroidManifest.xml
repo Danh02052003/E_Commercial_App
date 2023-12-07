@@ -18,6 +18,9 @@
         android:theme="@style/Theme.MobileProject"
         tools:targetApi="31">
         <activity
+            android:name=".activity.view.order.PaymentActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.view.order.OrderDetailActivity"
             android:exported="false" />
         <activity

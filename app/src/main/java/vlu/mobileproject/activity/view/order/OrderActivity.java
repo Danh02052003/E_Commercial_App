@@ -46,7 +46,7 @@ public class OrderActivity extends AppCompatActivity {
 
     RecyclerView cardTitle;
 
-    TextView orderStatus, orderTime, orderItemCount, paymentMethod, totalPrice;
+    TextView orderStatus, orderTime, orderItemCount, paymentMethod, totalPrice, DestinationEnd;
     ProgressBar pendingBar, inprogressBar, Delivering2YouBar;
     ImageView btnBack;
     Button btnDetail;
@@ -67,6 +67,7 @@ public class OrderActivity extends AppCompatActivity {
         Delivering2YouBar = findViewById(R.id.Delivering2You);
         btnBack = findViewById(R.id.btnBack);
         btnDetail = findViewById(R.id.btnDetail);
+        DestinationEnd = findViewById(R.id.DestinationEnd);
 
         orderStatus = findViewById(R.id.orderStatus);
         orderTime = findViewById(R.id.orderTime);
@@ -117,6 +118,7 @@ public class OrderActivity extends AppCompatActivity {
                         orderTime.setText(order.getOrder_date());
                         paymentMethod.setText(order.getPaymentMethod().getPaymentMethod());
                         totalPrice.setText("$ " + String.valueOf(order.getTotal_amount()));
+                        DestinationEnd.setText(order.getShippingAddress());
 
                         ProgressBarAnimation(order);
 
