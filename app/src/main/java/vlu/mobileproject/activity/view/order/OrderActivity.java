@@ -26,7 +26,6 @@ import vlu.mobileproject.R;
 import vlu.mobileproject.data.DeliveryStatus;
 import vlu.mobileproject.modle.Order;
 import vlu.mobileproject.modle.OrderItem;
-import vlu.mobileproject.modle.Product;
 import vlu.mobileproject.modle.Products;
 
 public class OrderActivity extends AppCompatActivity {
@@ -112,9 +111,10 @@ public class OrderActivity extends AppCompatActivity {
                                     productItemQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            Product product = snapshot.getValue(Product.class);
-                                            orderItem.setProductName( product.getProduct_name());
-
+                                            Products product = snapshot.getValue(Products.class);
+                                            product.setProductID(orderItem.getProduct_id());
+                                            Products.MemoryOption phoneMemPackage = product.GetMemoOptPackage(orderItem.getProductMemoryOption());
+                                            orderItem.setProductName(String.format("%s %s", product.getProduct_name(), phoneMemPackage.getMemory()));
                                             orderItemList.add(orderItem);
                                             orderItemCount.setText(orderItemList.size() + " kiện hàng.");
                                             OrderItemAdapter orderItemAdapter = new OrderItemAdapter(OrderActivity.this, orderItemList);

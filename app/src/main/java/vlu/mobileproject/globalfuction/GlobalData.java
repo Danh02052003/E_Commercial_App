@@ -11,18 +11,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import vlu.mobileproject.AllFrag;
-import vlu.mobileproject.HomeChildItem;
-import vlu.mobileproject.HomeParentItem;
-import vlu.mobileproject.R;
-import vlu.mobileproject.adapter.HomeParentAdapter;
-import vlu.mobileproject.modle.Product;
 import vlu.mobileproject.modle.Products;
 
 public class GlobalData {
