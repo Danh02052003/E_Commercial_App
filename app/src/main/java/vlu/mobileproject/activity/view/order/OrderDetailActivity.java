@@ -52,8 +52,8 @@ public class OrderDetailActivity extends AppCompatActivity {
         orderId = findViewById(R.id.orderId);
         cartRec.setLayoutManager(new LinearLayoutManager(this));
 
-        totalPrice = findViewById(R.id.totalTemp);
-        totalTemp = findViewById(R.id.totalPrice);
+        totalPrice = findViewById(R.id.totalPrice);
+        totalTemp = findViewById(R.id.totalTemp);
         otherFeesText = findViewById(R.id.otherFeesText);
         discountText = findViewById(R.id.discountText);
         DestinationEnd = findViewById(R.id.DestinationEnd);

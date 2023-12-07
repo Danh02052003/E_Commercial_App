@@ -203,7 +203,8 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         }
 
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
-        formattedValue = decimalFormat.format(totalPrice - totalPrice * (discountPercent == 0 ? 1 : (discountPercent / 100)));
+        double afterDiscount = totalPrice * (discountPercent == 0 ? 1 : ((100 - discountPercent) / 100));
+        formattedValue = decimalFormat.format(afterDiscount);
         tvCart_totalPrice.setText("$" + (formattedValue));
     }
 
@@ -231,6 +232,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
             rvProductAdded.setAdapter(adapter);
 
             tvCart_totalPrice.setText("$00");
+            tvCart_discount.setText("$00");
             totalPrice = 0;
         });
     }
@@ -243,7 +245,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
                     Discount discount = snapshot.getValue(Discount.class);
                     discountPercent = discount.getDiscountValue() * 100;
                     tvCart_discount.setText(String.valueOf(discountPercent) + " %");
-                    tvCart_totalPrice.setText("$ " + String.valueOf(tvCart_totalPrice.getText().length() == 0 ? 0 : discountPercent * Double.valueOf(tvCart_totalPrice.getText().toString().replaceAll("\\$", ""))));
+                    tvCart_totalPrice.setText("$ " + String.valueOf((100 - discountPercent) * totalPrice));
                     Paper.book().write("discount", discount.getDiscountValue());
                 } else {
                     Toast.makeText(Cart.this, "Không thấy mã giảm giá", Toast.LENGTH_SHORT).show();
