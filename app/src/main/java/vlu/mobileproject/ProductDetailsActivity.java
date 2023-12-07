@@ -248,8 +248,17 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         btnDetails_wAddToCart.setOnClickListener(view -> {
             AddProductItem2Cart(false);
-            rlPopupWindow.setVisibility(View.INVISIBLE);
-            btnDetails_wAddToCart.setVisibility(View.INVISIBLE);
+            Animation animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down_window);
+            cvPopupWindow_display.startAnimation(animation);
+            animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out_window);
+            rlPopupWindow.startAnimation(animation);
+
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                rlPopupWindow.clearAnimation();
+                rlPopupWindow.setVisibility(View.INVISIBLE);
+                btnDetails_wAddToCart.setVisibility(View.INVISIBLE);
+                btnDetails_wBuyNow.setVisibility(View.INVISIBLE);
+            }, 300);
         });
 
         btnFavorite_empty.setOnClickListener(view -> {
