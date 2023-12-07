@@ -20,8 +20,8 @@ public class ImageHandler {
     }
 
     // Need id Image and Email Account
-    public static void setImageFromFirebaseStorage(CircleImageView avatarAccount, String emailAccount) {
-        String avatarUrl = "https://firebasestorage.googleapis.com/v0/b/e-commerce-73482.appspot.com/o/avatars%2Favatar_" + cutEmail(emailAccount) +".png?alt=media";
+    public static void setImageFromFirebaseStorage(CircleImageView avatarAccount, String userID) {
+        String avatarUrl = "https://firebasestorage.googleapis.com/v0/b/e-commerce-73482.appspot.com/o/avatars%2Favatar_" + userID +".png?alt=media";
 
         // Get the reference to the Firebase Storage file using the image URL
         StorageReference imageRef = FirebaseStorage.getInstance().getReferenceFromUrl(avatarUrl);

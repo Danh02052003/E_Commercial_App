@@ -6,7 +6,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -36,7 +35,6 @@ import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 import vlu.mobileproject.R;
 import vlu.mobileproject.globalfuction.ImageHandler;
-import vlu.mobileproject.modle.User;
 
 
 public class Information_Account_Detail extends AppCompatActivity {
@@ -47,18 +45,11 @@ public class Information_Account_Detail extends AppCompatActivity {
     static String bet = "https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/";
     // email or sdt from login account
 
-    private final String userEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-    String emailAccountLogin = userEmail;
-
-    // use for avatar
-    String shortEmailAccountLogin = emailAccountLogin.replace("@gmail.com", "");
-
+    String userID = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
     FirebaseDatabase firebaseDatabase;
     DatabaseReference UserReference;
 
-    // Firebase Storage reference
     private StorageReference storageRef;
-    public String avatarUrl = "https://firebasestorage.googleapis.com/v0/b/e-commerce-73482.appspot.com/o/avatars%2Favatar_" + shortEmailAccountLogin +".png?alt=media";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +63,6 @@ public class Information_Account_Detail extends AppCompatActivity {
         addEvents();
         storageRef = FirebaseStorage.getInstance().getReference();
         SetupUserData2View();
-
     }
 
     private void addEvents() {
@@ -82,7 +72,7 @@ public class Information_Account_Detail extends AppCompatActivity {
         // Handle the click event for the Checked button
         btnChecked.setOnClickListener(v -> {
             saveAvatarAndNavigateBack();
-            updateInformationDetail(emailAccountLogin);
+            updateInformationDetail(userID);
             Toast.makeText(Information_Account_Detail.this, "Save successfully", Toast.LENGTH_SHORT).show();
         });
 
@@ -94,7 +84,7 @@ public class Information_Account_Detail extends AppCompatActivity {
         });
     }
 
-    // update data user
+    // TODO: sua lai het, dungf UserID
     private void updateInformationDetail(String userEmail) {
         FirebaseDatabase database = FirebaseDatabase.getInstance(bet);
         DatabaseReference myRef = database.getReference("User");
@@ -169,7 +159,7 @@ public class Information_Account_Detail extends AppCompatActivity {
                     edtNameAccount.setText(snapshot.child("userName").getValue(String.class));
                     edtEmailAccount.setText(userEmail);
                     edtSDTAccount.setText(userPhoneNumb);
-                    ImageHandler.setImageFromFirebaseStorage(imgAvatarAccount, userEmail);
+                    ImageHandler.setImageFromFirebaseStorage(imgAvatarAccount, UserID);
                 }
             }
 
@@ -264,7 +254,7 @@ public class Information_Account_Detail extends AppCompatActivity {
 
     private void uploadImageToFirebase(Uri imageUri, UploadImageCallback callback) {
         // Get the file name for the image
-        String fileName = "avatar_" + shortEmailAccountLogin + ".png";
+        String fileName = "avatar_" + userID + ".png";
 
         // Get the reference to the location in Firebase Storage where you want to save the image
         StorageReference avatarRef = storageRef.child("avatars").child(fileName);

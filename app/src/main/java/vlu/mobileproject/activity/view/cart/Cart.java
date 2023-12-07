@@ -238,16 +238,20 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
                     OrderItem neworderItem = new OrderItem(newOrderKey, ProductID, ProductOption, ProductQuantity);
                     orderItemReference.child(newOrderItemID).setValue(neworderItem).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            Toast.makeText(Cart.this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(Cart.this, OrderActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("OrderID", newOrderKey); // Replace "key" and "value" with your actual data
-                            intent.putExtras(bundle);
-                            startActivity(intent);
 
+                        } else {
+                            Toast.makeText(Cart.this, "không thể thêm kiện hàng" + neworderItem.getProductName(), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
+
+                Toast.makeText(Cart.this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Cart.this, OrderActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("OrderID", newOrderKey);
+                intent.putExtras(bundle);
+                startActivity(intent);
+
             } else {
                 Toast.makeText(Cart.this, "Đặt không hàng thành công", Toast.LENGTH_SHORT).show();
             }

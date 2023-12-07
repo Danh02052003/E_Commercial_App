@@ -51,7 +51,7 @@ public class Information_Account extends Information_Account_Detail {
         addEvents();
         fetchUserDataFromFirebase(userEmail);
 
-        ImageHandler.setImageFromFirebaseStorage(imgAvatarAccount, emailAccountLogin);
+        ImageHandler.setImageFromFirebaseStorage(imgAvatarAccount, userID);
 
         // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
@@ -131,7 +131,7 @@ public class Information_Account extends Information_Account_Detail {
                     user CurUser = snapshot.getValue(user.class);
                     assert CurUser != null;
                     NameAccount.setText(CurUser.getUserName());
-                    ImageHandler.setImageFromFirebaseStorage(imgAvatarAccount, auth.getCurrentUser().getEmail());
+                    ImageHandler.setImageFromFirebaseStorage(imgAvatarAccount, auth.getCurrentUser().getUid());
 
                 } else {
                     Log.d("FirebaseError", "No user found with the email: " + userEmail);
