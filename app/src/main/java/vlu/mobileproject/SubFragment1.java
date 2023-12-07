@@ -18,7 +18,7 @@ import vlu.mobileproject.adapter.HomeChildAdapter;
 import vlu.mobileproject.globalfuction.GlobalData;
 import vlu.mobileproject.modle.Products;
 
-public class SubFragment1 extends Fragment {
+public class SubFragment1 extends Fragment implements GlobalData.Callback {
 
     RecyclerView RecNav;
 
@@ -27,6 +27,7 @@ public class SubFragment1 extends Fragment {
     ArrayList<Products> allProducts;
 
     TextView TitleText;
+    boolean isDataLoaded = false;
 
     String typeOfPhone;
     public SubFragment1(String TypeofPhone) {
@@ -41,7 +42,7 @@ public class SubFragment1 extends Fragment {
         TitleText.setText(typeOfPhone);
         // Connect to the parent fragment (AllFrag) and retrieve all products
         allProducts = new ArrayList<>();
-        allProducts = new ArrayList<>(GlobalData.forYou_list);
+        GlobalData.initData(getContext(), this);
 
         List<Products> filteredProducts = new ArrayList<>();
         for (Products product : allProducts) {
@@ -58,4 +59,8 @@ public class SubFragment1 extends Fragment {
         return root;
     }
 
+    @Override
+    public void onCompleted(List<Products> products) {
+        allProducts = new ArrayList<>(products);
+    }
 }

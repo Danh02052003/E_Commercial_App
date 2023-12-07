@@ -21,7 +21,7 @@
             android:name=".activity.view.order.OrderActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.view.order.order"
+            android:name=".activity.view.home.MainActivity"
             android:exported="false" />
         <activity
             android:name=".ChooseLanguage"
@@ -30,7 +30,7 @@
             android:name=".login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.view.home.MainActivity"
+            android:name=".activity.view.order.order"
             android:exported="true"></activity> <!-- This activity has the LAUNCHER category to act as the main entry point -->
         <activity
             android:name=".login.ForgotPassword"

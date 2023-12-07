@@ -31,13 +31,14 @@ import vlu.mobileproject.globalfuction.GlobalData;
 import vlu.mobileproject.modle.Products;
 
 
-public class SearchFragment extends Fragment implements filterBottomSheetFragment.FilterListener  {
+public class SearchFragment extends Fragment implements filterBottomSheetFragment.FilterListener, GlobalData.Callback {
 
     SearchView searchItem;
     ListView listViewProduct;
 
     private ArrayList<Products> allProducts;
     private ArrayList<Products> displayedProducts;
+    AllFrag allFragment = (AllFrag) getParentFragment();
 
     int minPriceValue, maxPriceValue = 5000;
 
@@ -92,21 +93,6 @@ public class SearchFragment extends Fragment implements filterBottomSheetFragmen
 
         // Connect to the parent fragment (AllFrag) and retrieve all products
         allProducts = new ArrayList<>();
-        AllFrag allFragment = (AllFrag) getParentFragment();
-        if (allFragment == null) {
-            allProducts = new ArrayList<>(GlobalData.forYou_list);
-        }
-
-        // Initialize the displayedProducts list and limit it to 5 items initially
-        displayedProducts = new ArrayList<>();
-        int limit = Math.min(allProducts.size(), 5);
-        for (int i = 0; i < limit; i++) {
-            displayedProducts.add(allProducts.get(i));
-        }
-
-        // Initialize the adapter with displayedProducts
-        productAdapter = new ProductAdapter(requireContext(), displayedProducts);
-        listViewProduct.setAdapter(productAdapter);
 
         // Setup the search view for filtering
         searchItem.clearFocus();
@@ -172,6 +158,7 @@ public class SearchFragment extends Fragment implements filterBottomSheetFragmen
             bottomSheetFragment.setFilterListener(this); // Set the FilterListener to receive the filter values
             bottomSheetFragment.show(getChildFragmentManager(), bottomSheetFragment.getTag());
         });
+        GlobalData.initData(getContext(),this);
     }
 
     // function
@@ -203,4 +190,20 @@ public class SearchFragment extends Fragment implements filterBottomSheetFragmen
         listViewProduct.setAdapter(productAdapter);
     }
 
+    @Override
+    public void onCompleted(List<Products> products) {
+        if (allFragment == null) {
+            allProducts = new ArrayList<>(products);
+        };
+        // Initialize the displayedProducts list and limit it to 5 items initially
+        displayedProducts = new ArrayList<>();
+        int limit = Math.min(allProducts.size(), 5);
+        for (int i = 0; i < limit; i++) {
+            displayedProducts.add(allProducts.get(i));
+        }
+
+        // Initialize the adapter with displayedProducts
+        productAdapter = new ProductAdapter(requireContext(), displayedProducts);
+        listViewProduct.setAdapter(productAdapter);
+    }
 }

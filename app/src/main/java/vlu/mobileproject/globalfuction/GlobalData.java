@@ -11,6 +11,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,93 +27,52 @@ import vlu.mobileproject.modle.Products;
 
 public class GlobalData {
     public interface Callback{
-        void onCompleted(List<Products> foryou_list, List<Products> highlight_list);
-
-    }
-    public interface AllCallBack{
         void onCompleted(List<Products> products);
+
     }
-    public static List<Products> forYou_list;
-    public static List<Products> highlight_list;
-    static List<Products> products = new ArrayList<>();
+    public final static List<Products> products = new ArrayList<>();
+    public static boolean isDataLoaded = false;
 
-    public static void initData(Context context, Callback callback) {
-
-        forYou_list = new ArrayList<>();
-        highlight_list = new ArrayList<>();
-
-        FirebaseApp.initializeApp(context);
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/");
-        DatabaseReference productRef = database.getReference("Products_2");
-        productRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int i = 0;
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Products product = dataSnapshot.getValue(Products.class);
-                    product.setProductID(dataSnapshot.getKey());
-                    Log.d("Product debug: ", "Product " + String.valueOf(product.getProduct_id()));
-                    i++;
-                    String imageCategory_path = product.getProduct_categoryId() == 1 ? "samsung" : "iphone";
-//                    String imgUrl = dataSnapshot.child("product_img").getValue().toString();
-                    product.setProduct_img("product_image/"+imageCategory_path+"/"+product.getProduct_img());
-                    products.add(product);
+    public static void initData(Context context, Callback callBack) {
+        if(isDataLoaded == false) {
+            isDataLoaded = true;
+            FirebaseApp.initializeApp(context);
+            FirebaseDatabase database = FirebaseDatabase.getInstance("https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/");
+            DatabaseReference productRef = database.getReference("Products_2");
+            productRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    int i = 0;
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Products product = dataSnapshot.getValue(Products.class);
+                        product.setProductID(dataSnapshot.getKey());
+                        Log.d("Product debug: ", "Product " + String.valueOf(product.getProduct_id()));
+                        i++;
+                        products.add(product);
+//                        String imageCategory_path = product.getProduct_categoryId() == 1 ? "samsung" : "iphone";
+//                        product.setProduct_img("product_image/"+imageCategory_path+"/"+product.getProduct_img());
+//                        StorageReference imgRef = FirebaseStorage.getInstance().getReference().child(product.getProduct_img());
+//                        imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
+//                            product.setProduct_img(uri.toString());
+//
+//                            if(products.size() == snapshot.getChildrenCount())
+//                                callBack.onCompleted(products);
+//                        }).addOnFailureListener(e -> {
+//                            Log.e(this.toString(), "Error loading image from Firebase: " + e.getMessage());
+//                            e.printStackTrace();
+//                        });
+                    }
+                    callBack.onCompleted(products);
                 }
-                separateData();
-                callback.onCompleted(forYou_list, highlight_list);
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
-
-    }
-    public static void initData(Context context, AllCallBack callBack) {
-
-        forYou_list = new ArrayList<>();
-        highlight_list = new ArrayList<>();
-
-        FirebaseApp.initializeApp(context);
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/");
-        DatabaseReference productRef = database.getReference("Products_2");
-        productRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int i = 0;
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Products product = dataSnapshot.getValue(Products.class);
-                    product.setProductID(dataSnapshot.getKey());
-                    Log.d("Product debug: ", "Product " + String.valueOf(product.getProduct_id()));
-                    i++;
-                    String imageCategory_path = product.getProduct_categoryId() == 1 ? "samsung" : "iphone";
-//                    String imgUrl = dataSnapshot.child("product_img").getValue().toString();
-                    product.setProduct_img("product_image/"+imageCategory_path+"/"+product.getProduct_img());
-                    products.add(product);
                 }
-                callBack.onCompleted(products);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-    }
-    static void separateData() {
-        for (int i = 0; i < products.size(); i++) {
-            if (i < products.size() / 2)
-                forYou_list.add(products.get(i));
-            else highlight_list.add(products.get(i));
+            });
         }
-    };
-    private void loadFirebaseData() {
+        else callBack.onCompleted(products);
 
     }
-
-
-
 
 }
