@@ -105,7 +105,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
     void OnTry2Cancel(String OrderID) {
         Query query = orderReference.child(OrderID);
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
