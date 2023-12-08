@@ -35,7 +35,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     LinearLayoutManager layoutManager;
     RecyclerView cartRec;
     ImageView btnBack;
-    TextView  totalPrice, DestinationEnd, orderId, totalTemp, otherFeesText, discountText;
+    TextView finalTotalPrice, DestinationEnd, orderId, totalTemp, otherFeesText, discountText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         orderId = findViewById(R.id.orderId);
         cartRec.setLayoutManager(new LinearLayoutManager(this));
 
-        totalPrice = findViewById(R.id.totalPrice);
+        finalTotalPrice = findViewById(R.id.finalTotalPrice);
         totalTemp = findViewById(R.id.totalTemp);
         otherFeesText = findViewById(R.id.otherFeesText);
         discountText = findViewById(R.id.discountText);
@@ -87,7 +87,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                         totalTemp.setText("$ " + totalAmount);
                         discountText.setText(discount + " %");
                         otherFeesText.setText("$ " + otherFees);
-                        totalPrice.setText("$ " + finTotalAmount);
+                        finalTotalPrice.setText("$ " + finTotalAmount);
                         DestinationEnd.setText(order.getShippingAddress());
                         orderId.setText(orderID);
 

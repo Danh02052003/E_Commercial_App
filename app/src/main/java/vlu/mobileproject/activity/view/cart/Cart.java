@@ -74,6 +74,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
     List<Discount> DiscountList = new ArrayList<>();
     double totalPrice = 0;
     double discountPercent = 0;
+    double discount = 0;
     String formattedValue;
     DatabaseReference cartReference, orderReference, orderItemReference, discountReference;
     FirebaseAuth auth;
@@ -305,6 +306,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
             Intent intent = new Intent(Cart.this, PaymentActivity.class);
             Paper.book().write("inCartSelectedList", inCartSelectedList);
             Paper.book().write("totalPrice", totalPrice);
+            Paper.book().write("discount", discount);
             startActivity(intent);
 
             setInCart.removeAll(setInCartSelected);
@@ -327,11 +329,11 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    Discount discount = snapshot.getValue(Discount.class);
-                    discountPercent = discount.getDiscountValue() * 100;
+                    Discount discountPack = snapshot.getValue(Discount.class);
+                    discountPercent = discountPack.getDiscountValue() * 100;
                     tvCart_discount.setText(String.valueOf(discountPercent) + " %");
                     tvCart_totalPrice.setText("$ " + String.valueOf((100 - discountPercent) * totalPrice));
-                    Paper.book().write("discount", discount.getDiscountValue());
+                    discount = discountPack.getDiscountValue();
                 } else {
                     Toast.makeText(Cart.this, "Không thấy mã giảm giá", Toast.LENGTH_SHORT).show();
                 }
