@@ -79,7 +79,7 @@ public class PaymentActivity extends AppCompatActivity {
         paymentMethodMap.put("Cash on Delivery", PaymentMethod.COD);
         paymentMethodMap.put("Banking", PaymentMethod.BANKING);
         paymentMethodMap.put("Credit Card", PaymentMethod.CREDIT_CARD);
-        deleveryProviderMap.put("Credit Card", DeliveryProvider.GIAO_HANG_NHANH);
+        deleveryProviderMap.put("Credit Card", DeliveryProvider.NORMAL);
         deleveryProviderMap.put("Credit Card", DeliveryProvider.GIAO_HANG_TIET_KIEM);
         deleveryProviderMap.put("Credit Card", DeliveryProvider.HOA_TOC);
         Paper.delete("totalPrice");
