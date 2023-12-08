@@ -27,7 +27,7 @@
     <style name="TEXT">
         <item name="android:textColor">#172239</item>
     </style>
-    <style name="SpecialText">
+    <style name="discountDescription">
         <item name="android:textColor">#6D6D78</item>
     </style>
     <style name="TitleText">

@@ -34,7 +34,7 @@
 
     <TextView
         android:id="@+id/tvCart_totalAdded"
-        style="@style/SpecialText"
+        style="@style/discountDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -59,52 +59,66 @@
         app:layout_constraintTop_toBottomOf="@+id/tvCart_totalAdded">
 
 
-        <TextView
-            android:id="@+id/textView10"
-            style="@style/textNumb"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:text="25"
-            android:textSize="24pt"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:id="@+id/disCountName"
+                style="@style/textNumb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:textSize="40sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            style="@style/textNumb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="110dp"
-            android:layout_marginTop="28dp"
-            android:text="%"
-            android:textSize="12pt"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textView11"
-            app:layout_constraintStart_toEndOf="@+id/textView10" />
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:orientation="vertical"-->
+<!--                android:gravity="center"-->
+<!--                >-->
+<!--                <TextView-->
+<!--                    style="@style/textNumb"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="%"-->
+<!--                    android:textSize="12pt"-->
+<!--                    android:textStyle="bold"-->
+<!--                    app:layout_constraintBottom_toTopOf="@+id/textView11"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/disCountName" />-->
 
-        <TextView
-            android:id="@+id/textView11"
-            style="@style/textNumb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="110dp"
-            android:layout_marginTop="15dp"
-            android:text="Off"
-            android:textSize="8pt"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/textView10" />
+<!--                <TextView-->
+<!--                    android:id="@+id/textView11"-->
+<!--                    style="@style/textNumb"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Off"-->
+<!--                    android:paddingLeft="5dp"-->
+<!--                    android:textSize="8pt"-->
+<!--                    android:textStyle="bold"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/disCountName" />-->
+<!--            </LinearLayout>-->
 
-        <TextView
-            style="@style/SpecialText"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="180dp"
-            android:layout_marginTop="10dp"
-            android:text="sử dụng mã VLUs khi thanh toán"
-            android:textSize="9pt"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            >
+
+            <TextView
+                android:padding="5dp"
+                android:id="@+id/discountDescription"
+                style="@style/TEXT"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                />
+        </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
@@ -112,13 +126,13 @@
         android:id="@+id/rvProductAdded"
         style="@style/SCREEN"
         android:layout_width="match_parent"
-        android:layout_height="380dp"
+        android:layout_height="250dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:paddingLeft="15dp"
         android:paddingRight="5dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/edtDiscount"
+
         app:layout_constraintTop_toBottomOf="@+id/cardView">
 
     </androidx.recyclerview.widget.RecyclerView>
@@ -138,33 +152,43 @@
 
     <EditText
         android:id="@+id/edtDiscount"
-        style="@style/TEXT"
         android:layout_width="230dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginBottom="36dp"
-        android:hint="Mã khuyến mãi"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:textSize="8pt"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_edittext"
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:hint="Discount"
+        android:inputType="textPassword"
+        android:paddingStart="60dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        android:textColorHint="@color/colorHint"
         app:layout_constraintBottom_toTopOf="@+id/textView12"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnApplyDiscount"
         style="@style/greenButton"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="44dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rounded_edittext"
+        android:backgroundTint="#00CC96"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:text="Sử dụng"
         android:textAllCaps="false"
+        android:textColor="@color/white"
         android:textSize="8pt"
         app:layout_constraintBottom_toTopOf="@+id/textView12"
-        app:layout_constraintStart_toEndOf="@+id/edtDiscount" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnPay"
@@ -172,7 +196,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:paddingTop="12dp"
+        android:background="@drawable/rounded_edittext"
+        android:backgroundTint="#00CC96"
+        android:textColor="@color/white"
         android:paddingBottom="12dp"
         android:text="Thanh toán"
         android:textAllCaps="false"
@@ -214,12 +243,13 @@
 
     <TextView
         android:id="@+id/textView12"
-        style="@style/SpecialText"
+        style="@style/discountDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginBottom="8dp"
+        android:layout_marginStart="10dp"
         android:text="Giảm giá:"
         android:textSize="10pt"
         app:layout_constraintBottom_toTopOf="@+id/textView13"
@@ -227,9 +257,10 @@
 
     <TextView
         android:id="@+id/textView13"
-        style="@style/SpecialText"
+        style="@style/discountDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginBottom="32dp"

@@ -6,8 +6,12 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -62,27 +66,58 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
     List<ProductInCartItem> inCartItemList = new ArrayList<>();
     ProductInCartAdapter adapter;
     CheckBox cbCartCheck;
-    TextView tvCart_state, tvCart_totalPrice, tvCart_discount;
+    TextView tvCart_state, tvCart_totalPrice, tvCart_discount, tvCart_totalAdded, disCountName, discountDescription;
     Button btnPay, btnApplyDiscount;
     ImageButton btnBack;
     EditText edtDiscount;
     List<ProductInCartItem> inCartSelectedList = new ArrayList<>();
+    List<Discount> DiscountList = new ArrayList<>();
     double totalPrice = 0;
     double discountPercent = 0;
     String formattedValue;
     DatabaseReference cartReference, orderReference, orderItemReference, discountReference;
     FirebaseAuth auth;
+    int currentIndex = 0;
+    private Handler handler = new Handler();
+    private Runnable updateTextRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (DiscountList.size() == 0) {
+                handler.postDelayed(this, 500);
+                return;
+            }
+
+            if (currentIndex < DiscountList.size()) {
+                animateTextChange(DiscountList.get(currentIndex).getDiscountName(), DiscountList.get(currentIndex).getDiscountDescription());
+                currentIndex++;
+            } else {
+                currentIndex = 0;
+            }
+
+            handler.postDelayed(this, 4000);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
+        cartReference = FirebaseDatabase.getInstance().getReference(CART_REFERENCE_KEY);
+        orderReference = FirebaseDatabase.getInstance().getReference(ORDER_REFERENCE_KEY);
+        orderItemReference = FirebaseDatabase.getInstance().getReference(ORDER_ITEM_REFERENCE_KEY);
+        discountReference = FirebaseDatabase.getInstance().getReference(DISCOUNT_REFERENCE_KEY);
+
+        LoadDiscountInfo();
+
         tvCart_totalPrice = findViewById(R.id.tvCart_totalPrice);
         btnPay = findViewById(R.id.btnPay);
         btnApplyDiscount = findViewById(R.id.btnApplyDiscount);
         edtDiscount = findViewById(R.id.edtDiscount);
         tvCart_discount = findViewById(R.id.tvCart_discount);
+        disCountName = findViewById(R.id.disCountName);
+        discountDescription = findViewById(R.id.discountDescription);
+        tvCart_totalAdded = findViewById(R.id.tvCart_totalAdded);
         btnBack = findViewById(R.id.btnBack);
 
         Paper.init(this);
@@ -93,17 +128,59 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
             finish();
         });
 
-        cartReference = FirebaseDatabase.getInstance().getReference(CART_REFERENCE_KEY);
-        orderReference = FirebaseDatabase.getInstance().getReference(ORDER_REFERENCE_KEY);
-        orderItemReference = FirebaseDatabase.getInstance().getReference(ORDER_ITEM_REFERENCE_KEY);
-        discountReference = FirebaseDatabase.getInstance().getReference(DISCOUNT_REFERENCE_KEY);
         GetListFromShoppingCart();
 
         btnApplyDiscount.setOnClickListener(view -> {
             applyDiscount(edtDiscount.getText().toString());
         });
+
+        disCountName = findViewById(R.id.disCountName);
+        discountDescription = findViewById(R.id.discountDescription);
+        // Start the loop
+        handler.postDelayed(updateTextRunnable, 0);
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Remove the callback to avoid memory leaks
+        handler.removeCallbacks(updateTextRunnable);
     }
 
+    private void animateTextChange(String newDiscountName, String newDiscountDescription) {
+        // Fade-out animation for disCountName
+        ObjectAnimator fadeOutDiscountName = ObjectAnimator.ofFloat(disCountName, "alpha", 1f, 0f);
+        fadeOutDiscountName.setDuration(500);
+
+        fadeOutDiscountName.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                // Update disCountName and start fade-in animation
+                disCountName.setText(newDiscountName);
+                ObjectAnimator fadeInDiscountName = ObjectAnimator.ofFloat(disCountName, "alpha", 0f, 1f);
+                fadeInDiscountName.setDuration(500);
+                fadeInDiscountName.start();
+            }
+        });
+
+        // Fade-out animation for discountDescription
+        ObjectAnimator fadeOutDiscountDescription = ObjectAnimator.ofFloat(discountDescription, "alpha", 1f, 0f);
+        fadeOutDiscountDescription.setDuration(500);
+
+        fadeOutDiscountDescription.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                // Update discountDescription and start fade-in animation
+                discountDescription.setText(newDiscountDescription);
+                ObjectAnimator fadeInDiscountDescription = ObjectAnimator.ofFloat(discountDescription, "alpha", 0f, 1f);
+                fadeInDiscountDescription.setDuration(500);
+                fadeInDiscountDescription.start();
+            }
+        });
+
+        // Start the fade-out animations
+        fadeOutDiscountName.start();
+        fadeOutDiscountDescription.start();
+    }
     private void setupUI() {
         rvProductAdded = findViewById(R.id.rvProductAdded);
         rvProductAdded.setLayoutManager(new LinearLayoutManager(this));
@@ -208,6 +285,8 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
             btnPay.setBackgroundResource(R.color.greenVLUS);
         }
 
+        tvCart_totalAdded.setText(inCartItemList.size());
+
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         double afterDiscount = totalPrice * (discountPercent == 0 ? 1 : ((100 - discountPercent) / 100));
         formattedValue = decimalFormat.format(afterDiscount);
@@ -253,6 +332,27 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
                     tvCart_discount.setText(String.valueOf(discountPercent) + " %");
                     tvCart_totalPrice.setText("$ " + String.valueOf((100 - discountPercent) * totalPrice));
                     Paper.book().write("discount", discount.getDiscountValue());
+                } else {
+                    Toast.makeText(Cart.this, "Không thấy mã giảm giá", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(Cart.this, "Lỗi: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    void LoadDiscountInfo() {
+        discountReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot discSnapshot : snapshot.getChildren()) {
+                        Discount discount = discSnapshot.getValue(Discount.class);
+                        DiscountList.add(discount);
+                    }
                 } else {
                     Toast.makeText(Cart.this, "Không thấy mã giảm giá", Toast.LENGTH_SHORT).show();
                 }
