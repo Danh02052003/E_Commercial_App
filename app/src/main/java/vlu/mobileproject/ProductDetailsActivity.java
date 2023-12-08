@@ -15,7 +15,6 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
@@ -35,7 +34,9 @@ import com.google.firebase.database.ValueEventListener;
 
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import vlu.mobileproject.activity.view.cart.Cart;
 import vlu.mobileproject.activity.view.home.MainActivity;
@@ -71,7 +72,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     boolean shouldAddQuantty = false;
     private final String userEmail = UserManager.getInstance().getUserEmail();
 
-    List<TextView> listPrice;
+    List<TextView> listPrice, listDescription;
 
     DatabaseReference cartReference, productRef;
 
@@ -80,6 +81,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     String productSelectedOption = "";
     double selectedOptionPrice = 0.0;
     int selectedOptionQuantity = 0;
+
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -93,9 +95,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         product = (Products) bundle.getSerializable("object_product");
         if (product != null) {
-
             tvDetails_productName.setText(product.getProduct_name());
-            tvDetails_productPrice.setText("$" + String.valueOf(product.getPriceForMemory()));
+            tvDetails_productPrice.setText("$" + product.getPriceForMemory());
             tvDetails_productDescr.setText("Ngày sản xuất: " + product.getProduct_createdDate() + "\n" + product.getProduct_description());
 
             Glide.with(this).load(product.getProduct_img()).into(ivDetails_productIllustration);
@@ -105,47 +106,47 @@ public class ProductDetailsActivity extends AppCompatActivity {
             gvCapacities.setAdapter(capacitiesAdapter);
             String[] memoryOptions = product.getMemory();
 
-            tvDetailsAddProduct_productPrice.setText("$" + String.valueOf(product.getPriceForMemory()));
+            tvDetailsAddProduct_productPrice.setText("$" + product.getPriceForMemory());
             tvDetails_nProductLeft.setText("Tổng " + product.getTotalQuantity() + " sản phẩm.");
 
             cartReference = FirebaseDatabase.getInstance().getReference("Cart");
             productRef = FirebaseDatabase.getInstance().getReference("Products");
             auth = FirebaseAuth.getInstance();
 
-            gvCapacities.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                    if (gvCapacities.isItemChecked(position)) {
-                        reset_gvCapacitiesBtns();
-                        productSelectedOption = product.getMemoryOptionNames()[position];
-                        selectedOptionPrice = product.getPriceForMemory(memoryOptions[position]);
-                        tvDetailsAddProduct_productPrice.setText(String.valueOf(product.getPriceForMemory(memoryOptions[position])));
-                        selectedOptionQuantity = product.getQuantityForMemory(memoryOptions[position]);
-                        productQuantityAdded = 1;
-                        SetTextForQuantity();
+            gvCapacities.setOnItemClickListener((adapterView, view, position, l) -> {
+                if (gvCapacities.isItemChecked(position)) {
+                    reset_gvCapacitiesBtns();
+                    productSelectedOption = product.getMemoryOptionNames()[position];
+                    selectedOptionPrice = product.getPriceForMemory(memoryOptions[position]);
+                    tvDetailsAddProduct_productPrice.setText(String.valueOf(product.getPriceForMemory(memoryOptions[position])));
+                    selectedOptionQuantity = product.getQuantityForMemory(memoryOptions[position]);
+                    productQuantityAdded = 1;
+                    SetTextForQuantity();
 
-                        tvDetails_nProductLeft.setText(selectedOptionQuantity + " sản phẩm.");
+                    tvDetails_nProductLeft.setText(selectedOptionQuantity + " sản phẩm.");
 
-                        btnDetails_wAddToCart.setEnabled(true);
-                        btnDetails_wAddToCart.setBackgroundResource(R.color.greenVLUS);
-                        btnDetails_wBuyNow.setEnabled(true);
-                        btnDetails_wBuyNow.setBackgroundResource(R.color.greenVLUS);
+                    btnDetails_wAddToCart.setEnabled(true);
+                    btnDetails_wAddToCart.setBackgroundResource(R.color.greenVLUS);
+                    btnDetails_wBuyNow.setEnabled(true);
+                    btnDetails_wBuyNow.setBackgroundResource(R.color.greenVLUS);
 
-                        view = gvCapacities.getChildAt(position);
-                        TextView textView = view.findViewById(R.id.tvCapacity);
-                        textView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
-                        textView.setTextColor(Color.WHITE);
-                    } else {
-
-                    }
-                    capacitiesAdapter.notifyDataSetChanged();
+                    view = gvCapacities.getChildAt(position);
+                    TextView textView = view.findViewById(R.id.tvCapacity);
+                    textView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
+                    textView.setTextColor(Color.WHITE);
                 }
+                capacitiesAdapter.notifyDataSetChanged();
             });
         }
+
+
 
         SetTextForQuantity();
         String lang = language.getPresentLang();
         UpdateLang.exchangeCurrency(listPrice.toArray(new TextView[0]), this);
+        UpdateLang.translateLanguage(listDescription.toArray(new TextView[0]), this);
+
+
     }
 
     private void addControl() {
@@ -158,6 +159,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         tvDetails_productName = findViewById(R.id.tvDetails_productName);
 //        tvDetails_productName.setTransitionName("product_name");
         tvDetails_productPrice = findViewById(R.id.tvDetails_productPrice);
+
 //        tvDetails_productPrice.setTransitionName("product_price");
         tvDetails_productDescr = findViewById(R.id.tvDetails_productDescr);
         ivDetails_productIllustration = findViewById(R.id.ivDetails_productIllustration);
@@ -183,7 +185,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
         btnFavorite_full.setBackground(null);
         gvCapacities = findViewById(R.id.gvCapacities);
 
-        listPrice = Arrays.asList(tvDetails_productPrice);
+        //translate
+        listPrice = Collections.singletonList(tvDetails_productPrice);
+        listDescription =  Arrays.asList(tvDetails_productDescr);
 
     }
 
@@ -241,10 +245,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         });
 
-        btnDetails_wBuyNow.setOnClickListener(view -> {
-            AddProductItem2Cart(true);
-
-        });
+        btnDetails_wBuyNow.setOnClickListener(view -> AddProductItem2Cart(true));
 
         btnDetails_wAddToCart.setOnClickListener(view -> {
             AddProductItem2Cart(false);
@@ -327,9 +328,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         });
 
-        btnBack.setOnClickListener(view -> {
-            supportFinishAfterTransition();
-        });
+        btnBack.setOnClickListener(view -> supportFinishAfterTransition());
     }
 
     void reset_gvCapacitiesBtns() {
@@ -347,6 +346,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     ShoppingCart CartItemProduct = dataSnapshot.getValue(ShoppingCart.class);
+                    assert CartItemProduct != null;
                     String productID = CartItemProduct.getProductID();
                     String productMemOpt = CartItemProduct.getMemoryOptID();
 
@@ -385,12 +385,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     private void SaveCardItem(ShoppingCart CartItem) {
         String productId = cartReference.push().getKey();
-        CartItem.setUserID(auth.getCurrentUser().getUid());
+        CartItem.setUserID(Objects.requireNonNull(auth.getCurrentUser()).getUid());
         String x = auth.getCurrentUser().getEmail();
         String y = auth.getCurrentUser().getPhoneNumber();
+        assert productId != null;
         cartReference.child(productId).setValue(CartItem);
 
-        Toast.makeText(this, "Sản phẩm đã được thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.add_cart), Toast.LENGTH_SHORT).show();
     }
 
     private void SetTextForQuantity() {

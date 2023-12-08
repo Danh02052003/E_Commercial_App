@@ -3,12 +3,16 @@ package vlu.mobileproject.translate;
 
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.util.Log;
 
 import java.util.Locale;
 
-public class LanguageHelper {
+import vlu.mobileproject.ChooseLanguage;
 
+public class LanguageHelper {
     public static void changeLanguage(Resources resources, String languageCode) {
+        Log.d("LanguageChange", "Switching to language: " + languageCode);
+
         Locale newLocale = new Locale(languageCode);
         Locale.setDefault(newLocale);
 

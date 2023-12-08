@@ -3,10 +3,17 @@ package vlu.mobileproject;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.util.Log;
+
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
-import java.util.ArrayList;
+import vlu.mobileproject.translate.LanguageHelper;
+import vlu.mobileproject.translate.UpdateLang;
 
 public class ChooseLanguage extends AppCompatActivity {
 
@@ -14,39 +21,36 @@ public class ChooseLanguage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_language);
+        LinearLayout lVi = findViewById(R.id.lVi);
+        LinearLayout lEn = findViewById(R.id.lEn);
+        ImageButton BtnBack = findViewById(R.id.BtnBack);
 
-        // Get ListView reference
-        ListView languageListView = findViewById(R.id.LVlanguage);
 
-        // Create a list of LanguageItem objects
-        ArrayList<LanguageItem> languageList = new ArrayList<>();
-        languageList.add(new LanguageItem("Vietnamese", R.drawable.flag_vietnam, "vi")); // "vi" for Vietnamese
-        languageList.add(new LanguageItem("English", R.drawable.flag_english, "en")); // "en" for English
+        BtnBack.setOnClickListener(v-> finish());
 
-        // Create custom adapter and set it to the ListView
-        LanguageAdapter adapter = new LanguageAdapter(this, languageList);
-        languageListView.setAdapter(adapter);
-
-        // Set item click listener
-        languageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, android.view.View view, int position, long id) {
-                // Get the selected LanguageItem
-                LanguageItem selectedLanguage = languageList.get(position);
-
-                // Save the selected language to SharedPreferences
-                saveLanguagePreference(selectedLanguage.languageCode());
-
-                // Optionally, you can restart the activity or reload your UI to apply the language change
+        lVi.setOnClickListener(v -> {
+            if ("en".equals(UpdateLang.getLanguage(this))) {
+                UpdateLang.setLanguage("vi", this);
+                Log.d("LanguageChange", "Switching to Vietnamese");
+                LanguageHelper.changeLanguage(getResources(), "vi");
                 recreate();
-            }
+                finish();
+            }else Toast.makeText(this, getString(R.string.error_language), Toast.LENGTH_LONG).show();
+        });
+
+        lEn.setOnClickListener(v -> {
+            if ("vi".equals(UpdateLang.getLanguage(this))) {
+                UpdateLang.setLanguage("en", this);
+                Log.d("LanguageChange", "Switching to English");
+                LanguageHelper.changeLanguage(getResources(), "en");
+                recreate();
+                finish();
+            }else Toast.makeText(this, getString(R.string.error_language), Toast.LENGTH_LONG).show();
         });
     }
 
-    private void saveLanguagePreference(String languageCode) {
-        SharedPreferences preferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("language_code", languageCode);
-        editor.apply();
+    private boolean getNightModeStatus() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean("night", false);
     }
 }
