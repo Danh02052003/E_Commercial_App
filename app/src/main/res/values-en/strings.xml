@@ -86,4 +86,6 @@
     <string name="onDelivered">Your order has been delivered to you</string>
     <string name="onCancel">Your order has been canceled</string>
 
+    <string name="orderHis">Order history</string>
+
 </resources>

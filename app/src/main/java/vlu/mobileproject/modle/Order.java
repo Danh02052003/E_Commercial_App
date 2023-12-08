@@ -5,13 +5,13 @@ import vlu.mobileproject.data.DeliveryStatus;
 import vlu.mobileproject.data.PaymentMethod;
 
 public class Order {
-    String buyer_id, order_id, shippingAddress;
-    double total_amount, discount, otherFees;
-    String order_date;
-    DeliveryStatus status;
-    PaymentMethod paymentMethod;
-    DeliveryMethod deliveryMethod;
-    String phoneNumber;
+    protected String buyer_id, order_id, shippingAddress;
+    protected double total_amount, discount, otherFees;
+    protected String order_date;
+    protected DeliveryStatus status;
+    protected PaymentMethod paymentMethod;
+    protected DeliveryMethod deliveryMethod;
+    protected String phoneNumber;
     public DeliveryMethod getDeliveryMethod() {
         return deliveryMethod;
     }

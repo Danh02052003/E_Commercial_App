@@ -6,7 +6,6 @@ import static java.util.Collections.addAll;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +14,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import vlu.mobileproject.AllFrag;
-import vlu.mobileproject.HomeChildItem;
 import vlu.mobileproject.R;
 import vlu.mobileproject.modle.Products;
 
@@ -61,7 +56,7 @@ public class ProductAdapter extends BaseAdapter {
         Products product = productList.get(position);
 
         ImageView imgProductId = convertView.findViewById(R.id.imgPhoneSearch);
-        TextView textProductName = convertView.findViewById(R.id.txtNamePhone);
+        TextView textProductName = convertView.findViewById(R.id.orderID);
 
         // Set the product_id as the image resource
 //        imgProductId.setImageResource(product.getProduct_img());

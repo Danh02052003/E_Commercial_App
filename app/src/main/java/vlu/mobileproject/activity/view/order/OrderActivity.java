@@ -77,7 +77,7 @@ public class OrderActivity extends AppCompatActivity {
 
         layoutManager = new LinearLayoutManager(this);
         cardTitle = findViewById(R.id.RecOrder);
-        cardTitle.setLayoutManager(new LinearLayoutManager(this));
+        cardTitle.setLayoutManager(layoutManager);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();

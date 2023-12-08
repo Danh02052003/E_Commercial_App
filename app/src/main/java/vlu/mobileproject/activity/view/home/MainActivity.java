@@ -60,6 +60,7 @@ import vlu.mobileproject.SubFragment1;
 import vlu.mobileproject.SubFragment2;
 import vlu.mobileproject.SubFragment3;
 import vlu.mobileproject.activity.view.cart.Cart;
+import vlu.mobileproject.activity.view.order.OrderHistoryActivity;
 import vlu.mobileproject.activity.view.search.SearchFragment;
 import vlu.mobileproject.adapter.DrawerAdapter;
 import vlu.mobileproject.activity.view.profile.Information_Account;
@@ -202,11 +203,12 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
 
                 return true;
             } else if (id == R.id.item_btt_nav_QR) {
+                Intent intent = new Intent(MainActivity.this, OrderHistoryActivity.class);
+                startActivity(intent);
                 // Load the QRFragment (if available)
                 //loadFragment(new QRFragment());
                 return true;
             }else if (id == R.id.item_btt_nav_search) {
-                loadFragment(new SearchFragment());
 
                 return true;
             } else if (id == R.id.item_btt_nav_profile) {

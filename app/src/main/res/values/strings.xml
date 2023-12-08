@@ -113,6 +113,7 @@
     <string name="onDelivering2You">Đơn hàng đang giao tới cho bạn</string>
     <string name="onDelivered">Đơn hàng đã được giao cho bạn</string>
     <string name="onCancel">Đơn hàng đã bị hủy</string>
+    <string name="orderHis">Lịch sử đặt hàng</string>
 
 
     <!--side menu-->
