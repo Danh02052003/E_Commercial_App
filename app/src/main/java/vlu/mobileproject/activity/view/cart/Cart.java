@@ -238,6 +238,8 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
     void LoadCartItem2View() {
         if (inCartItemList.size() != 0) {
 
+            tvCart_totalAdded.setText(inCartItemList.size() + " món hàng.");
+
             rvProductAdded = findViewById(R.id.rvProductAdded);
             rvProductAdded.setLayoutManager(new LinearLayoutManager(this));
 
@@ -284,8 +286,6 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
             btnPay.setEnabled(true);
             btnPay.setBackgroundResource(R.color.greenVLUS);
         }
-
-        tvCart_totalAdded.setText(inCartItemList.size());
 
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         double afterDiscount = totalPrice * (discountPercent == 0 ? 1 : ((100 - discountPercent) / 100));
