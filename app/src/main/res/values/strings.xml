@@ -8,18 +8,23 @@
 
     <!--login-->
     <string name="login">Đăng nhập</string>
+    <string name="loginWithPhone">Đăng nhập bằng số điện thoại</string>
+    <string name="loginWithEmail">Đăng nhập bằng Email</string>
+    <string name="verify">Xác nhận</string>
     <string name="email">Địa chỉ email</string>
     <string name="emailorphonenumb">Địa chỉ email hoặc số điện thoại</string>
     <string name="pass">Mật khẩu</string>
+    <string name="Newpass">Mật khẩu mới</string>
     <string name="forgot">Quên mật khẩu</string>
     <string name="no_user">Chưa có tài khoản?</string>
     <string name="create_user">Tạo tài khoản</string>
+    <string name="Rememberme">Nhớ tôi</string>
     <!--sign-up-->
     <string name="have_user">Đã có tài khoản?</string>
 
     <!--forget pass email-->
     <string name="forgot_pass">Bạn quên mật khẩu?</string>
-    <string name="enter_email">Nhập email để chúng tôi gửi mã xác nhận để tạo mật khẩu mới nhá</string>
+    <string name="enter_email">Nhập số điện thoại để chúng tôi gửi mã xác nhận để tạo mật khẩu mới</string>
     <string name="send_code">Gửi mã xác nhận</string>
     <string name="remember">Bạn nhớ được mật khẩu rồi à?</string>
 
