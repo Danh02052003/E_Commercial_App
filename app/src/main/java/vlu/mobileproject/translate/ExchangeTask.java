@@ -88,19 +88,17 @@ public class ExchangeTask extends AsyncTask<String, Void, String> {
     }
 
     private String formatCurrencyEngWithoutSymbol(String value, double result) {
-        String cleanValue = value.replace(",", "").replace("đ", "");
+        // Remove commas and "đ" from the value
+        String cleanValue = value.replace(".", "").replace("đ", "");
 
-        BigDecimal originalNumber = new BigDecimal(result);
-
-        //convert
         double doubleValue = Double.parseDouble(cleanValue);
-        double resultValue = originalNumber.doubleValue();
 
-
+        // Perform your calculations
+        double resultValue = result;
         double dividedValue = doubleValue * resultValue;
 
+        // Format the result
         DecimalFormat decimalFormat = new DecimalFormat("$#,###");
         return decimalFormat.format(dividedValue);
     }
-
 }

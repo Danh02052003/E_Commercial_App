@@ -51,10 +51,13 @@
     <string name="cancle">Cancle</string>
     <string name="setting">Settings</string>
     <string name="account">Account</string>
+    <string name="notification">Notification</string>
     <string name="personal_information">Profile</string>
     <string name="language">Language</string>
     <string name="dark_mode">Dark mode</string>
     <string name="info">Information</string>
+    <string name="present_language">en</string>
+    <string name="error_language">" You are currently in English language"</string>
     <string name="avatar">Avatar</string>
     <string name="upload">Upload avatar</string>
     <string name="name">Full name</string>
@@ -63,4 +66,10 @@
     <string name="favorite">Favorite product</string>
     <string name="home">Home</string>
     <string name="log_out">Log out</string>
+    <string name="prompt_password">Mật khẩu</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">Login failed</string>
+    <string name="added_cart">The product has been added to cart</string>
 </resources>

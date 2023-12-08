@@ -10,6 +10,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -31,16 +34,21 @@ import vlu.mobileproject.login.UserManager;
 import vlu.mobileproject.login.user;
 
 
+
+
+
 public class Information_Account extends Information_Account_Detail {
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch switchMode;
     boolean nightMode;
     SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+    //SharedPreferences.Editor editor;
     CircleImageView imgAvatarAccount;
     TextView NameAccount;
     ImageButton BtnGoToIn4Detail, btnGoToLanguage, btnGoToNotification, BtnBack;
+    LinearLayout lLanguage, lNotify, lDarkmode, lIn4Detail;
+    ImageView btnGoToIn4Detail, btnGotoIn4DetailEn;
     private final String userEmail = UserManager.getInstance().getUserEmail();
 
     @Override
@@ -49,10 +57,11 @@ public class Information_Account extends Information_Account_Detail {
         setContentView(R.layout.activity_information_account);
         addControls();
         addEvents();
+        setPresentMode();
         fetchUserDataFromFirebase(userEmail);
+    }
 
-        ImageHandler.setImageFromFirebaseStorage(imgAvatarAccount, userID);
-
+    private void setPresentMode(){
         // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
 
@@ -71,45 +80,60 @@ public class Information_Account extends Information_Account_Detail {
         if (nightMode) {
             switchMode.setChecked(true);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-
         }
 
-
     }
-
     @SuppressLint("CutPasteId")
     private void addControls() {
         switchMode = findViewById(R.id.switchDarkMode);
-        BtnGoToIn4Detail = findViewById(R.id.BtnGoToIn4Detail);
-        btnGoToLanguage = findViewById(R.id.btnGoToLanguage);
-        btnGoToNotification = findViewById(R.id.btnGoToNotification);
         BtnBack = findViewById(R.id.BtnBack);
         imgAvatarAccount = findViewById(R.id.imgAvatarAccount);
         NameAccount = findViewById(R.id.NameAccount);
+        BtnGoToIn4Detail= findViewById(R.id.BtnGoToIn4Detail);
+        btnGoToLanguage = findViewById(R.id.btnGoToLanguage);
+        btnGoToNotification = findViewById(R.id.btnGoToNotification);
+        lLanguage = findViewById(R.id.lLanguage);
+        lNotify = findViewById(R.id.lNotify);
+        lDarkmode = findViewById(R.id.lDarkmode);
+        lIn4Detail = findViewById(R.id.lIn4Detail);
 
+
+        ImageHandler.setImageFromFirebaseStorage(imgAvatarAccount, userID);
     }
 
     private void addEvents() {
+
+
+        lLanguage.setOnClickListener(v-> startNewActivity(ChooseLanguage.class));
+        lIn4Detail.setOnClickListener(v -> startNewActivity(Information_Account_Detail.class));
+        BtnBack.setOnClickListener(v -> finish());
+
+
+        lDarkmode.setOnClickListener(v-> switchMode.setChecked(!switchMode.isChecked()));
+
+
+        // Set OnCheckedChangeListener for the Switch
         switchMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
             // Save the selected mode to SharedPreferences when the user toggles the Switch
-            editor = sharedPreferences.edit();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("night", isChecked);
             editor.apply();
+            BtnGoToIn4Detail.setImageResource(R.drawable.gotowhite);
+            btnGoToLanguage.setImageResource(R.drawable.gotowhite);
+            btnGoToNotification.setImageResource(R.drawable.gotowhite);
             // Apply the selected mode to the entire app
             applyNightMode(isChecked);
         });
 
-        btnGoToLanguage.setOnClickListener(v-> startNewActivity(ChooseLanguage.class));
-        BtnGoToIn4Detail.setOnClickListener(v -> startNewActivity(Information_Account_Detail.class));
 
-
-        BtnBack.setOnClickListener(v -> finish());
     }
 
     private void startNewActivity(Class<?> activityClass) {
         Intent intent = new Intent(Information_Account.this, activityClass);
         startActivity(intent);
-    }    protected void applyNightMode(boolean isNightMode) {
+    }
+
+    protected void applyNightMode(boolean isNightMode) {
         // Apply the selected mode to the entire app
         if (isNightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
