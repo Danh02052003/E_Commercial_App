@@ -63,6 +63,9 @@
     <string name="pay">Thanh toán</string>
     <string name="doing">Đơn hàng của bạn đang được thực hiện....</string>
 
+    <string name="DP_normal">Giao hàng nhanh</string>
+    <string name="DP_lowCost">Giao hàng tiết kiệm</string>
+    <string name="DP_highSpeed">Giao hàng hỏa tốc</string>
 
     <!--Search-->
     <string name="filter">Bộ lọc</string>

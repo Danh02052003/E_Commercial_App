@@ -1,7 +1,7 @@
 package vlu.mobileproject.data;
 
 public enum DeliveryProvider {
-    GIAO_HANG_NHANH(""),
+    NORMAL(""),
     GIAO_HANG_TIET_KIEM("In Progress"),
     HOA_TOC("Delivering to you");
 

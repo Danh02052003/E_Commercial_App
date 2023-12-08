@@ -65,6 +65,9 @@
     <string name="address">Address</string>
     <string name="favorite">Favorite product</string>
     <string name="home">Home</string>
+    <string name="DP_normal">normal speed</string>
+    <string name="DP_lowCost">low-cost deliver</string>
+    <string name="DP_highSpeed"></string>
     <string name="log_out">Log out</string>
     <string name="prompt_password">Mật khẩu</string>
     <string name="action_sign_in_short">Sign in</string>
