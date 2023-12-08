@@ -1,102 +1,276 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".activity.view.order.PaymentActivity">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="phone Shipping adress: "
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp"/>
-
-        <EditText
-            android:id="@+id/shippingAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="shipping address"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp"/>
-    </LinearLayout>
-    <LinearLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardPersonalInfo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="phone Number: "
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp"/>
-
-        <EditText
-            android:id="@+id/phoneNumber"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="30dp">
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="000 000 000"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp"/>
-    </LinearLayout>
+            android:layout_height="110dp"
+            android:background="@drawable/custom_card_border"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#CCCCCC"
-        android:layout_marginBottom="16dp"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp">
+
+            <LinearLayout
+                android:id="@+id/linearLayout3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/payment_address"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/shippingAddress"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:padding="8dp"
+                    android:layout_marginLeft="30dp"
+                    android:hint="shipping address"
+                    android:textSize="15sp"
+                    android:background="@drawable/rounded_edittext"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/phone_number"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/phoneNumber"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="30dp"
+                    android:hint="000 000 000"
+                    android:textSize="15sp"
+                    android:padding="8dp"
+                    android:background="@drawable/rounded_edittext"/>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <ImageButton
+        android:id="@+id/btnBack"
+        style="@style/IMAGEBUTTON"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
+        android:src="@drawable/back_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textViewPaymentMethod"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Payment Method"
-        android:textSize="18sp"
+        android:text="@string/payment_title"
+        android:layout_marginTop="36dp"
+        android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_marginBottom="8dp"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <RadioGroup
-        android:id="@+id/radioGroupPaymentMethod"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/payment_desc"
+        android:textColor="#6D6D78"
+        android:textSize="12sp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPaymentMethod" />
 
-        <RadioButton
-            android:id="@+id/radioButtonCOD"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Cash on Delivery" />
-
-        <RadioButton
-            android:id="@+id/radioButtonBanking"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Banking" />
-
-        <RadioButton
-            android:id="@+id/radioButtonCreditCard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Credit Card" />
-
-    </RadioGroup>
-
-    <!-- Other payment-related details can be added here -->
-
-    <Button
-        android:id="@+id/btnProceedToPayment"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardPaymentMethod"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Proceed to Payment"
-        android:layout_marginTop="16dp"/>
-</LinearLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardPersonalInfo"
+        android:layout_margin="20dp"
+        app:cardElevation="30dp"
+        app:cardCornerRadius="20dp">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/custom_card_border"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Phương thức thanh toán"
+                android:padding="5dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <RadioGroup
+                android:id="@+id/radioGroupPaymentMethod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView18"
+                android:layout_marginTop="5dp">
+
+                <RadioButton
+                    android:id="@+id/radioButtonCOD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Cash on Delivery" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonBanking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Banking" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonCreditCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Credit Card" />
+
+            </RadioGroup>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardDeliveryMethod"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardPaymentMethod">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/custom_card_border" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Phương thức giao hàng"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <RadioGroup
+                android:id="@+id/radioGroupDeliveryMethod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView19">
+
+                <RadioButton
+                    android:id="@+id/radioButtonNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Normal" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonSaving"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Low-cost" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonHighSpeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="High speed" />
+
+            </RadioGroup>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnProceedToPayment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:paddingLeft="80dp"
+        android:paddingRight="80dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:textSize="22sp"
+        android:text="Confirm"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardDeliveryMethod"
+        android:background="@drawable/rounded_button">
+
+    </androidx.appcompat.widget.AppCompatButton>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

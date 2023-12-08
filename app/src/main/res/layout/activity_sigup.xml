@@ -21,15 +21,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:layout_width="20.1dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
-        android:src="@drawable/lock"
-        app:layout_constraintStart_toStartOf="@+id/passWord"
-        app:layout_constraintTop_toTopOf="@+id/passWord" />
-
     <EditText
         android:id="@+id/email"
         android:layout_width="362dp"
@@ -115,6 +106,15 @@
 
     <ImageView
         android:layout_width="20.1dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/lock"
+        app:layout_constraintStart_toStartOf="@+id/passWord"
+        app:layout_constraintTop_toTopOf="@+id/passWord" />
+
+    <ImageView
+        android:layout_width="20.1dp"
         android:layout_height="18dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="20dp"
@@ -125,7 +125,7 @@
     <ImageView
         android:layout_width="20.1dp"
         android:layout_height="18dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="22dp"
         android:layout_marginTop="20dp"
         android:src="@drawable/profile"
         app:layout_constraintStart_toStartOf="@+id/userName"
