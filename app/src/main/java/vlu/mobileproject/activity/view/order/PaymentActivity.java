@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -25,7 +24,7 @@ import java.util.Map;
 import io.paperdb.Paper;
 import vlu.mobileproject.ProductInCartItem;
 import vlu.mobileproject.R;
-import vlu.mobileproject.activity.view.cart.Cart;
+import vlu.mobileproject.data.DeliveryProvider;
 import vlu.mobileproject.data.DeliveryStatus;
 import vlu.mobileproject.data.PaymentMethod;
 import vlu.mobileproject.modle.Order;
@@ -39,13 +38,14 @@ public class PaymentActivity extends AppCompatActivity {
     private static final String ORDER_ITEM_REFERENCE_KEY = "OrderItem";
     private static final String PRODUCTS_REFERENCE_KEY = "Products_2";
     Map<String, PaymentMethod> paymentMethodMap;
+    Map<String, DeliveryProvider> deleveryProviderMap;
 
     Button btnProceedToPayment;
     EditText shippingAddress;
     List<ProductInCartItem> inCartSelectedList;
     double otherFees, totalPrice, discount;
-    RadioGroup radioGroup;
-    RadioButton checkedRadioButton;
+    RadioGroup radioGroupPaymentMethod, radioGroupDeliveryProvider;
+    RadioButton checkedRadioButtonPaymentMethod, checkedRadioButtonDeliveryProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +55,12 @@ public class PaymentActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         paymentMethodMap = new HashMap<>();
+        deleveryProviderMap = new HashMap<>();
 
         btnProceedToPayment = findViewById(R.id.btnProceedToPayment);
-        radioGroup = findViewById(R.id.radioGroupPaymentMethod);
+        radioGroupPaymentMethod = findViewById(R.id.radioGroupPaymentMethod);
+        //TODO:
+        radioGroupDeliveryProvider = findViewById(R.id.radioGroupPaymentMethod);
         cartReference = FirebaseDatabase.getInstance().getReference(CART_REFERENCE_KEY);
         orderReference = FirebaseDatabase.getInstance().getReference(ORDER_REFERENCE_KEY);
         orderItemReference = FirebaseDatabase.getInstance().getReference(ORDER_ITEM_REFERENCE_KEY);
@@ -76,6 +79,9 @@ public class PaymentActivity extends AppCompatActivity {
         paymentMethodMap.put("Cash on Delivery", PaymentMethod.COD);
         paymentMethodMap.put("Banking", PaymentMethod.BANKING);
         paymentMethodMap.put("Credit Card", PaymentMethod.CREDIT_CARD);
+        deleveryProviderMap.put("Credit Card", DeliveryProvider.GIAO_HANG_NHANH);
+        deleveryProviderMap.put("Credit Card", DeliveryProvider.GIAO_HANG_TIET_KIEM);
+        deleveryProviderMap.put("Credit Card", DeliveryProvider.HOA_TOC);
         Paper.delete("totalPrice");
         Paper.delete("inCartSelectedList");
         Paper.delete("discount");
@@ -84,18 +90,23 @@ public class PaymentActivity extends AppCompatActivity {
         });
     }
 
-    PaymentMethod getDisplayString(String paymentMethod) {
+    PaymentMethod getpaymentMethod(String paymentMethod) {
         return paymentMethodMap.get(paymentMethod);
+    }
+    DeliveryProvider getDeleveryProvider(String deleveryProvider) {
+        return deleveryProviderMap.get(deleveryProvider);
     }
 
     void InitOrder(double totalPrice, List<ProductInCartItem> CheckedItems) {
         String UserID = auth.getCurrentUser().getUid();
         String newOrderKey = orderReference.push().getKey();
         String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        checkedRadioButton = findViewById(radioGroup.getCheckedRadioButtonId());
-        PaymentMethod paymentMethod = getDisplayString(checkedRadioButton.getText().toString());
+        checkedRadioButtonPaymentMethod = findViewById(radioGroupPaymentMethod.getCheckedRadioButtonId());
+        checkedRadioButtonDeliveryProvider = findViewById(radioGroupDeliveryProvider.getCheckedRadioButtonId());
+        PaymentMethod paymentMethod = getpaymentMethod(checkedRadioButtonPaymentMethod.getText().toString());
+        DeliveryProvider deliveryProvider = getDeleveryProvider(checkedRadioButtonDeliveryProvider.getText().toString());
 
-        Order newOrder = new Order(UserID, newOrderKey, totalPrice, discount, otherFees, currentDate, DeliveryStatus.PENDING, paymentMethod, shippingAddress.getText().toString());
+        Order newOrder = new Order(UserID, newOrderKey, totalPrice, discount, otherFees, currentDate, DeliveryStatus.PENDING, paymentMethod, deliveryProvider, shippingAddress.getText().toString());
 
         orderReference.child(newOrderKey).setValue(newOrder).addOnCompleteListener(taskAddOrder -> {
             if (taskAddOrder.isSuccessful()) {

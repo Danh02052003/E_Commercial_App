@@ -125,7 +125,11 @@ public class OrderActivity extends AppCompatActivity {
                         orderStatus.setText(order.getStatus().getStatus());
                         orderTime.setText(order.getOrder_date());
                         paymentMethod.setText(order.getPaymentMethod().getPaymentMethod());
-                        totalPrice.setText("$ " + String.valueOf(order.getTotal_amount()));
+                        double totalAmount = order.getTotal_amount();
+                        double otherFees = order.getOtherFees();
+                        double discount = order.getDiscount();
+                        double finTotalAmount = totalAmount - discount * totalAmount + otherFees;
+                        totalPrice.setText("$ " + finTotalAmount);
                         DestinationEnd.setText(order.getShippingAddress());
 
                         ProgressBarAnimation(order);

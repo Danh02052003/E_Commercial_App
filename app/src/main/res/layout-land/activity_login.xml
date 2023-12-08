@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextUserName"
+        android:id="@+id/userPhoneNumber"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:layout_below="@+id/textView"
@@ -48,16 +48,16 @@
         android:layout_height="18dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:layout_toStartOf="@id/editTextUserName"
+        android:layout_toStartOf="@id/userPhoneNumber"
         android:src="@drawable/email"
-        app:layout_constraintStart_toStartOf="@+id/editTextUserName"
-        app:layout_constraintTop_toTopOf="@+id/editTextUserName" />
+        app:layout_constraintStart_toStartOf="@+id/userPhoneNumber"
+        app:layout_constraintTop_toTopOf="@+id/userPhoneNumber" />
 
     <EditText
         android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:layout_below="@+id/editTextUserName"
+        android:layout_below="@+id/userPhoneNumber"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:background="@drawable/rounded_edittext"
@@ -71,7 +71,7 @@
         android:paddingBottom="8dp"
         android:text="soliknokia"
         android:textColorHint="@color/colorHint"
-        app:layout_constraintTop_toBottomOf="@+id/editTextUserName"
+        app:layout_constraintTop_toBottomOf="@+id/userPhoneNumber"
         tools:layout_editor_absoluteX="0dp" />
 
     <ImageView
@@ -124,7 +124,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button"
+        android:id="@+id/loginbutton"
         android:layout_width="match_parent"
         android:layout_height="66dp"
         android:layout_gravity="center"
@@ -147,7 +147,7 @@
         android:textColor="#00CC96"
         app:layout_constraintEnd_toEndOf="parent"
 
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/loginbutton" />
 
     <TextView
 
@@ -159,7 +159,7 @@
         android:layout_marginEnd="8dp"
         android:text="@string/no_user"
         app:layout_constraintEnd_toStartOf="@+id/taotaikhoan"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/loginbutton" />
 
     <TextView
         android:id="@+id/textView2"

@@ -22,24 +22,25 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="148dp"
         android:layout_marginTop="48dp"
-        android:text="Cài Đặt"
+        android:text="@string/setting"
         android:textSize="20dp" />
 
     <TextView
         android:id="@+id/Account"
-        style="@style/SpecialText"
+        style="@style/discountDescription"
         android:layout_width="73dp"
         android:layout_height="16dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="114dp"
-        android:text="Tài Khoản" />
+        android:text="@string/account" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imgAvatarAccount"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="152dp" />
+        android:layout_marginTop="152dp"
+        android:src="@drawable/logo_team_light"/>
 
     <TextView
         android:id="@+id/NameAccount"
@@ -53,24 +54,24 @@
 
     <TextView
         android:id="@+id/in4Account"
-        style="@style/SpecialText"
+        style="@style/discountDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/NameAccount"
         android:layout_marginStart="138dp"
         android:layout_marginTop="10dp"
-        android:text="Thông tin cá nhân"
+        android:text="@string/personal_information"
         android:textSize="8pt" />
 
 
     <TextView
         android:id="@+id/NameSetting"
-        style="@style/SpecialText"
+        style="@style/discountDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="282dp"
-        android:text="Cài đặt" />
+        android:text="@string/setting" />
 
     <LinearLayout
         android:id="@+id/lLanguage"
@@ -93,16 +94,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
-            android:text="Ngôn ngữ"
+            android:text="@string/language"
             android:textSize="9pt" />
 
         <TextView
             android:id="@+id/detailLanguage"
-            style="@style/SpecialText"
+            style="@style/discountDescription"
             android:layout_width="16dp"
-            android:layout_height="14dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="VI" />
+            android:text="@string/present_language" />
 
         <ImageButton
             android:id="@+id/btnGoToLanguage"
@@ -110,7 +111,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
-            android:src="@drawable/btn" />
+            android:src="@drawable/gotoblack" />
 
 
     </LinearLayout>
@@ -135,7 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
-            android:text="Thông Báo"
+            android:text="@string/notification"
             android:textSize="9pt" />
 
 
@@ -145,7 +146,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
-            android:src="@drawable/btn" />
+            android:src="@drawable/gotoblack" />
 
 
     </LinearLayout>
@@ -170,7 +171,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
-            android:text="Chế độ tối"
+            android:text="@string/dark_mode"
             android:textSize="9pt" />
 
 
@@ -184,6 +185,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/lIn4Detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/lDarkmode"
@@ -202,7 +204,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
-            android:text="Thông tin"
+            android:text="@string/info"
             android:textSize="9pt" />
 
 

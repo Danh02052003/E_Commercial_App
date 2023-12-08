@@ -48,7 +48,7 @@ public class SignupActivity extends AppCompatActivity {
     private TextView dangnhap;
 
     private FirebaseAuth firebaseAuth;
-    private DatabaseReference usersRef;
+    private DatabaseReference usersRef, CartRef;
 
     FragmentTransaction transaction;
 
@@ -56,6 +56,7 @@ public class SignupActivity extends AppCompatActivity {
 
     String verificationId;
     String phone;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,19 +70,23 @@ public class SignupActivity extends AppCompatActivity {
         });
         buttonSignup.setOnClickListener(v -> signupUser());
     }
-    private void addControl(){
+
+    private void addControl() {
         firebaseAuth = FirebaseAuth.getInstance();
         usersRef = FirebaseDatabase.getInstance().getReference("User");
-        editPhone =findViewById(R.id.phoneNumber);
+        CartRef = FirebaseDatabase.getInstance().getReference("Cart");
+        editPhone = findViewById(R.id.phoneNumber);
         editTextUsername = findViewById(R.id.userName);
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.passWord);
         buttonSignup = findViewById(R.id.bttSignup);
         dangnhap = findViewById(R.id.dangNhap);
     }
+
     private boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
+
     private void signupUser() {
         username = editTextUsername.getText().toString().trim();
         final String email = editTextEmail.getText().toString().trim();
@@ -156,6 +161,7 @@ public class SignupActivity extends AppCompatActivity {
                 PhoneAuthProvider.verifyPhoneNumber(options);
             } else {
                 Toast.makeText(SignupActivity.this, "Số này đã được sử dụng", Toast.LENGTH_SHORT).show();
+                firebaseAuth.getCurrentUser().delete();
             }
         });
     }
@@ -191,11 +197,10 @@ public class SignupActivity extends AppCompatActivity {
             //     user action.
             //signInWithPhoneAuthCredential(credential);
 
-            final  String code = credential.getSmsCode();
+            final String code = credential.getSmsCode();
             if (code != null) {
                 VerifyCode(code);
             }
-            saveUserDataToDatabase(username, credential);
         }
 
         @Override
@@ -214,7 +219,7 @@ public class SignupActivity extends AppCompatActivity {
             }
             Log.d(TAG, "Verification Fail Invalid request" + e.getMessage());
             Toast.makeText(SignupActivity.this, "Verification Fail Invalid request" + e.getMessage(), Toast.LENGTH_SHORT).show();
-
+            firebaseAuth.getCurrentUser().delete();
             // Show a message and update the UI
         }
 
@@ -247,6 +252,8 @@ public class SignupActivity extends AppCompatActivity {
                         Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
+                    } else {
+                        firebaseAuth.getCurrentUser().delete();
                     }
                 });
     }
@@ -265,6 +272,9 @@ public class SignupActivity extends AppCompatActivity {
                                 usersRef.child(userId).setValue(newUser)
                                         .addOnCompleteListener(task -> {
                                             if (task.isSuccessful()) {
+
+                                                //CartRef.child(userId).setValue(null);
+
                                                 Paper.init(this);
                                                 Paper.book().write("RememberUser", true);
                                                 Toast.makeText(SignupActivity.this, "Đặng kí thành công", Toast.LENGTH_SHORT).show();
@@ -284,15 +294,9 @@ public class SignupActivity extends AppCompatActivity {
                         });
             } else {
                 // The phone number is already associated with another account
+                firebaseAuth.getCurrentUser().delete();
                 Toast.makeText(SignupActivity.this, "Số điện thoại này đã được sử dụng", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private String generateVerificationCode() {
-        int min = 100000;
-        int max = 999999;
-        int verificationCodeInt = min + (int) (Math.random() * (max - min + 1));
-        return String.valueOf(verificationCodeInt);
     }
 }

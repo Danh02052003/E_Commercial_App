@@ -34,7 +34,7 @@
 
     <TextView
         android:id="@+id/tvCart_totalAdded"
-        style="@style/SpecialText"
+        style="@style/discountDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -60,7 +60,7 @@
 
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/disCountName"
             style="@style/textNumb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
             android:textSize="12pt"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/textView11"
-            app:layout_constraintStart_toEndOf="@+id/textView10" />
+            app:layout_constraintStart_toEndOf="@+id/disCountName" />
 
         <TextView
             android:id="@+id/textView11"
@@ -92,10 +92,10 @@
             android:text="Off"
             android:textSize="8pt"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/textView10" />
+            app:layout_constraintStart_toEndOf="@+id/disCountName" />
 
         <TextView
-            style="@style/SpecialText"
+            style="@style/discountDescription"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="180dp"
@@ -214,7 +214,7 @@
 
     <TextView
         android:id="@+id/textView12"
-        style="@style/SpecialText"
+        style="@style/discountDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -227,7 +227,7 @@
 
     <TextView
         android:id="@+id/textView13"
-        style="@style/SpecialText"
+        style="@style/discountDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"

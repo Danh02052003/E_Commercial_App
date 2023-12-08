@@ -4,15 +4,20 @@
     <string name="welcome">Welcome to VLUS app</string>
     <string name="start">Start</string>
     <string name="login">Login</string>
+    <string name="loginWithPhone">Login with your phone number</string>
+    <string name="loginWithEmail">Login with your Email</string>
     <string name="email">Email</string>
     <string name="emailorphonenumb">Email</string>
+    <string name="Rememberme">Remember me</string>
+    <string name="verify">Verify</string>
     <string name="pass">Password</string>
+    <string name="Newpass">New password</string>
     <string name="forgot">Forgot password</string>
     <string name="no_user">Don\'t have account</string>
     <string name="create_user">Create account</string>
     <string name="have_user">Have account?</string>
     <string name="forgot_pass">Forgot your password?</string>
-    <string name="enter_email">Enter your email so we can send you a verification code to create a new password</string>
+    <string name="enter_email">Enter your phone number so we can send you a verification code to create a new password</string>
     <string name="send_code">Send verification code</string>
     <string name="verification">Verification</string>
     <string name="enter_code">" Please enter the verification code that was sent"</string>
@@ -46,10 +51,13 @@
     <string name="cancle">Cancle</string>
     <string name="setting">Settings</string>
     <string name="account">Account</string>
+    <string name="notification">Notification</string>
     <string name="personal_information">Profile</string>
     <string name="language">Language</string>
     <string name="dark_mode">Dark mode</string>
     <string name="info">Information</string>
+    <string name="present_language">en</string>
+    <string name="error_language">" You are currently in English language"</string>
     <string name="avatar">Avatar</string>
     <string name="upload">Upload avatar</string>
     <string name="name">Full name</string>
@@ -58,4 +66,10 @@
     <string name="favorite">Favorite product</string>
     <string name="home">Home</string>
     <string name="log_out">Log out</string>
+    <string name="prompt_password">Mật khẩu</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">Login failed</string>
+    <string name="added_cart">The product has been added to cart</string>
 </resources>

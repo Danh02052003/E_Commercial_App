@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="100.5dp"
             android:layout_marginTop="48dp"
-            android:text="Thông tin cá nhân"
+            android:text="@string/personal_information"
             android:textSize="20dp"/>
 
         <ImageButton
@@ -47,7 +47,7 @@
 
     <TextView
         android:id="@+id/tvAvatar"
-        style="@style/SpecialText"
+        style="@style/discountDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
@@ -69,7 +69,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_marginTop="10dp"
-        android:text="Upload ảnh đại diện "
+        android:text="@string/upload"
         android:layout_below="@id/imgAvatarAccount"
         android:textSize="9pt"
         android:textColor="#00CC96" />
@@ -81,12 +81,12 @@
 
         <TextView
             android:id="@+id/tvNameAccount"
-            style="@style/SpecialText"
+            style="@style/discountDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="84dp"
-            android:text="Họ và tên" />
+            android:text="@string/name" />
 
         <EditText
             android:id="@+id/edtNameAccount"
@@ -102,7 +102,7 @@
 
         <TextView
             android:id="@+id/tvEmailAccount"
-            style="@style/SpecialText"
+            style="@style/discountDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
@@ -122,12 +122,12 @@
 
         <TextView
             android:id="@+id/tvSDTAccount"
-            style="@style/SpecialText"
+            style="@style/discountDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="208dp"
-            android:text="Số điện thoại" />
+            android:text="@string/phone" />
 
         <EditText
             android:id="@+id/edtSDTAccount"
@@ -143,12 +143,12 @@
 
         <TextView
             android:id="@+id/tvAdressAccount"
-            style="@style/SpecialText"
+            style="@style/discountDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="270dp"
-            android:text="Địa chỉ" />
+            android:text="@string/address" />
 
         <EditText
             android:id="@+id/edtAddressAccount"
