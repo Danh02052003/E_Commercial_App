@@ -44,8 +44,8 @@ public class PaymentActivity extends AppCompatActivity {
     EditText shippingAddress;
     List<ProductInCartItem> inCartSelectedList;
     double otherFees, totalPrice, discount;
-    RadioGroup radioGroup;
-    RadioButton checkedRadioButton;
+    RadioGroup radioGroupPaymentMethod, radioGroupDeliveryProvider;
+    RadioButton checkedRadioButtonPaymentMethod, checkedRadioButtonDeliveryProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,9 @@ public class PaymentActivity extends AppCompatActivity {
         deleveryProviderMap = new HashMap<>();
 
         btnProceedToPayment = findViewById(R.id.btnProceedToPayment);
-        radioGroup = findViewById(R.id.radioGroupPaymentMethod);
+        radioGroupPaymentMethod = findViewById(R.id.radioGroupPaymentMethod);
+        //TODO:
+        radioGroupDeliveryProvider = findViewById(R.id.radioGroupPaymentMethod);
         cartReference = FirebaseDatabase.getInstance().getReference(CART_REFERENCE_KEY);
         orderReference = FirebaseDatabase.getInstance().getReference(ORDER_REFERENCE_KEY);
         orderItemReference = FirebaseDatabase.getInstance().getReference(ORDER_ITEM_REFERENCE_KEY);
@@ -77,9 +79,9 @@ public class PaymentActivity extends AppCompatActivity {
         paymentMethodMap.put("Cash on Delivery", PaymentMethod.COD);
         paymentMethodMap.put("Banking", PaymentMethod.BANKING);
         paymentMethodMap.put("Credit Card", PaymentMethod.CREDIT_CARD);
-        deleveryProviderMap.put("Credit Card", DeliveryProvider.CREDIT_CARD);
-        deleveryProviderMap.put("Credit Card", DeliveryProvider.CREDIT_CARD);
-        deleveryProviderMap.put("Credit Card", DeliveryProvider.CREDIT_CARD);
+        deleveryProviderMap.put("Credit Card", DeliveryProvider.GIAO_HANG_NHANH);
+        deleveryProviderMap.put("Credit Card", DeliveryProvider.GIAO_HANG_TIET_KIEM);
+        deleveryProviderMap.put("Credit Card", DeliveryProvider.HOA_TOC);
         Paper.delete("totalPrice");
         Paper.delete("inCartSelectedList");
         Paper.delete("discount");
@@ -91,17 +93,18 @@ public class PaymentActivity extends AppCompatActivity {
     PaymentMethod getpaymentMethod(String paymentMethod) {
         return paymentMethodMap.get(paymentMethod);
     }
-    DeliveryProvider getDeleveryProvider(String paymentMethod) {
-        return paymentMethodMap.get(paymentMethod);
+    DeliveryProvider getDeleveryProvider(String deleveryProvider) {
+        return deleveryProviderMap.get(deleveryProvider);
     }
 
     void InitOrder(double totalPrice, List<ProductInCartItem> CheckedItems) {
         String UserID = auth.getCurrentUser().getUid();
         String newOrderKey = orderReference.push().getKey();
         String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        checkedRadioButton = findViewById(radioGroup.getCheckedRadioButtonId());
-        PaymentMethod paymentMethod = getpaymentMethod(checkedRadioButton.getText().toString());
-        DeliveryProvider deliveryProvider = getpaymentMethod(checkedRadioButton.getText().toString());
+        checkedRadioButtonPaymentMethod = findViewById(radioGroupPaymentMethod.getCheckedRadioButtonId());
+        checkedRadioButtonDeliveryProvider = findViewById(radioGroupDeliveryProvider.getCheckedRadioButtonId());
+        PaymentMethod paymentMethod = getpaymentMethod(checkedRadioButtonPaymentMethod.getText().toString());
+        DeliveryProvider deliveryProvider = getDeleveryProvider(checkedRadioButtonDeliveryProvider.getText().toString());
 
         Order newOrder = new Order(UserID, newOrderKey, totalPrice, discount, otherFees, currentDate, DeliveryStatus.PENDING, paymentMethod, deliveryProvider, shippingAddress.getText().toString());
 

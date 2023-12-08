@@ -1,11 +1,9 @@
 package vlu.mobileproject.data;
 
 public enum DeliveryProvider {
-    ("Pending"),
-    IN_PROGRESS("In Progress"),
-    DELIVERING_TO_YOU("Delivering to you"),
-    DELIVERED("Delivered"),
-    CANCELED("Canceled");
+    GIAO_HANG_NHANH(""),
+    GIAO_HANG_TIET_KIEM("In Progress"),
+    HOA_TOC("Delivering to you");
 
     private final String deliveryProvider;
 
