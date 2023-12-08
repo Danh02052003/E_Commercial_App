@@ -102,6 +102,10 @@
     <string name="invalid_password">Mật khẩu phải có hơn 5 ký tự</string>
     <string name="login_failed">Đăng nhập thất bại</string>
     <string name="title_activity_login_smstest">LoginActivitySMSTest</string>
+    <string name="payment_title">Phương thức thanh toán</string>
+    <string name="payment_desc">Chọn phương thức thanh toán của bạn</string>
+    <string name="phone_number">Số điện thoại:</string>
+    <string name="payment_address">Địa chỉ:</string>
 
     <!--side menu-->
 

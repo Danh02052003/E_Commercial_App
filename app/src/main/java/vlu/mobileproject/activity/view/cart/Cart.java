@@ -2,7 +2,6 @@ package vlu.mobileproject.activity.view.cart;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,8 +19,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,29 +26,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import io.paperdb.Paper;
-import vlu.mobileproject.ProductDetailsActivity;
 import vlu.mobileproject.ProductInCartItem;
 import vlu.mobileproject.R;
 import vlu.mobileproject.ShoppingCart;
-import vlu.mobileproject.activity.view.order.OrderActivity;
 import vlu.mobileproject.activity.view.order.PaymentActivity;
 import vlu.mobileproject.adapter.ProductInCartAdapter;
-import vlu.mobileproject.data.DeliveryStatus;
-import vlu.mobileproject.data.PaymentMethod;
+
 import vlu.mobileproject.modle.Discount;
-import vlu.mobileproject.modle.Order;
-import vlu.mobileproject.modle.OrderItem;
 import vlu.mobileproject.modle.Products;
 
 public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCheckedChangeListener {
@@ -60,8 +48,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
     private static final String ORDER_ITEM_REFERENCE_KEY = "OrderItem";
     private static final String PRODUCTS_REFERENCE_KEY = "Products_2";
     private static final String DISCOUNT_REFERENCE_KEY = "Discount";
-
-    DeliveryStatus deliveryStatus;
+    
     RecyclerView rvProductAdded;
     List<ProductInCartItem> inCartItemList = new ArrayList<>();
     ProductInCartAdapter adapter;

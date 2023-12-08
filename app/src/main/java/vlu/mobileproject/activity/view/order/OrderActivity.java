@@ -8,13 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -28,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vlu.mobileproject.R;
-import vlu.mobileproject.activity.view.cart.Cart;
 import vlu.mobileproject.data.DeliveryStatus;
 import vlu.mobileproject.modle.Order;
 import vlu.mobileproject.modle.OrderItem;

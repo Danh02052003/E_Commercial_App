@@ -75,4 +75,8 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">Login failed</string>
     <string name="added_cart">The product has been added to cart</string>
+    <string name="payment_title">Payment methods</string>
+    <string name="payment_desc">Choose your desired payment method</string>
+    <string name="phone_number">Phone Number:</string>
+    <string name="payment_address">Address</string>
 </resources>
