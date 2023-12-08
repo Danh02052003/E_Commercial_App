@@ -2,6 +2,7 @@ package vlu.mobileproject.activity.view.cart;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -200,6 +201,11 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         }
         if (inCartSelectedList.size() == 0) {
             totalPrice = 0;
+            btnPay.setEnabled(false);
+            btnPay.setBackgroundResource(R.color.greyIcon);
+        } else {
+            btnPay.setEnabled(true);
+            btnPay.setBackgroundResource(R.color.greenVLUS);
         }
 
         DecimalFormat decimalFormat = new DecimalFormat("0.00");

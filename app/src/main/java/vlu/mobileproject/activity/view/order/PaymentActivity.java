@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -25,7 +24,7 @@ import java.util.Map;
 import io.paperdb.Paper;
 import vlu.mobileproject.ProductInCartItem;
 import vlu.mobileproject.R;
-import vlu.mobileproject.activity.view.cart.Cart;
+import vlu.mobileproject.data.DeliveryProvider;
 import vlu.mobileproject.data.DeliveryStatus;
 import vlu.mobileproject.data.PaymentMethod;
 import vlu.mobileproject.modle.Order;
@@ -39,6 +38,7 @@ public class PaymentActivity extends AppCompatActivity {
     private static final String ORDER_ITEM_REFERENCE_KEY = "OrderItem";
     private static final String PRODUCTS_REFERENCE_KEY = "Products_2";
     Map<String, PaymentMethod> paymentMethodMap;
+    Map<String, DeliveryProvider> deleveryProviderMap;
 
     Button btnProceedToPayment;
     EditText shippingAddress;
@@ -55,6 +55,7 @@ public class PaymentActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         paymentMethodMap = new HashMap<>();
+        deleveryProviderMap = new HashMap<>();
 
         btnProceedToPayment = findViewById(R.id.btnProceedToPayment);
         radioGroup = findViewById(R.id.radioGroupPaymentMethod);
@@ -76,6 +77,9 @@ public class PaymentActivity extends AppCompatActivity {
         paymentMethodMap.put("Cash on Delivery", PaymentMethod.COD);
         paymentMethodMap.put("Banking", PaymentMethod.BANKING);
         paymentMethodMap.put("Credit Card", PaymentMethod.CREDIT_CARD);
+        deleveryProviderMap.put("Credit Card", DeliveryProvider.CREDIT_CARD);
+        deleveryProviderMap.put("Credit Card", DeliveryProvider.CREDIT_CARD);
+        deleveryProviderMap.put("Credit Card", DeliveryProvider.CREDIT_CARD);
         Paper.delete("totalPrice");
         Paper.delete("inCartSelectedList");
         Paper.delete("discount");
@@ -84,7 +88,10 @@ public class PaymentActivity extends AppCompatActivity {
         });
     }
 
-    PaymentMethod getDisplayString(String paymentMethod) {
+    PaymentMethod getpaymentMethod(String paymentMethod) {
+        return paymentMethodMap.get(paymentMethod);
+    }
+    DeliveryProvider getDeleveryProvider(String paymentMethod) {
         return paymentMethodMap.get(paymentMethod);
     }
 
@@ -93,9 +100,10 @@ public class PaymentActivity extends AppCompatActivity {
         String newOrderKey = orderReference.push().getKey();
         String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         checkedRadioButton = findViewById(radioGroup.getCheckedRadioButtonId());
-        PaymentMethod paymentMethod = getDisplayString(checkedRadioButton.getText().toString());
+        PaymentMethod paymentMethod = getpaymentMethod(checkedRadioButton.getText().toString());
+        DeliveryProvider deliveryProvider = getpaymentMethod(checkedRadioButton.getText().toString());
 
-        Order newOrder = new Order(UserID, newOrderKey, totalPrice, discount, otherFees, currentDate, DeliveryStatus.PENDING, paymentMethod, shippingAddress.getText().toString());
+        Order newOrder = new Order(UserID, newOrderKey, totalPrice, discount, otherFees, currentDate, DeliveryStatus.PENDING, paymentMethod, deliveryProvider, shippingAddress.getText().toString());
 
         orderReference.child(newOrderKey).setValue(newOrder).addOnCompleteListener(taskAddOrder -> {
             if (taskAddOrder.isSuccessful()) {
