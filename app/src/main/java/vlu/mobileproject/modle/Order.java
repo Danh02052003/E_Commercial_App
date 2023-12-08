@@ -1,6 +1,6 @@
 package vlu.mobileproject.modle;
 
-import vlu.mobileproject.data.DeliveryProvider;
+import vlu.mobileproject.data.DeliveryMethod;
 import vlu.mobileproject.data.DeliveryStatus;
 import vlu.mobileproject.data.PaymentMethod;
 
@@ -10,14 +10,22 @@ public class Order {
     String order_date;
     DeliveryStatus status;
     PaymentMethod paymentMethod;
-    DeliveryProvider deliveryProvider;
-
-    public DeliveryProvider getDeliveryProvider() {
-        return deliveryProvider;
+    DeliveryMethod deliveryMethod;
+    String phoneNumber;
+    public DeliveryMethod getDeliveryMethod() {
+        return deliveryMethod;
     }
 
-    public void setDeliveryProvider(DeliveryProvider deliveryProvider) {
-        this.deliveryProvider = deliveryProvider;
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setDeliveryMethod(DeliveryMethod deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
     }
 
     public PaymentMethod getPaymentMethod() {
@@ -52,7 +60,7 @@ public class Order {
         this.otherFees = otherFees;
     }
 
-    public Order(String buyer_id, String order_id, double total_amount, double discount, double otherFees, String order_date, DeliveryStatus status, PaymentMethod paymentMethod, DeliveryProvider deliveryProvider, String shippingAddress) {
+    public Order(String buyer_id, String order_id, double total_amount, double discount, double otherFees, String order_date, DeliveryStatus status, PaymentMethod paymentMethod, DeliveryMethod deliveryMethod, String shippingAddress, String phoneNumber) {
         this.buyer_id = buyer_id;
         this.order_id = order_id;
         this.total_amount = total_amount;
@@ -62,7 +70,7 @@ public class Order {
         this.shippingAddress = shippingAddress;
         this.discount = discount;
         this.otherFees = otherFees;
-        this.deliveryProvider = deliveryProvider;
+        this.deliveryMethod = deliveryMethod;
     }
 
     public Order(){}

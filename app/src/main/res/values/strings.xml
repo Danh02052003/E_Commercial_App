@@ -107,6 +107,14 @@
     <string name="phone_number">Số điện thoại:</string>
     <string name="payment_address">Địa chỉ:</string>
 
+
+    <string name="onPending">Chúng tôi đang chuẩn bị đơn hàng</string>
+    <string name="onInProgress">Chúng tôi đang trên dường vận chuyển</string>
+    <string name="onDelivering2You">Đơn hàng đang giao tới cho bạn</string>
+    <string name="onDelivered">Đơn hàng đã được giao cho bạn</string>
+    <string name="onCancel">Đơn hàng đã bị hủy</string>
+
+
     <!--side menu-->
 
 </resources>

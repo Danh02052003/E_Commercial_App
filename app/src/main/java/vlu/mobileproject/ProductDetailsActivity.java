@@ -379,6 +379,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     }
 
     void Move2Cart(){
+        finish();
         Intent intentt = new Intent(ProductDetailsActivity.this, Cart.class);
         startActivity(intentt);
     }

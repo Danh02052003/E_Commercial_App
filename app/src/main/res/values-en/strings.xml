@@ -79,4 +79,11 @@
     <string name="payment_desc">Choose your desired payment method</string>
     <string name="phone_number">Phone Number:</string>
     <string name="payment_address">Address</string>
+
+    <string name="onPending">We are preparing your order</string>
+    <string name="onInProgress">We are in transit for delivery</string>
+    <string name="onDelivering2You">Your order is on the way to you</string>
+    <string name="onDelivered">Your order has been delivered to you</string>
+    <string name="onCancel">Your order has been canceled</string>
+
 </resources>

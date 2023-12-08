@@ -2,6 +2,7 @@ package vlu.mobileproject.activity.view.cart;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,6 +10,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -48,7 +50,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
     private static final String ORDER_ITEM_REFERENCE_KEY = "OrderItem";
     private static final String PRODUCTS_REFERENCE_KEY = "Products_2";
     private static final String DISCOUNT_REFERENCE_KEY = "Discount";
-    
+
     RecyclerView rvProductAdded;
     List<ProductInCartItem> inCartItemList = new ArrayList<>();
     ProductInCartAdapter adapter;
@@ -126,7 +128,17 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         discountDescription = findViewById(R.id.discountDescription);
         // Start the loop
         handler.postDelayed(updateTextRunnable, 0);
+
+        SetEnablePayBtn(false);
     }
+
+    void SetEnablePayBtn(boolean isEnable) {
+        int color = isEnable ? R.color.greenVLUS : R.color.greyIcon;
+        btnPay.setEnabled(isEnable);
+        ColorStateList colorStateList = ContextCompat.getColorStateList(this, color);
+        btnPay.setBackgroundTintList(colorStateList);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -169,6 +181,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         fadeOutDiscountName.start();
         fadeOutDiscountDescription.start();
     }
+
     private void setupUI() {
         rvProductAdded = findViewById(R.id.rvProductAdded);
         rvProductAdded.setLayoutManager(new LinearLayoutManager(this));
@@ -243,6 +256,8 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
 
             PayControl();
         } else {
+            SetEnablePayBtn(false);
+
             tvCart_state = findViewById(R.id.tvCart_state);
             tvCart_state.setVisibility(View.VISIBLE);
         }
@@ -267,12 +282,9 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
             }
         }
         if (inCartSelectedList.size() == 0) {
-            totalPrice = 0;
-            btnPay.setEnabled(false);
-            btnPay.setBackgroundResource(R.color.greyIcon);
+            SetEnablePayBtn(false);
         } else {
-            btnPay.setEnabled(true);
-            btnPay.setBackgroundResource(R.color.greenVLUS);
+            SetEnablePayBtn(true);
         }
 
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
@@ -286,28 +298,17 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
             Set<ProductInCartItem> setInCart = new HashSet<>(inCartItemList);
             Set<ProductInCartItem> setInCartSelected = new HashSet<>(inCartSelectedList);
 
-            for (int i = 0; i < inCartSelectedList.size(); i++) {
-                cartReference.child(inCartSelectedList.get(i).getCartItemID()).removeValue();
-            }
-
             Intent intent = new Intent(Cart.this, PaymentActivity.class);
             Paper.book().write("inCartSelectedList", inCartSelectedList);
             Paper.book().write("totalPrice", totalPrice);
             Paper.book().write("discount", discount);
             startActivity(intent);
 
-            setInCart.removeAll(setInCartSelected);
-            inCartItemList = new ArrayList<>(setInCart);
-            setInCartSelected.removeAll(setInCartSelected);
-            inCartSelectedList = new ArrayList<>(setInCartSelected);
-
-            adapter = new ProductInCartAdapter(inCartItemList);
-            adapter.setOnCheckedChangeListener(this);
-            rvProductAdded.setAdapter(adapter);
-
             tvCart_totalPrice.setText("$00");
             tvCart_discount.setText("$00");
             totalPrice = 0;
+
+            finish();
         });
     }
 

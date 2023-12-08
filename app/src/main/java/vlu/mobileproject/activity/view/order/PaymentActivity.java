@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -24,7 +25,7 @@ import java.util.Map;
 import io.paperdb.Paper;
 import vlu.mobileproject.ProductInCartItem;
 import vlu.mobileproject.R;
-import vlu.mobileproject.data.DeliveryProvider;
+import vlu.mobileproject.data.DeliveryMethod;
 import vlu.mobileproject.data.DeliveryStatus;
 import vlu.mobileproject.data.PaymentMethod;
 import vlu.mobileproject.modle.Order;
@@ -38,14 +39,15 @@ public class PaymentActivity extends AppCompatActivity {
     private static final String ORDER_ITEM_REFERENCE_KEY = "OrderItem";
     private static final String PRODUCTS_REFERENCE_KEY = "Products_2";
     Map<String, PaymentMethod> paymentMethodMap;
-    Map<String, DeliveryProvider> deleveryProviderMap;
+    Map<String, DeliveryMethod> deleveryMethodMap;
 
-    Button btnProceedToPayment;
-    EditText shippingAddress;
+    Button btnProceedToOrder;
+    ImageButton btnBack;
+    EditText shippingAddress, phoneNumber;
     List<ProductInCartItem> inCartSelectedList;
     double otherFees, totalPrice, discount;
-    RadioGroup radioGroupPaymentMethod, radioGroupDeliveryProvider;
-    RadioButton checkedRadioButtonPaymentMethod, checkedRadioButtonDeliveryProvider;
+    RadioGroup radioGroupPaymentMethod, radioGroupDeliveryMethod;
+    RadioButton checkedRadioButtonPaymentMethod, checkedRadioButtonDeliveryMethod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,16 +57,17 @@ public class PaymentActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         paymentMethodMap = new HashMap<>();
-        deleveryProviderMap = new HashMap<>();
+        deleveryMethodMap = new HashMap<>();
 
-        btnProceedToPayment = findViewById(R.id.btnProceedToPayment);
+        btnProceedToOrder = findViewById(R.id.btnProceedToOrder);
         radioGroupPaymentMethod = findViewById(R.id.radioGroupPaymentMethod);
-        //TODO:
-        radioGroupDeliveryProvider = findViewById(R.id.radioGroupPaymentMethod);
+        radioGroupDeliveryMethod = findViewById(R.id.radioGroupDeliveryMethod);
         cartReference = FirebaseDatabase.getInstance().getReference(CART_REFERENCE_KEY);
         orderReference = FirebaseDatabase.getInstance().getReference(ORDER_REFERENCE_KEY);
         orderItemReference = FirebaseDatabase.getInstance().getReference(ORDER_ITEM_REFERENCE_KEY);
         shippingAddress = findViewById(R.id.shippingAddress);
+        phoneNumber = findViewById(R.id.phoneNumber);
+        btnBack = findViewById(R.id.btnBack);
 
         totalPrice = Paper.book().read("totalPrice");
         inCartSelectedList = Paper.book().read("inCartSelectedList");
@@ -79,34 +82,46 @@ public class PaymentActivity extends AppCompatActivity {
         paymentMethodMap.put("Cash on Delivery", PaymentMethod.COD);
         paymentMethodMap.put("Banking", PaymentMethod.BANKING);
         paymentMethodMap.put("Credit Card", PaymentMethod.CREDIT_CARD);
-        deleveryProviderMap.put("Credit Card", DeliveryProvider.NORMAL);
-        deleveryProviderMap.put("Credit Card", DeliveryProvider.GIAO_HANG_TIET_KIEM);
-        deleveryProviderMap.put("Credit Card", DeliveryProvider.HOA_TOC);
+        deleveryMethodMap.put("Normal speed", DeliveryMethod.NORMAL);
+        deleveryMethodMap.put("Low cost", DeliveryMethod.LOW_COST);
+        deleveryMethodMap.put("High speed", DeliveryMethod.HIGH_SPEED);
         Paper.delete("totalPrice");
         Paper.delete("inCartSelectedList");
         Paper.delete("discount");
-        btnProceedToPayment.setOnClickListener(v -> {
+
+        btnProceedToOrder.setOnClickListener(v -> {
             InitOrder(totalPrice, inCartSelectedList);
         });
+        btnBack.setOnClickListener(view -> {
+            finish();
+        });
+
+        phoneNumber.setText(auth.getCurrentUser().getPhoneNumber());
     }
 
     PaymentMethod getpaymentMethod(String paymentMethod) {
         return paymentMethodMap.get(paymentMethod);
     }
-    DeliveryProvider getDeleveryProvider(String deleveryProvider) {
-        return deleveryProviderMap.get(deleveryProvider);
+
+    DeliveryMethod getDeliveryMethod(String deliveryMethod) {
+        return deleveryMethodMap.get(deliveryMethod);
     }
 
     void InitOrder(double totalPrice, List<ProductInCartItem> CheckedItems) {
+        if (shippingAddress.getText().length() == 0 || phoneNumber.getText().length() == 0) {
+            Toast.makeText(PaymentActivity.this, "Hãy nhập đầy đủ thông tin" , Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String UserID = auth.getCurrentUser().getUid();
         String newOrderKey = orderReference.push().getKey();
         String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         checkedRadioButtonPaymentMethod = findViewById(radioGroupPaymentMethod.getCheckedRadioButtonId());
-        checkedRadioButtonDeliveryProvider = findViewById(radioGroupDeliveryProvider.getCheckedRadioButtonId());
+        checkedRadioButtonDeliveryMethod = findViewById(radioGroupDeliveryMethod.getCheckedRadioButtonId());
         PaymentMethod paymentMethod = getpaymentMethod(checkedRadioButtonPaymentMethod.getText().toString());
-        DeliveryProvider deliveryProvider = getDeleveryProvider(checkedRadioButtonDeliveryProvider.getText().toString());
+        DeliveryMethod deliveryMethod = getDeliveryMethod(checkedRadioButtonDeliveryMethod.getText().toString());
 
-        Order newOrder = new Order(UserID, newOrderKey, totalPrice, discount, otherFees, currentDate, DeliveryStatus.PENDING, paymentMethod, deliveryProvider, shippingAddress.getText().toString());
+        Order newOrder = new Order(UserID, newOrderKey, totalPrice, discount, otherFees, currentDate, DeliveryStatus.PENDING, paymentMethod, deliveryMethod, shippingAddress.getText().toString(), phoneNumber.getText().toString());
 
         orderReference.child(newOrderKey).setValue(newOrder).addOnCompleteListener(taskAddOrder -> {
             if (taskAddOrder.isSuccessful()) {
@@ -118,7 +133,9 @@ public class PaymentActivity extends AppCompatActivity {
                     OrderItem neworderItem = new OrderItem(newOrderKey, ProductID, ProductOption, ProductQuantity);
                     orderItemReference.child(newOrderItemID).setValue(neworderItem).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-
+                            for (int i = 0; i < inCartSelectedList.size(); i++) {
+                                cartReference.child(inCartSelectedList.get(i).getCartItemID()).removeValue();
+                            }
                         } else {
                             Toast.makeText(PaymentActivity.this, "không thể thêm kiện hàng" + neworderItem.getProductName(), Toast.LENGTH_SHORT).show();
                         }
@@ -128,6 +145,7 @@ public class PaymentActivity extends AppCompatActivity {
                 Toast.makeText(PaymentActivity.this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(PaymentActivity.this, OrderActivity.class);
                 Bundle bundle = new Bundle();
+                finish();
                 bundle.putString("OrderID", newOrderKey);
                 intent.putExtras(bundle);
                 startActivity(intent);

@@ -348,9 +348,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-
                     <TextView
-                        android:id="@+id/textView24"
+                        android:id="@+id/progressInfo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Shop đang chuẩn bị đơn hàng của bạn..."
@@ -378,6 +377,7 @@
                     android:layout_height="match_parent">
 
                     <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/cancelOrder"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="#9F9595"
@@ -386,7 +386,7 @@
                         android:paddingRight="80dp"
                         android:paddingBottom="15dp"
                         android:text="Hủy Đơn Hàng"
-                        android:textColor="#817474"
+                        android:textColor="@color/white"
                         android:textSize="22sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"

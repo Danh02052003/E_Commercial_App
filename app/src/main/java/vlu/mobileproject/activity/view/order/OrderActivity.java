@@ -2,11 +2,13 @@ package vlu.mobileproject.activity.view.order;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -42,7 +44,7 @@ public class OrderActivity extends AppCompatActivity {
 
     RecyclerView cardTitle;
 
-    TextView orderStatus, orderTime, orderItemCount, paymentMethod, totalPrice, DestinationEnd, btnDetail2;
+    TextView orderStatus, orderTime, orderItemCount, paymentMethod, totalPrice, DestinationEnd, btnDetail2, deliveryMethod;
     ProgressBar pendingBar, inprogressBar, Delivering2YouBar;
     ImageView btnBack;
     Button btnDetail;
@@ -65,6 +67,7 @@ public class OrderActivity extends AppCompatActivity {
         btnDetail = findViewById(R.id.btnDetail);
         btnDetail2 = findViewById(R.id.btnDetail2);
         DestinationEnd = findViewById(R.id.DestinationEnd);
+        deliveryMethod = findViewById(R.id.deliveryMethod);
 
         orderStatus = findViewById(R.id.orderStatus);
         orderTime = findViewById(R.id.orderTime);
@@ -114,21 +117,11 @@ public class OrderActivity extends AppCompatActivity {
                 if (Snapshot.exists()) {
                     for (DataSnapshot orderSnapshot : Snapshot.getChildren()) {
                         Order order = orderSnapshot.getValue(Order.class);
+                        SetupInfo2View(order);
                         String orderID = order.getOrder_id();
 
                         SetupDetailBtn(orderID);
 
-                        orderStatus.setText(order.getStatus().getStatus());
-                        orderTime.setText(order.getOrder_date());
-                        paymentMethod.setText(order.getPaymentMethod().getPaymentMethod());
-                        double totalAmount = order.getTotal_amount();
-                        double otherFees = order.getOtherFees();
-                        double discount = order.getDiscount();
-                        double finTotalAmount = totalAmount - discount * totalAmount + otherFees;
-                        totalPrice.setText("$ " + finTotalAmount);
-                        DestinationEnd.setText(order.getShippingAddress());
-
-                        ProgressBarAnimation(order);
 
                         Query orderItemQuery = orderItemReference.orderByChild("order_id").equalTo(orderID);
                         orderItemQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -179,6 +172,29 @@ public class OrderActivity extends AppCompatActivity {
         });
     }
 
+    void SetupInfo2View(Order order) {
+        String DE_Method = (order.getPaymentMethod().getPaymentMethod()) == null ? "#Null" : order.getPaymentMethod().getPaymentMethod();
+        String PM_Method = (order.getDeliveryMethod().getdeliveryMethod()) == null ? "#Null" : order.getDeliveryMethod().getdeliveryMethod();
+        paymentMethod.setText(PM_Method);
+        deliveryMethod.setText(DE_Method);
+        if (order.getStatus().getStatus().equals(DeliveryStatus.CANCELED.getStatus())) {
+            ColorStateList colorStateList = ContextCompat.getColorStateList(this, R.color.red);
+            orderStatus.setTextColor(colorStateList);
+        }
+        orderStatus.setText(order.getStatus().getStatus());
+        orderTime.setText(order.getOrder_date());
+
+        double totalAmount = order.getTotal_amount();
+        double otherFees = order.getOtherFees();
+        double discount = order.getDiscount();
+        double finTotalAmount = totalAmount - discount * totalAmount + otherFees;
+        totalPrice.setText("$ " + finTotalAmount);
+        DestinationEnd.setText(order.getShippingAddress());
+        ProgressBarAnimation(order);
+        String orderID = order.getOrder_id();
+        SetupDetailBtn(orderID);
+    }
+
     void ProgressBarAnimation(Order order) {
         if (order.getStatus().getStatus().equals(DeliveryStatus.PENDING.getStatus())) {
             inprogressBar.setProgress(0);
@@ -192,6 +208,20 @@ public class OrderActivity extends AppCompatActivity {
             pendingBar.setProgress(100);
             inprogressBar.setProgress(100);
             startSmoothAnimation(Delivering2YouBar);
+        } else if (order.getStatus().getStatus().equals(DeliveryStatus.DELIVERED.getStatus())) {
+            pendingBar.setProgress(100);
+            inprogressBar.setProgress(100);
+            Delivering2YouBar.setProgress(100);
+            startSmoothAnimation(Delivering2YouBar);
+        } else {
+            stopSmoothAnimation();
+            pendingBar.setProgress(100);
+            inprogressBar.setProgress(100);
+            Delivering2YouBar.setProgress(100);
+            ColorStateList colorStateList = ContextCompat.getColorStateList(this, R.color.red);
+            pendingBar.setProgressTintList(colorStateList);
+            Delivering2YouBar.setProgressTintList(colorStateList);
+            inprogressBar.setProgressTintList(colorStateList);
         }
     }
 
