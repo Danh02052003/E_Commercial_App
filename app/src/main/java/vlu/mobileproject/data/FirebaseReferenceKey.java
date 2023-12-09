@@ -2,7 +2,9 @@ package vlu.mobileproject.data;
 
 public enum FirebaseReferenceKey {
     PRODUCT("Product_2"),
-    DISCOUNT("Discount");
+    DISCOUNT("Discount"),
+    ORDER("Order"),
+    ORDER_ITEM("OrderItem");
 
     private final String ReferenceKey;
 

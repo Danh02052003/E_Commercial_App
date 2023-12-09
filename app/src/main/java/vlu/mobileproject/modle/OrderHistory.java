@@ -1,6 +1,7 @@
 package vlu.mobileproject.modle;
 
 import java.io.Serializable;
+import java.util.List;
 
 import vlu.mobileproject.activity.view.order.OrderHistoryActivity;
 import vlu.mobileproject.data.DeliveryMethod;
@@ -9,22 +10,21 @@ import vlu.mobileproject.data.PaymentMethod;
 
 public class OrderHistory extends Order implements Serializable {
 
-    int orderItemCount;
+    List<OrderItem> orderItemList;
 
     public OrderHistory() {
 
     }
 
-    public OrderHistory(String buyer_id, String order_id, double total_amount, double discount, double otherFees, String order_date, DeliveryStatus status, PaymentMethod paymentMethod, DeliveryMethod deliveryMethod, String shippingAddress, String phoneNumber, int orderItemCount) {
+    public OrderHistory(String buyer_id, String order_id, double total_amount, double discount, double otherFees, String order_date, DeliveryStatus status, PaymentMethod paymentMethod, DeliveryMethod deliveryMethod, String shippingAddress, String phoneNumber) {
         super(buyer_id, order_id, total_amount, discount, otherFees, order_date, status, paymentMethod, deliveryMethod, shippingAddress, phoneNumber);
-        this.orderItemCount = orderItemCount;
     }
 
-    public int getOrderItemCount() {
-        return orderItemCount;
+    public List<OrderItem> getOrderItemList() {
+        return orderItemList;
     }
 
-    public void setOrderItemCount(int orderItemCount) {
-        this.orderItemCount = orderItemCount;
+    public void setOrderItemList(List<OrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
     }
 }
