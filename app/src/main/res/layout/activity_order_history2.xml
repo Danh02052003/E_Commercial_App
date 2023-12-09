@@ -59,11 +59,22 @@
                     style="@style/MenuText"
                     android:text="All Orders" />
 
+                <!-- Pending -->
+                <TextView
+                    android:id="@+id/textPending"
+                    style="@style/MenuText"
+                    android:text="Pending" />
+
+                <TextView
+                    android:id="@+id/textInprogress"
+                    style="@style/MenuText"
+                    android:text="In progress" />
+
                 <!-- Delivering -->
                 <TextView
                     android:id="@+id/textDelivering"
                     style="@style/MenuText"
-                    android:text="Delivering" />
+                    android:text="Delivering to you" />
                 <!-- Delivered -->
                 <TextView
                     android:id="@+id/textDelivered"

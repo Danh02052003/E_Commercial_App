@@ -36,7 +36,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
     RecyclerView recOrderHis;
     LinearLayoutManager layoutManager;
     OrderHistoryAdapter orderHistoryAdapter;
-    TextView textAllOrders, textDelivering;
+    TextView textAllOrders, textDelivering, textDelivered, textCanceled, textPending, textInprogress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,29 +47,37 @@ public class OrderHistoryActivity extends AppCompatActivity {
         recOrderHis.setLayoutManager(layoutManager);
         textAllOrders = findViewById(R.id.textAllOrders);
         textDelivering = findViewById(R.id.textDelivering);
+        textDelivered = findViewById(R.id.textDelivered);
+        textCanceled = findViewById(R.id.textCanceled);
+        textPending = findViewById(R.id.textPending);
+        textInprogress = findViewById(R.id.textInprogress);
 
         auth = FirebaseAuth.getInstance();
 
-        LoadOrderHistory();
+        LoadOrderHistory(DeliveryStatus.ALL);
 
         textAllOrders.setOnClickListener(v -> {
-            LoadOrderHistory();
+            LoadOrderHistory(DeliveryStatus.ALL);
+        });
+        textPending.setOnClickListener(v -> {
+            LoadOrderHistory(DeliveryStatus.PENDING);
         });
         textDelivering.setOnClickListener(v -> {
-            ArrayList<OrderHistory> orderHistories2Show = new ArrayList<>();
-            LoadOrderHistory();
-            for (OrderHistory orderHistory : orderHistories) {
-                if (orderHistory.getStatus().equals(DeliveryStatus.CANCELED)) {
-                    orderHistories2Show.add(orderHistory);
-                }
-            }
-            orderHistoryAdapter = new OrderHistoryAdapter(OrderHistoryActivity.this, orderHistories2Show);
-            recOrderHis.setAdapter(orderHistoryAdapter);
-            orderHistoryAdapter.updateData(orderHistories2Show);
+            LoadOrderHistory(DeliveryStatus.DELIVERING_TO_YOU);
+        });
+        textInprogress.setOnClickListener(v -> {
+            LoadOrderHistory(DeliveryStatus.IN_PROGRESS);
+        });
+        textDelivered.setOnClickListener(v -> {
+            LoadOrderHistory(DeliveryStatus.DELIVERED);
+        });
+        textCanceled.setOnClickListener(v -> {
+            LoadOrderHistory(DeliveryStatus.CANCELED);
         });
     }
 
-    void LoadOrderHistory() {
+    void LoadOrderHistory(DeliveryStatus deliveryStatus) {
+        orderHistories.clear();
         String userID = auth.getCurrentUser().getUid();
         orderReference = FirebaseDatabase.getInstance().getReference(ORDER_REFERENCE_KEY);
         orderItemReference = FirebaseDatabase.getInstance().getReference(ORDER_ITEM_REFERENCE_KEY);
@@ -91,11 +99,18 @@ public class OrderHistoryActivity extends AppCompatActivity {
                                             count++;
                                         }
                                     }
+
+                                    if (DeliveryStatus.ALL.equals(deliveryStatus)) {
+                                        orderHistories.add(orderHistory);
+                                    } else {
+                                        if (orderHistory.getStatus().equals(deliveryStatus)) {
+                                            orderHistories.add(orderHistory);
+                                        }
+                                    }
                                     orderHistoryAdapter = new OrderHistoryAdapter(OrderHistoryActivity.this, orderHistories);
                                     recOrderHis.setAdapter(orderHistoryAdapter);
 
                                     orderHistory.setOrderItemCount(count);
-                                    orderHistories.add(orderHistory);
                                     orderHistoryAdapter.updateData(orderHistories);
                                 }
 

@@ -1,11 +1,13 @@
 package vlu.mobileproject.modle;
 
+import java.io.Serializable;
+
 import vlu.mobileproject.activity.view.order.OrderHistoryActivity;
 import vlu.mobileproject.data.DeliveryMethod;
 import vlu.mobileproject.data.DeliveryStatus;
 import vlu.mobileproject.data.PaymentMethod;
 
-public class OrderHistory extends Order {
+public class OrderHistory extends Order implements Serializable {
 
     int orderItemCount;
 

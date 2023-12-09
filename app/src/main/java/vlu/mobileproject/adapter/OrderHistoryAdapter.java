@@ -4,7 +4,11 @@ import static com.google.firebase.database.core.RepoManager.clear;
 import static java.util.Collections.addAll;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +16,15 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import vlu.mobileproject.ProductDetailsActivity;
 import vlu.mobileproject.R;
+import vlu.mobileproject.activity.view.order.OrderActivity;
 import vlu.mobileproject.activity.view.order.OrderDetailAdapter;
 import vlu.mobileproject.modle.OrderHistory;
 import vlu.mobileproject.modle.Products;
@@ -49,6 +56,19 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         holder.productQuantity.setText(String.valueOf(orderHistory.getOrderItemCount()));
         holder.productStatus.setText(String.valueOf(orderHistory.getStatus().getStatus()));
 
+        holder.orderHisItem.setOnClickListener(v -> {
+            onClickGoToDetail(orderHistory, holder);
+        });
+
+    }
+
+    public void onClickGoToDetail(OrderHistory orderHistory, OrderHistoryAdapter.ViewHolder viewHolder) {
+        Intent intent = new Intent(context, OrderActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("OrderID", orderHistory.getOrder_id());
+        intent.putExtras(bundle);
+
+        context.startActivity(intent);
     }
 
     @Override
@@ -64,6 +84,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView orderID, productTotalPrice, productQuantity, productStatus;
 
+        ConstraintLayout orderHisItem;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -71,6 +93,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             productTotalPrice = itemView.findViewById(R.id.txtTotalPrice);
             productQuantity= itemView.findViewById(R.id.quantity);
             productStatus= itemView.findViewById(R.id.txtorderStatus);
+            orderHisItem= itemView.findViewById(R.id.orderHisItem);
 
         }
     }
