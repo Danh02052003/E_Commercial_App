@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import vlu.mobileproject.adapter.HomeParentAdapter;
@@ -24,8 +25,6 @@ public class AllFrag extends Fragment implements GlobalData.Callback {
     private HomeParentAdapter parentAdapter;
     private List<HomeParentItem> parentItemList;
     List<Products> products = new ArrayList<>();
-    List<Products> foryou_list = new ArrayList<>();
-    List<Products> highlight_list = new ArrayList<>();
     boolean isDataLoaded = false;
 
     private static final String ARG_PARAM1 = "param1";
@@ -70,29 +69,41 @@ public class AllFrag extends Fragment implements GlobalData.Callback {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
-        if (parentItemList == null || parentItemList.isEmpty()) {
+//        if (parentItemList == null || parentItemList.isEmpty()) {
+//            GlobalData.initData(getContext(), this);
+//
+//        }
+        if(isDataLoaded == false){
             GlobalData.initData(getContext(), this);
-
         }
         rvChildList = anotherLayout.findViewById(R.id.rvChildList);
         rvChildList.setLayoutManager(layoutManager);
 
         return view;
     }
-    void separateData() {
+
+    @Override
+    public void onCompleted(List<Products> products) {
+        if(isDataLoaded == false){
+            this.products = products;
+//            Collections.shuffle(products);
+            isDataLoaded = true;
+            loadUI();
+        }
+        else {
+            loadUI();
+        }
+
+    }
+    void loadUI(){
+        List<Products> foryou_list = new ArrayList<>();
+        List<Products> highlight_list = new ArrayList<>();
         for (int i = 0; i < products.size(); i++) {
             if (i < products.size() / 2)
                 foryou_list.add(products.get(i));
             else highlight_list.add(products.get(i));
         }
-    };
-
-    @Override
-    public void onCompleted(List<Products> products) {
-        this.products = products;
-        separateData();
         parentItemList = new ArrayList<>();
-
         parentItemList.add(new HomeParentItem("Dành cho bạn", foryou_list));
         parentItemList.add(new HomeParentItem("Sản phẩm nổi bật", highlight_list));
         parentAdapter = new HomeParentAdapter(parentItemList);

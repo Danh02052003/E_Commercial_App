@@ -14,17 +14,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vlu.mobileproject.adapter.HomeParentAdapter;
+import vlu.mobileproject.globalfuction.GlobalData;
+import vlu.mobileproject.modle.Products;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link IphoneFrag#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class IphoneFrag extends Fragment {
+public class IphoneFrag extends Fragment implements GlobalData.Callback {
     RecyclerView rvCategory;
     RecyclerView rvChildList;
     private HomeParentAdapter parentAdapter;
     private List<HomeParentItem> parentItemList;
+    List<Products> products = new ArrayList<>();
+    boolean isDataLoaded = false;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -87,7 +91,11 @@ public class IphoneFrag extends Fragment {
 
         rvChildList = anotherLayout.findViewById(R.id.rvChildList);
         rvChildList.setLayoutManager(layoutManager);
+        if(isDataLoaded == false){
+            GlobalData.initData(getContext(), this);
+        }
 
+//
 
 //        parentItemList = new ArrayList<>();
 //        parentItemList.add(new HomeParentItem("Dành cho bạn", forYou_list));
@@ -99,5 +107,34 @@ public class IphoneFrag extends Fragment {
 //
 
         return view;
+    }
+    void loadUI(){
+        List<Products> forYou_list = new ArrayList<>();
+        List<Products> highlight_list = new ArrayList<>();
+        for(int i = 0; i < products.size(); i++){
+            if(i<products.size()/2)
+                forYou_list.add(products.get(i));
+            else highlight_list.add(products.get(i));
+        }
+        parentItemList = new ArrayList<>();
+        parentItemList.add(new HomeParentItem("Dành cho bạn", forYou_list));
+        parentItemList.add(new HomeParentItem("Sản phẩm nổi bật", highlight_list));
+
+        parentAdapter = new HomeParentAdapter(parentItemList);
+        rvCategory.setAdapter(parentAdapter);
+
+    }
+
+    @Override
+    public void onCompleted(List<Products> products) {
+        if(isDataLoaded == false){
+            for (Products product : products) {
+                if(product.getProduct_categoryId() == 2)
+                    this.products.add(product);
+            }
+            isDataLoaded = true;
+        }
+        loadUI();
+
     }
 }

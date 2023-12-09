@@ -199,7 +199,7 @@ public class HomeFragment extends Fragment implements CategoriesAdapter.OnItemSe
 
         }
         else if (position == POS_IPHONE) {
-            loadFragment(new SamsungFrag());
+            loadFragment(new IphoneFrag());
         }
 
     }
