@@ -14,14 +14,14 @@ public class Products implements Serializable {
     private String product_name;
 
     // Product key in firebase - the actual ID
-    String ProductID;
+    String productID;
 
     public String getProductID() {
-        return ProductID;
+        return productID;
     }
 
     public void setProductID(String productID) {
-        ProductID = productID;
+        this.productID = productID;
     }
 
     public Products() {
