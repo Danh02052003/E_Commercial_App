@@ -194,7 +194,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                                             orderItem.setProductName(String.format("%s %s", product.getProduct_name(), phoneMemPackage.getMemory()));
                                             orderItem.setPrice_per_unit(phoneMemPackage.getProduct_price());
                                             orderItemList.add(orderItem);
-                                            OrderDetailAdapter orderItemAdapter = new OrderDetailAdapter(orderItemList);
+                                            OrderDetailAdapter orderItemAdapter = new OrderDetailAdapter(OrderDetailActivity.this, orderItemList);
                                             cartRec.setAdapter(orderItemAdapter);
                                         }
 
