@@ -57,15 +57,24 @@
                 <TextView
                     android:id="@+id/textAllOrders"
                     style="@style/MenuText"
-                    android:onClick="onMenuClick"
                     android:text="All Orders" />
+
+                <!-- Pending -->
+                <TextView
+                    android:id="@+id/textPending"
+                    style="@style/MenuText"
+                    android:text="Pending" />
+
+                <TextView
+                    android:id="@+id/textInprogress"
+                    style="@style/MenuText"
+                    android:text="In progress" />
 
                 <!-- Delivering -->
                 <TextView
                     android:id="@+id/textDelivering"
                     style="@style/MenuText"
-                    android:onClick="onMenuClick"
-                    android:text="Delivering" />
+                    android:text="Delivering to you" />
                 <!-- Delivered -->
                 <TextView
                     android:id="@+id/textDelivered"
@@ -77,7 +86,6 @@
                 <TextView
                     android:id="@+id/textCanceled"
                     style="@style/MenuText"
-                    android:onClick="onMenuClick"
                     android:text="Canceled" />
 
             </LinearLayout>
@@ -85,12 +93,13 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recOrderHis"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:scrollbars="vertical"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>

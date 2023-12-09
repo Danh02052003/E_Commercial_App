@@ -96,6 +96,7 @@ public class IphoneFrag extends Fragment implements GlobalData.Callback {
         }
 
 //
+
 //        parentItemList = new ArrayList<>();
 //        parentItemList.add(new HomeParentItem("Dành cho bạn", forYou_list));
 //        parentItemList.add(new HomeParentItem("Sản phẩm nổi bật", highlight_list));

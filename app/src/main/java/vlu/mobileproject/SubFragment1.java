@@ -40,8 +40,6 @@ public class SubFragment1 extends Fragment implements GlobalData.Callback {
 
         TitleText = root.findViewById(R.id.Title);
         TitleText.setText(typeOfPhone);
-        // Connect to the parent fragment (AllFrag) and retrieve all products
-        allProducts = new ArrayList<>();
         GlobalData.initData(getContext(), this);
 
         List<Products> filteredProducts = new ArrayList<>();

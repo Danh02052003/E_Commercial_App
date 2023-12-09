@@ -5,7 +5,8 @@ public enum DeliveryStatus {
     IN_PROGRESS("In Progress"),
     DELIVERING_TO_YOU("Delivering to you"),
     DELIVERED("Delivered"),
-    CANCELED("Canceled");
+    CANCELED("Canceled"),
+    ALL("All");
 
     private final String status;
 

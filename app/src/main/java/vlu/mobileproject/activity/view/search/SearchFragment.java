@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 
@@ -15,6 +16,11 @@ import android.widget.ListView;
 
 
 import com.google.android.material.slider.RangeSlider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -70,14 +76,11 @@ public class SearchFragment extends Fragment implements filterBottomSheetFragmen
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        // Call the initData() method to populate the allProducts list
-//        GlobalData.initData(getContext());
     }
 
     @SuppressLint("MissingInflatedId")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         // Inflate the layout for this fragment
 
@@ -92,28 +95,10 @@ public class SearchFragment extends Fragment implements filterBottomSheetFragmen
         addEvents();
 
         // Connect to the parent fragment (AllFrag) and retrieve all products
-        allProducts = new ArrayList<>();
 
         // Setup the search view for filtering
         searchItem.clearFocus();
         return view;
-    }
-
-    @Override
-    public void onFilterApplied(int startValue, int endValue) {
-
-        // Store the startValue and endValue or apply filters
-        minPriceValue = startValue;
-        maxPriceValue = endValue;
-
-        // Filter products based on the search query and price range
-        filterProductList(searchItem.getQuery().toString());
-    }
-
-    @Override
-    public void onCancelFilter() {
-        // Handle the cancellation of the filter if needed
-        // You can reset the filters or take any other actions here
     }
 
     private void addEvents() {
@@ -126,46 +111,79 @@ public class SearchFragment extends Fragment implements filterBottomSheetFragmen
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // Filter the product list on text change
                 filterProductList(newText);
                 return true;
             }
         });
 
         listViewProduct.setOnItemClickListener((parent, view, position, id) -> {
-            // Get the selected product from the displayedProducts list
             if (position >= 0 && position < displayedProducts.size()) {
                 Products selectedProduct = displayedProducts.get(position);
-
-                // Check if the selected product is not null before proceeding
                 if (selectedProduct != null) {
-                    // Create an Intent to start the ProductDetailsActivity
                     Intent intent = new Intent(requireContext(), ProductDetailsActivity.class);
-
-                    // Pass the selected product details as extras to the intent
                     intent.putExtra("object_product", selectedProduct);
-
-                    // Start the ProductDetailsActivity with the intent
                     startActivity(intent);
                 }
             }
         });
 
-        // filter
         btnFilter.setOnClickListener(v -> {
-            // Show the bottom sheet dialog
             filterBottomSheetFragment bottomSheetFragment = new filterBottomSheetFragment();
             bottomSheetFragment.setFilterListener(this); // Set the FilterListener to receive the filter values
             bottomSheetFragment.show(getChildFragmentManager(), bottomSheetFragment.getTag());
         });
-        GlobalData.initData(getContext(),this);
+        GlobalData.initData(getContext(), this);
+    }
+
+
+    @Override
+    public void onFilterApplied(int startValue, int endValue) {
+
+        minPriceValue = startValue;
+        maxPriceValue = endValue;
+        filterProductList(searchItem.getQuery().toString());
+    }
+
+    @Override
+    public void onCancelFilter() {
+
+    }
+
+    void LoadProductData() {
+        DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("Product_2");
+        productRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Products products = dataSnapshot.getValue(Products.class);
+                        allProducts.add(products);
+                    }
+
+                    // Initialize the displayedProducts list and limit it to 5 items initially
+                    displayedProducts = new ArrayList<>();
+                    int limit = Math.min(allProducts.size(), 5);
+                    for (int i = 0; i < limit; i++) {
+                        displayedProducts.add(allProducts.get(i));
+                    }
+
+                    // Initialize the adapter with displayedProducts
+                    productAdapter = new ProductAdapter(requireContext(), displayedProducts);
+                    listViewProduct.setAdapter(productAdapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     // function
     private void filterProductList(String query) {
         // Create a new list to store the filtered products
         List<Products> filteredProducts = new ArrayList<>();
-
         // Iterate through all products and check for matching names and price range
         for (Products product : allProducts) {
             // Check for matching names
@@ -194,7 +212,8 @@ public class SearchFragment extends Fragment implements filterBottomSheetFragmen
     public void onCompleted(List<Products> products) {
         if (allFragment == null) {
             allProducts = new ArrayList<>(products);
-        };
+        }
+
         // Initialize the displayedProducts list and limit it to 5 items initially
         displayedProducts = new ArrayList<>();
         int limit = Math.min(allProducts.size(), 5);

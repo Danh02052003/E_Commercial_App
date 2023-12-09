@@ -81,7 +81,7 @@
 
                 <ImageView
                     android:id="@+id/ivCart_productImg"
-                    android:src="@drawable/iphone_14_pro_max_deeppurple"
+                    android:src="@drawable/placeholder"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:scaleType="centerCrop"/>

@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
                 //loadFragment(new QRFragment());
                 return true;
             }else if (id == R.id.item_btt_nav_search) {
-
+                loadFragment(new SearchFragment());
                 return true;
             } else if (id == R.id.item_btt_nav_profile) {
                 Intent intent = new Intent(MainActivity.this, Information_Account.class);

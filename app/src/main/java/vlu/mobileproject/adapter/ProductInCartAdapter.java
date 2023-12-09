@@ -1,5 +1,7 @@
 package vlu.mobileproject.adapter;
 
+import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.google.firebase.database.DatabaseReference;
@@ -29,9 +32,11 @@ public class ProductInCartAdapter extends RecyclerView.Adapter<ProductInCartAdap
     private List<ProductInCartItem> inCartItemList;
     private ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
     private OnCheckedChangeListener onCheckedChangeListener;
+    Context context;
 
-    public ProductInCartAdapter(List<ProductInCartItem> inCartItemList) {
+    public ProductInCartAdapter(Context context, List<ProductInCartItem> inCartItemList) {
         this.inCartItemList = inCartItemList;
+        this.context = context;
     }
 
     public interface OnRemoveCartItem {
@@ -52,7 +57,7 @@ public class ProductInCartAdapter extends RecyclerView.Adapter<ProductInCartAdap
         holder.tvCart_productName.setText(product.getProductName());
         holder.tvCart_productPrice.setText("$" + String.valueOf(product.getProductPrice()));
         holder.tvCart_quantityAdded.setText(String.valueOf(product.getProductQuantity()) + "x");
-//        holder.ivCart_productImg.setImageResource(product.getProductImg());
+        loadGlideImageWithCheck(context, product.getProductImg(), holder.ivCart_productImg);
         holder.rlRemoveProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,7 +92,22 @@ public class ProductInCartAdapter extends RecyclerView.Adapter<ProductInCartAdap
         });
 
     }
-
+    private void loadGlideImageWithCheck(Context context, String imageUrl, ImageView imageView) {
+        if (isValidContextForGlide(context)) {
+            Glide.with(context)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.error)
+                    .into(imageView);
+        }
+    }
+    private static boolean isValidContextForGlide(Context context) {
+        if (context instanceof Activity) {
+            Activity activity = (Activity) context;
+            return !(activity.isDestroyed() || activity.isFinishing());
+        }
+        return true;
+    }
     @Override
     public int getItemCount() {
         return inCartItemList.size();
