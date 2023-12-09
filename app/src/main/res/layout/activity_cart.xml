@@ -126,16 +126,15 @@
         android:id="@+id/rvProductAdded"
         style="@style/SCREEN"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
         android:paddingLeft="15dp"
         android:paddingRight="5dp"
         android:visibility="visible"
-
-        app:layout_constraintTop_toBottomOf="@+id/cardView">
-
-    </androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+        app:layout_constraintHeight_default="spread"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:layout_constraintVertical_weight="1" />
 
     <TextView
         android:id="@+id/tvCart_state"
@@ -150,126 +149,133 @@
         app:layout_constraintTop_toTopOf="@+id/rvProductAdded"
         app:layout_constraintVertical_bias="0.498" />
 
-    <EditText
-        android:id="@+id/edtDiscount"
-        android:layout_width="230dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/rounded_edittext"
-        android:drawablePadding="10dp"
-        android:ems="10"
-        android:hint="Discount"
-        android:paddingStart="60dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="8dp"
-        android:textColorHint="@color/colorHint"
-        app:layout_constraintBottom_toTopOf="@+id/textView12"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnApplyDiscount"
-        style="@style/greenButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/rounded_edittext"
-        android:backgroundTint="#00CC96"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:text="Sử dụng"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="8pt"
-        app:layout_constraintBottom_toTopOf="@+id/textView12"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnPay"
-        style="@style/greenButton"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        style="@style/SCREEN"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:paddingTop="12dp"
-        android:background="@drawable/rounded_edittext"
-        android:backgroundTint="@color/greyIcon"
-        android:textColor="@color/white"
-        android:paddingBottom="12dp"
-        android:text="Thanh toán"
-        android:enabled="false"
-        android:textAllCaps="false"
-        android:textSize="10pt"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <TextView
-        android:id="@+id/tvCart_discount"
-        style="@style/textNumb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="4dp"
-        android:text="$0.00"
-        android:textSize="14pt"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/tvCart_totalPrice"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.927"
-        app:layout_constraintStart_toEndOf="@+id/textView12" />
+        <EditText
+            android:id="@+id/edtDiscount"
+            android:layout_width="230dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded_edittext"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="Discount"
+            android:paddingStart="60dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColorHint="@color/colorHint"
+            app:layout_constraintBottom_toTopOf="@+id/textView12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvCart_totalPrice"
-        style="@style/textNumb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="24dp"
-        android:text="$0.00"
-        android:textSize="14pt"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/btnPay"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.927"
-        app:layout_constraintStart_toEndOf="@+id/textView13" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnApplyDiscount"
+            style="@style/greenButton"
+            android:layout_width="wrap_content"
 
-    <TextView
-        android:id="@+id/textView12"
-        style="@style/discountDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="10dp"
-        android:text="Giảm giá:"
-        android:textSize="10pt"
-        app:layout_constraintBottom_toTopOf="@+id/textView13"
-        app:layout_constraintStart_toStartOf="parent" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded_edittext"
+            android:backgroundTint="#00CC96"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Sử dụng"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="8pt"
+            app:layout_constraintBottom_toTopOf="@+id/textView12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView13"
-        style="@style/discountDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="32dp"
-        android:text="Tổng cộng:"
-        android:textSize="10pt"
-        app:layout_constraintBottom_toTopOf="@+id/btnPay"
-        app:layout_constraintStart_toStartOf="parent" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnPay"
+            style="@style/greenButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/rounded_edittext"
+            android:backgroundTint="@color/greyIcon"
+            android:enabled="false"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="Thanh toán"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="10pt"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:layout_editor_absoluteX="0dp" />
 
+        <TextView
+            android:id="@+id/tvCart_discount"
+            style="@style/textNumb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="24dp"
+            android:layout_marginBottom="4dp"
+            android:text="0.00%"
+            android:textSize="14pt"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tvCart_totalPrice"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.927"
+            app:layout_constraintStart_toEndOf="@+id/textView12" />
 
+        <TextView
+            android:id="@+id/tvCart_totalPrice"
+            style="@style/textNumb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="24dp"
+            android:text="$0.00"
+            android:textSize="14pt"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/btnPay"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.927"
+            app:layout_constraintStart_toEndOf="@+id/textView13" />
 
+        <TextView
+            android:id="@+id/textView12"
+            style="@style/discountDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="8dp"
+            android:text="Giảm giá:"
+            android:textSize="10pt"
+            app:layout_constraintBottom_toTopOf="@+id/textView13"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView13"
+            style="@style/discountDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="32dp"
+            android:text="Tổng cộng:"
+            android:textSize="10pt"
+            app:layout_constraintBottom_toTopOf="@+id/btnPay"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

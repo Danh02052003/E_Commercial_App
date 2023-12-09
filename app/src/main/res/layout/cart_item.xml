@@ -15,7 +15,6 @@
         android:paddingBottom="5dp"
         style="@style/SCREEN"
         android:layout_width="wrap_content"
-        android:background="@color/white"
         android:layout_height="120dp" >
 
         <androidx.cardview.widget.CardView
@@ -52,7 +51,6 @@
         android:paddingBottom="10dp"
         android:layout_width="match_parent"
         style="@style/SCREEN"
-        android:background="@color/white"
         android:layout_height="120dp" >
 
         <LinearLayout

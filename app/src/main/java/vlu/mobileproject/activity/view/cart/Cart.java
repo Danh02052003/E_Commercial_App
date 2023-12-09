@@ -180,6 +180,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         // Start the fade-out animations
         fadeOutDiscountName.start();
         fadeOutDiscountDescription.start();
+
     }
 
     private void setupUI() {
