@@ -1,4 +1,4 @@
-package vlu.mobileproject.adapter;
+package vlu.mobileproject.activity.view.order;
 
 import static com.google.firebase.database.core.RepoManager.clear;
 import static java.util.Collections.addAll;
@@ -14,7 +14,6 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,8 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vlu.mobileproject.R;
-import vlu.mobileproject.activity.view.order.OrderActivity;
-import vlu.mobileproject.activity.view.order.OrderHistoryActivity;
 import vlu.mobileproject.data.DeliveryStatus;
 import vlu.mobileproject.globalfuction.GlobalData;
 import vlu.mobileproject.modle.OrderHistory;
@@ -156,7 +153,6 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         Bundle bundle = new Bundle();
         bundle.putSerializable("OrderID", orderHistory.getOrder_id());
         intent.putExtras(bundle);
-
         context.startActivity(intent);
     }
 

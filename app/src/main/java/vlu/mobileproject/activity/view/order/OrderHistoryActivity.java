@@ -6,9 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,10 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vlu.mobileproject.R;
-import vlu.mobileproject.adapter.OrderHistoryAdapter;
 import vlu.mobileproject.data.DeliveryStatus;
 import vlu.mobileproject.data.FirebaseReferenceKey;
-import vlu.mobileproject.modle.Order;
 import vlu.mobileproject.modle.OrderHistory;
 import vlu.mobileproject.modle.OrderItem;
 
