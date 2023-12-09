@@ -99,7 +99,9 @@ public class SamsungFrag extends Fragment implements GlobalData.Callback {
 
         rvChildList = anotherLayout.findViewById(R.id.rvChildList);
         rvChildList.setLayoutManager(layoutManager);
-        GlobalData.initData(getContext(),this);
+        if(isDataLoaded == false){
+            GlobalData.initData(getContext(), this);
+        }
 
         return view;
     }
@@ -122,9 +124,12 @@ public class SamsungFrag extends Fragment implements GlobalData.Callback {
 
     @Override
     public void onCompleted(List<Products> products) {
-        for (Products product : products) {
-            if(product.getProduct_categoryId() == 1)
-                this.products.add(product);
+        if(isDataLoaded == false){
+            for (Products product : products) {
+                if(product.getProduct_categoryId() == 1)
+                    this.products.add(product);
+            }
+            isDataLoaded = true;
         }
         loadUI();
     }

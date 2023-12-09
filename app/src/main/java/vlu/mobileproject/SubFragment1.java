@@ -27,7 +27,7 @@ public class SubFragment1 extends Fragment implements GlobalData.Callback {
     ArrayList<Products> allProducts;
 
     TextView TitleText;
-    boolean isDataLoaded = false;
+
 
     String typeOfPhone;
     public SubFragment1(String TypeofPhone) {
