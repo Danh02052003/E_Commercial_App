@@ -2,6 +2,7 @@ package vlu.mobileproject.activity.view.profile;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -47,7 +48,7 @@ public class Information_Account extends Information_Account_Detail {
     CircleImageView imgAvatarAccount;
     TextView NameAccount;
     ImageButton BtnGoToIn4Detail, btnGoToLanguage, btnGoToNotification, BtnBack;
-    LinearLayout lLanguage, lNotify, lDarkmode, lIn4Detail;
+    ConstraintLayout lLanguage, lNotify, lDarkmode, lIn4Detail;
     ImageView btnGoToIn4Detail, btnGotoIn4DetailEn;
     private final String userEmail = UserManager.getInstance().getUserEmail();
 
