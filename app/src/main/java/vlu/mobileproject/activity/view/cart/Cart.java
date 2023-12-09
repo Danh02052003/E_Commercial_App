@@ -283,12 +283,13 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         }
         if (inCartSelectedList.size() == 0) {
             SetEnablePayBtn(false);
+            totalPrice = 0;
         } else {
             SetEnablePayBtn(true);
         }
 
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
-        double afterDiscount = totalPrice * (discountPercent == 0 ? 1 : ((100 - discountPercent) / 100));
+        double afterDiscount = totalPrice * ((100 - discountPercent)/100);
         formattedValue = decimalFormat.format(afterDiscount);
         tvCart_totalPrice.setText("$" + (formattedValue));
     }
@@ -320,7 +321,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
                     Discount discountPack = snapshot.getValue(Discount.class);
                     discountPercent = discountPack.getDiscountValue() * 100;
                     tvCart_discount.setText(String.valueOf(discountPercent) + " %");
-                    tvCart_totalPrice.setText("$ " + String.valueOf((100 - discountPercent) * totalPrice));
+                    tvCart_totalPrice.setText("$ " + String.valueOf(((100 - discountPercent)/100) * totalPrice));
                     discount = discountPack.getDiscountValue();
                 } else {
                     Toast.makeText(Cart.this, "Không thấy mã giảm giá", Toast.LENGTH_SHORT).show();
