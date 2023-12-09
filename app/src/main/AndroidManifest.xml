@@ -41,9 +41,7 @@
         <activity
             android:name=".login.LoginActivity"
             android:exported="false" />
-        <activity
-            android:name=".activity.view.order.order"
-            android:exported="true" /> <!-- This activity has the LAUNCHER category to act as the main entry point -->
+<!-- This activity has the LAUNCHER category to act as the main entry point -->
         <activity
             android:name=".login.ForgotPassword"
             android:exported="false" />
