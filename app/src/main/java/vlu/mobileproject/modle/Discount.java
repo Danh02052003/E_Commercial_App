@@ -5,14 +5,25 @@ public class Discount {
     String discountDescription;
     double discountValue;
 
+    String discountUrl;
+
     public Discount() {
 
     }
 
-    public Discount(String discountName, String discountDescription, double discountValue) {
+    public Discount(String discountName, String discountDescription, double discountValue, String discountUrl) {
         this.discountName = discountName;
         this.discountDescription = discountDescription;
         this.discountValue = discountValue;
+        this.discountUrl = discountUrl;
+    }
+
+    public String getDiscountUrl() {
+        return discountUrl;
+    }
+
+    public void setDiscountUrl(String discountUrl) {
+        this.discountUrl = discountUrl;
     }
 
     public String getDiscountName() {
