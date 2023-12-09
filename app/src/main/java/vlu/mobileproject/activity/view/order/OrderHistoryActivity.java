@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -20,6 +22,7 @@ import java.util.List;
 
 import vlu.mobileproject.R;
 import vlu.mobileproject.adapter.OrderHistoryAdapter;
+import vlu.mobileproject.data.DeliveryStatus;
 import vlu.mobileproject.modle.Order;
 import vlu.mobileproject.modle.OrderHistory;
 import vlu.mobileproject.modle.OrderItem;
@@ -30,25 +33,40 @@ public class OrderHistoryActivity extends AppCompatActivity {
     DatabaseReference orderReference, orderItemReference, productItemReference;
     FirebaseAuth auth;
     ArrayList<OrderHistory> orderHistories = new ArrayList<>();
-    ListView recOrderHis;
+    RecyclerView recOrderHis;
     LinearLayoutManager layoutManager;
     OrderHistoryAdapter orderHistoryAdapter;
+    TextView textAllOrders, textDelivering;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_history2);
 
-//        layoutManager = new LinearLayoutManager(this);
-//        recOrderHis.setLayoutManager(layoutManager);
         recOrderHis = findViewById(R.id.recOrderHis);
-
-        orderHistoryAdapter = new OrderHistoryAdapter(OrderHistoryActivity.this, orderHistories);
-        orderHistoryAdapter.updateData(orderHistories);
-        recOrderHis.setAdapter(orderHistoryAdapter);
+        layoutManager = new LinearLayoutManager(this);
+        recOrderHis.setLayoutManager(layoutManager);
+        textAllOrders = findViewById(R.id.textAllOrders);
+        textDelivering = findViewById(R.id.textDelivering);
 
         auth = FirebaseAuth.getInstance();
 
         LoadOrderHistory();
+
+        textAllOrders.setOnClickListener(v -> {
+            LoadOrderHistory();
+        });
+        textDelivering.setOnClickListener(v -> {
+            ArrayList<OrderHistory> orderHistories2Show = new ArrayList<>();
+            LoadOrderHistory();
+            for (OrderHistory orderHistory : orderHistories) {
+                if (orderHistory.getStatus().equals(DeliveryStatus.CANCELED)) {
+                    orderHistories2Show.add(orderHistory);
+                }
+            }
+            orderHistoryAdapter = new OrderHistoryAdapter(OrderHistoryActivity.this, orderHistories2Show);
+            recOrderHis.setAdapter(orderHistoryAdapter);
+            orderHistoryAdapter.updateData(orderHistories2Show);
+        });
     }
 
     void LoadOrderHistory() {
@@ -73,6 +91,9 @@ public class OrderHistoryActivity extends AppCompatActivity {
                                             count++;
                                         }
                                     }
+                                    orderHistoryAdapter = new OrderHistoryAdapter(OrderHistoryActivity.this, orderHistories);
+                                    recOrderHis.setAdapter(orderHistoryAdapter);
+
                                     orderHistory.setOrderItemCount(count);
                                     orderHistories.add(orderHistory);
                                     orderHistoryAdapter.updateData(orderHistories);

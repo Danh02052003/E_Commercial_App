@@ -11,14 +11,18 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import vlu.mobileproject.R;
+import vlu.mobileproject.activity.view.order.OrderDetailAdapter;
 import vlu.mobileproject.modle.OrderHistory;
 import vlu.mobileproject.modle.Products;
 
-public class OrderHistoryAdapter extends BaseAdapter {
+public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<OrderHistory> orderHistoryList;
@@ -28,14 +32,23 @@ public class OrderHistoryAdapter extends BaseAdapter {
         this.orderHistoryList = orderHistoryList;
     }
 
+    @NonNull
     @Override
-    public int getCount() {
-        return orderHistoryList.size();
+    public OrderHistoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_layout_order_history, parent, false);
+        return new OrderHistoryAdapter.ViewHolder(view);
     }
 
     @Override
-    public Object getItem(int position) {
-        return orderHistoryList.get(position);
+    public void onBindViewHolder(@NonNull OrderHistoryAdapter.ViewHolder holder, int position) {
+        OrderHistory orderHistory = orderHistoryList.get(position);
+
+        holder.orderID.setText(orderHistory.getOrder_id());
+        String totalPrice = "$ " + (orderHistory.getTotal_amount() * (1 - orderHistory.getDiscount()));
+        holder.productTotalPrice.setText(totalPrice.toString());
+        holder.productQuantity.setText(String.valueOf(orderHistory.getOrderItemCount()));
+        holder.productStatus.setText(String.valueOf(orderHistory.getStatus().getStatus()));
+
     }
 
     @Override
@@ -44,24 +57,22 @@ public class OrderHistoryAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.custom_layout_order_history, parent, false);
+    public int getItemCount() {
+        return orderHistoryList.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView orderID, productTotalPrice, productQuantity, productStatus;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            orderID = itemView.findViewById(R.id.orderID);
+            productTotalPrice = itemView.findViewById(R.id.txtTotalPrice);
+            productQuantity= itemView.findViewById(R.id.quantity);
+            productStatus= itemView.findViewById(R.id.txtorderStatus);
+
         }
-        OrderHistory orderHistory = orderHistoryList.get(position);
-
-        TextView orderID = convertView.findViewById(R.id.orderID);
-        TextView productTotalPrice = convertView.findViewById(R.id.txtTotalPrice);
-        TextView productQuantity= convertView.findViewById(R.id.quantity);
-        TextView productStatus= convertView.findViewById(R.id.txtorderStatus);
-
-        orderID.setText(orderHistory.getOrder_id());
-        String totalPrice = "$ " + (orderHistory.getTotal_amount() * (1 - orderHistory.getDiscount()));
-        productTotalPrice.setText(totalPrice.toString());
-        productQuantity.setText(String.valueOf(orderHistory.getOrderItemCount()));
-        productStatus.setText(orderHistory.getStatus().getStatus());
-
-        return convertView;
     }
 
     // Add this method to update the adapter data

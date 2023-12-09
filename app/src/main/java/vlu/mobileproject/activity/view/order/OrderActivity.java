@@ -122,7 +122,6 @@ public class OrderActivity extends AppCompatActivity {
 
                         SetupDetailBtn(orderID);
 
-
                         Query orderItemQuery = orderItemReference.orderByChild("order_id").equalTo(orderID);
                         orderItemQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
