@@ -40,6 +40,7 @@ import java.util.Objects;
 
 import vlu.mobileproject.activity.view.cart.Cart;
 import vlu.mobileproject.activity.view.home.MainActivity;
+import vlu.mobileproject.data.FirebaseReferenceKey;
 import vlu.mobileproject.login.UserManager;
 import vlu.mobileproject.modle.FavoriteFirebase;
 
@@ -94,6 +95,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
 
         product = (Products) bundle.getSerializable("object_product");
+
+        if (product == null) {
+            String productID = bundle.getString("productID");
+            GetProductData(productID);
+        }
         if (product != null) {
             tvDetails_productName.setText(product.getProduct_name());
             tvDetails_productPrice.setText("$" + product.getPriceForMemory());
@@ -109,8 +115,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
             tvDetailsAddProduct_productPrice.setText("$" + product.getPriceForMemory());
             tvDetails_nProductLeft.setText("Tổng " + product.getTotalQuantity() + " sản phẩm.");
 
-            cartReference = FirebaseDatabase.getInstance().getReference("Cart");
-            productRef = FirebaseDatabase.getInstance().getReference("Products");
+            cartReference = FirebaseDatabase.getInstance().getReference(FirebaseReferenceKey.CART.getReferenceKey());
+            productRef = FirebaseDatabase.getInstance().getReference(FirebaseReferenceKey.PRODUCT.getReferenceKey());
             auth = FirebaseAuth.getInstance();
 
             gvCapacities.setOnItemClickListener((adapterView, view, position, l) -> {
@@ -139,14 +145,33 @@ public class ProductDetailsActivity extends AppCompatActivity {
             });
         }
 
-
-
         SetTextForQuantity();
         String lang = language.getPresentLang();
         UpdateLang.exchangeCurrency(listPrice.toArray(new TextView[0]), this);
         UpdateLang.translateLanguage(listDescription.toArray(new TextView[0]), this);
+    }
 
+    void GetProductData(String productID) {
+        if (productID != null && !productID.isEmpty()) {
+            productRef.child(productID).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        Products SelectedProduct = snapshot.getValue(Products.class);
+                        product = SelectedProduct;
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
+                }
+            });
+            if (product == null) {
+                GetProductData(productID);
+            }
+        } else {
+            Toast.makeText(getApplicationContext(), "Lỗi mã sản phẩm", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void addControl() {

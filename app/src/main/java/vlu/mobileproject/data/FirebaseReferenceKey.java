@@ -4,7 +4,8 @@ public enum FirebaseReferenceKey {
     PRODUCT("Product_2"),
     DISCOUNT("Discount"),
     ORDER("Order"),
-    ORDER_ITEM("OrderItem");
+    ORDER_ITEM("OrderItem"),
+    CART("Cart");
 
     private final String ReferenceKey;
 

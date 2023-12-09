@@ -139,12 +139,9 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         int statusColor;
         if (orderHistory.getStatus().equals(DeliveryStatus.CANCELED)) {
             statusColor = context.getColor(R.color.red);
-            holder.buyAgain.setVisibility(View.VISIBLE);
         } else if (orderHistory.getStatus().equals(DeliveryStatus.DELIVERED)) {
-            holder.buyAgain.setVisibility(View.VISIBLE);
             statusColor = context.getColor(R.color.greenVLUS);
         } else {
-            holder.buyAgain.setVisibility(View.INVISIBLE);
             statusColor = context.getColor(R.color.black);
         }
         holder.productStatus.setTextColor(statusColor);
@@ -185,7 +182,6 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
         ConstraintLayout orderHisItem;
 
-        Button buyAgain;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -198,7 +194,6 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             orderHisItem= itemView.findViewById(R.id.orderHisItem);
             orderImg= itemView.findViewById(R.id.orderImg);
             txtPricePerUnit= itemView.findViewById(R.id.txtPricePerUnit);
-            buyAgain= itemView.findViewById(R.id.buyAgain);
             txtDiscount= itemView.findViewById(R.id.txtDiscount);
 
         }

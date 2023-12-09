@@ -117,16 +117,5 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/buyAgain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Mua lai"
-        android:layout_marginEnd="10dp"
-        android:visibility="invisible"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
