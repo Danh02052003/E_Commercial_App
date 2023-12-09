@@ -110,7 +110,6 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         Runnable updateTextRunnable = new Runnable() {
             @Override
             public void run() {
-
                 if (OrderItemList.size() == 0) {
                     handler.postDelayed(this, 500);
                     return;
@@ -123,10 +122,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                     orderHistory.currentCount = 0;
                 }
 
-                if (OrderItemList.size() == 1) {
-                    orderHistory.setShouldLoop(false);
-                }
-                if (orderHistory.isShouldLoop()) {
+                if (OrderItemList.size() > 1) {
                     handler.postDelayed(this, 4000);
                 }
             }

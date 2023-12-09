@@ -16,8 +16,6 @@ public class OrderHistory extends Order implements Serializable {
 
     public int currentCount = 0;
 
-    boolean shouldLoop = true;
-
     public OrderHistory() {
 
     }
@@ -38,14 +36,6 @@ public class OrderHistory extends Order implements Serializable {
 
     public int getCurrentCount() {
         return currentCount;
-    }
-
-    public boolean isShouldLoop() {
-        return shouldLoop;
-    }
-
-    public void setShouldLoop(boolean shouldLoop) {
-        this.shouldLoop = shouldLoop;
     }
 
     public void setCurrentCount(int currentCount) {
