@@ -186,7 +186,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         rvProductAdded = findViewById(R.id.rvProductAdded);
         rvProductAdded.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new ProductInCartAdapter(inCartItemList);
+        adapter = new ProductInCartAdapter(this, inCartItemList);
         adapter.setOnCheckedChangeListener(this);
         rvProductAdded.setAdapter(adapter);
         rvProductAdded.setVisibility(View.VISIBLE);
@@ -244,7 +244,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
             rvProductAdded = findViewById(R.id.rvProductAdded);
             rvProductAdded.setLayoutManager(new LinearLayoutManager(this));
 
-            adapter = new ProductInCartAdapter(inCartItemList);
+            adapter = new ProductInCartAdapter(this, inCartItemList);
             adapter.setOnCheckedChangeListener(this);
             adapter.notifyDataSetChanged();
             rvProductAdded.setAdapter(adapter);

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
     LinearLayoutManager layoutManager;
     OrderHistoryAdapter orderHistoryAdapter;
     TextView textAllOrders, textDelivering, textDelivered, textCanceled, textPending, textInprogress;
+    ImageButton btnBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,10 +53,13 @@ public class OrderHistoryActivity extends AppCompatActivity {
         textCanceled = findViewById(R.id.textCanceled);
         textPending = findViewById(R.id.textPending);
         textInprogress = findViewById(R.id.textInprogress);
+        btnBack = findViewById(R.id.btnBack);
 
         auth = FirebaseAuth.getInstance();
 
         LoadOrderHistory(DeliveryStatus.ALL);
+
+        btnBack.setOnClickListener(v -> finish());
 
         textAllOrders.setOnClickListener(v -> {
             LoadOrderHistory(DeliveryStatus.ALL);
