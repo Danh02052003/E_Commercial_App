@@ -93,15 +93,13 @@
     <string name="favorite">Yêu thích</string>
     <string name="home">Trang chủ</string>
     <string name="log_out">Đăng xuất</string>
-    <string name="title_activity_signup_smstest">SignupActivitySMSTest</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="title_activity_signup_smstest" translatable="false">SignupActivitySMSTest</string>
+
     <string name="action_sign_in_short">Đăng nhập</string>
     <string name="invalid_username">Tên người dùng không khả thi</string>
     <string name="invalid_password">Mật khẩu phải có hơn 5 ký tự</string>
     <string name="login_failed">Đăng nhập thất bại</string>
-    <string name="title_activity_login_smstest">LoginActivitySMSTest</string>
+    <string name="title_activity_login_smstest" translatable="false">LoginActivitySMSTest</string>
     <string name="payment_title">Phương thức thanh toán</string>
     <string name="payment_desc">Chọn phương thức thanh toán của bạn</string>
     <string name="phone_number">Số điện thoại:</string>
@@ -114,8 +112,11 @@
     <string name="onDelivered">Đơn hàng đã được giao cho bạn</string>
     <string name="onCancel">Đơn hàng đã bị hủy</string>
     <string name="orderHis">Lịch sử đặt hàng</string>
+    <string name="orderTracking">Theo dõi đơn hàng</string>
+    <string name="verify_desc">Vui lòng nhập mã xác nhận đã được gửi đến</string>
+    <string name="noSent">Chưa nhận được?</string>
 
 
-    <!--side menu-->
+    <!--Order tracking-->
 
 </resources>

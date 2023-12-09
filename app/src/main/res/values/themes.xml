@@ -69,7 +69,9 @@
         <item name="android:background">#00CC96</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
-
+    <style name="greenText">
+        <item name="android:textColor">#00CC96</item>
+    </style>
     <style name="DrawerNavigationText">
         <item name="android:textColor">#FFFFFF</item>
     </style>

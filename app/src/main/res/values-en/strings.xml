@@ -87,5 +87,8 @@
     <string name="onCancel">Your order has been canceled</string>
 
     <string name="orderHis">Order history</string>
+    <string name="orderTracking">Order Tracking</string>
+    <string name="verify_desc">Please enter the verification code sent to</string>
+    <string name="noSent">No code sent?</string>
 
 </resources>
