@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,13 +26,14 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import vlu.mobileproject.R;
 import vlu.mobileproject.activity.view.order.OrderActivity;
+import vlu.mobileproject.activity.view.order.OrderHistoryActivity;
+import vlu.mobileproject.data.DeliveryStatus;
 import vlu.mobileproject.globalfuction.GlobalData;
-import vlu.mobileproject.modle.Discount;
 import vlu.mobileproject.modle.OrderHistory;
+import vlu.mobileproject.modle.OrderItem;
 import vlu.mobileproject.modle.Products;
 
 public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.ViewHolder> implements GlobalData.Callback{
@@ -41,40 +43,20 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
     List<String> imgList = new ArrayList<>();
 
-    List<Products> productsList = new ArrayList<>();
+    List<Products> productsList;
 
-    int currentIndex = 0;
     private Handler handler = new Handler();
-    List<Discount> DiscountList = new ArrayList<>();
-    private Runnable updateTextRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (DiscountList.size() == 0) {
-                handler.postDelayed(this, 500);
-                return;
-            }
-
-            if (currentIndex < DiscountList.size()) {
-                animateChange(DiscountList.get(currentIndex).getDiscountUrl(), DiscountList.get(currentIndex).getDiscountDescription());
-                currentIndex++;
-            } else {
-                currentIndex = 0;
-            }
-
-            handler.postDelayed(this, 4000);
-        }
-    };
 
     public OrderHistoryAdapter(Context context, ArrayList<OrderHistory> orderHistoryList) {
         this.context = context;
         this.orderHistoryList = orderHistoryList;
     }
 
-    private void animateChange(int animSpeed, OrderHistoryAdapter.ViewHolder holder, String ImgUrl, String productName, String quantity, String pricePerProduct) {
-        // Fade-out animation for discountDescription
-        performFadeInOutAnimation(animSpeed, holder.productName, productName, null);
-        performFadeInOutAnimation(animSpeed, holder.productQuantity, quantity, null);
-        performFadeInOutAnimation(animSpeed, holder.orderImg, null, ImgUrl);
+    private void animateChange(int animSpeed, OrderHistoryAdapter.ViewHolder holder, OrderItem orderItem) {
+        performFadeInOutAnimation(animSpeed, holder.productName, orderItem.getProductName() + " " + orderItem.getProductOptName(), null);
+        performFadeInOutAnimation(animSpeed, holder.productQuantity, "x " + orderItem.getQuantity(), null);
+        performFadeInOutAnimation(animSpeed, holder.orderImg, null, orderItem.getImgUrl());
+        performFadeInOutAnimation(animSpeed, holder.txtPricePerUnit, "$ " + orderItem.getPrice_per_unit(), null);
     }
 
     private void performFadeInOutAnimation(int animSpeed, View view, String textToShow, String imgUrl) {
@@ -86,7 +68,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                 if (view instanceof TextView) {
                     ((TextView) view).setText(textToShow);
                 } else if (view instanceof ImageView) {
-                    Picasso.get().load(imgUrl).into((ImageView) view);
+                    String imgLink = imgUrl.isEmpty() ? "https://robohash.org/" + Math.random() : imgUrl;
+                    Picasso.get().load(imgLink).into((ImageView) view);
                 }
 
                 ObjectAnimator fadeInAnimation = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
@@ -101,7 +84,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     @Override
     public OrderHistoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_layout_order_history, parent, false);
-        handler.postDelayed(updateTextRunnable, 0);
+        GlobalData.initData(context, this);
 
         return new OrderHistoryAdapter.ViewHolder(view);
     }
@@ -110,27 +93,69 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     public void onBindViewHolder(@NonNull OrderHistoryAdapter.ViewHolder holder, int position) {
         OrderHistory orderHistory = orderHistoryList.get(position);
 
+        List<OrderItem> OrderItemList = new ArrayList<>();
+
+        for (Products product : productsList) {
+            for (OrderItem orderItem : orderHistory.getOrderItemList()) {
+                if (orderItem.getProduct_id().equals(product.getProductID())) {
+                    orderItem.setImgUrl(product.getProduct_img());
+                    orderItem.setProductName(product.getProduct_name());
+                    orderItem.setPrice_per_unit(product.getProductOptPackage(orderItem.getProductMemoryOptKey()).getProduct_price());
+                    orderItem.setProductOptName(product.getProductOptPackage(orderItem.getProductMemoryOptKey()).getMemory());
+                    OrderItemList.add(orderItem);
+                    break;
+                }
+            }
+        }
+        Runnable updateTextRunnable = new Runnable() {
+            @Override
+            public void run() {
+
+                if (OrderItemList.size() == 0) {
+                    handler.postDelayed(this, 500);
+                    return;
+                }
+
+                if (orderHistory.currentCount < OrderItemList.size()) {
+                    animateChange(500, holder, OrderItemList.get(orderHistory.currentCount));
+                    orderHistory.currentCount++;
+                } else {
+                    orderHistory.currentCount = 0;
+                }
+
+                if (OrderItemList.size() == 1) {
+                    orderHistory.setShouldLoop(false);
+                }
+                if (orderHistory.isShouldLoop()) {
+                    handler.postDelayed(this, 4000);
+                }
+            }
+        };
+        handler.postDelayed(orderHistory.setUpdateTextRunnable(updateTextRunnable), 0);
+
         holder.orderID.setText(orderHistory.getOrder_id());
         String totalPrice = "$ " + (orderHistory.getTotal_amount() * (1 - orderHistory.getDiscount()));
         holder.productTotalPrice.setText(totalPrice.toString());
         holder.productQuantity.setText(String.valueOf(orderHistory.getOrderItemList().size()));
         holder.productStatus.setText(String.valueOf(orderHistory.getStatus().getStatus()));
+        holder.txtDiscount.setText(String.valueOf(orderHistory.getDiscount() + " %"));
+
+        int statusColor;
+        if (orderHistory.getStatus().equals(DeliveryStatus.CANCELED)) {
+            statusColor = context.getColor(R.color.red);
+            holder.buyAgain.setVisibility(View.VISIBLE);
+        } else if (orderHistory.getStatus().equals(DeliveryStatus.DELIVERED)) {
+            holder.buyAgain.setVisibility(View.VISIBLE);
+            statusColor = context.getColor(R.color.greenVLUS);
+        } else {
+            holder.buyAgain.setVisibility(View.INVISIBLE);
+            statusColor = context.getColor(R.color.black);
+        }
+        holder.productStatus.setTextColor(statusColor);
 
         holder.orderHisItem.setOnClickListener(v -> {
             onClickGoToDetail(orderHistory, holder);
         });
-
-        imgList = orderHistory.getOrderItemList().stream()
-                .map(orderItem -> productsList.stream()
-                        .filter(product -> String.valueOf(product.getProduct_id()).equals(orderItem.getOrder_id()))
-                        .findFirst()
-                        .map(Products::getProduct_img)
-                        .orElse(null))
-                .collect(Collectors.toList());
-
-        for (String imgUrl : imgList) {
-            Picasso.get().load(imgUrl).into(holder.orderImg);
-        }
     }
 
     public void onClickGoToDetail(OrderHistory orderHistory, OrderHistoryAdapter.ViewHolder viewHolder) {
@@ -158,11 +183,13 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView orderID, productTotalPrice, productQuantity, productStatus, productName;
+        TextView orderID, productTotalPrice, productQuantity, productStatus, productName, txtPricePerUnit, txtDiscount;
 
         ImageView orderImg;
 
         ConstraintLayout orderHisItem;
+
+        Button buyAgain;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -174,6 +201,9 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             productStatus= itemView.findViewById(R.id.txtorderStatus);
             orderHisItem= itemView.findViewById(R.id.orderHisItem);
             orderImg= itemView.findViewById(R.id.orderImg);
+            txtPricePerUnit= itemView.findViewById(R.id.txtPricePerUnit);
+            buyAgain= itemView.findViewById(R.id.buyAgain);
+            txtDiscount= itemView.findViewById(R.id.txtDiscount);
 
         }
     }

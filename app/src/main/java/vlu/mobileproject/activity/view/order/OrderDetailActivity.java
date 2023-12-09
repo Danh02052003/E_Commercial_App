@@ -7,10 +7,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 import vlu.mobileproject.R;
-import vlu.mobileproject.data.DeliveryMethod;
 import vlu.mobileproject.data.DeliveryStatus;
 import vlu.mobileproject.modle.Order;
 import vlu.mobileproject.modle.OrderItem;
@@ -193,7 +190,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                                             Products product = snapshot.getValue(Products.class);
                                             product.setProductID(orderItem.getProduct_id());
-                                            Products.MemoryOption phoneMemPackage = product.GetMemoOptPackage(orderItem.getProductMemoryOption());
+                                            Products.MemoryOption phoneMemPackage = product.getProductOptPackage(orderItem.getProductMemoryOptKey());
                                             orderItem.setProductName(String.format("%s %s", product.getProduct_name(), phoneMemPackage.getMemory()));
                                             orderItem.setPrice_per_unit(phoneMemPackage.getProduct_price());
                                             orderItemList.add(orderItem);

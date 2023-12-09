@@ -137,7 +137,7 @@ public class OrderActivity extends AppCompatActivity {
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                                             Products product = snapshot.getValue(Products.class);
                                             product.setProductID(orderItem.getProduct_id());
-                                            Products.MemoryOption phoneMemPackage = product.GetMemoOptPackage(orderItem.getProductMemoryOption());
+                                            Products.MemoryOption phoneMemPackage = product.getProductOptPackage(orderItem.getProductMemoryOptKey());
                                             orderItem.setProductName(String.format("%s %s", product.getProduct_name(), phoneMemPackage.getMemory()));
                                             orderItemList.add(orderItem);
                                             orderItemCount.setText(orderItemList.size() + " kiện hàng.");

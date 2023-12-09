@@ -12,9 +12,17 @@ public class OrderHistory extends Order implements Serializable {
 
     List<OrderItem> orderItemList;
 
+    Runnable updateTextRunnable;
+
+    public int currentCount = 0;
+
+    boolean shouldLoop = true;
+
     public OrderHistory() {
 
     }
+
+    String imgUrl;
 
     public OrderHistory(String buyer_id, String order_id, double total_amount, double discount, double otherFees, String order_date, DeliveryStatus status, PaymentMethod paymentMethod, DeliveryMethod deliveryMethod, String shippingAddress, String phoneNumber) {
         super(buyer_id, order_id, total_amount, discount, otherFees, order_date, status, paymentMethod, deliveryMethod, shippingAddress, phoneNumber);
@@ -26,5 +34,38 @@ public class OrderHistory extends Order implements Serializable {
 
     public void setOrderItemList(List<OrderItem> orderItemList) {
         this.orderItemList = orderItemList;
+    }
+
+    public int getCurrentCount() {
+        return currentCount;
+    }
+
+    public boolean isShouldLoop() {
+        return shouldLoop;
+    }
+
+    public void setShouldLoop(boolean shouldLoop) {
+        this.shouldLoop = shouldLoop;
+    }
+
+    public void setCurrentCount(int currentCount) {
+        this.currentCount = currentCount;
+    }
+
+    public Runnable getUpdateTextRunnable() {
+        return updateTextRunnable;
+    }
+
+    public Runnable setUpdateTextRunnable(Runnable updateTextRunnable) {
+        this.updateTextRunnable = updateTextRunnable;
+        return this.updateTextRunnable;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }

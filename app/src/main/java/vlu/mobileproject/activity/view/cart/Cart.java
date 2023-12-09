@@ -217,7 +217,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
                             if (productSnapshot.exists()) {
                                 Products productDetails = productSnapshot.getValue(Products.class);
                                 productDetails.setProductID(productSnapshot.getKey());
-                                Products.MemoryOption MemoOptPackage = productDetails.GetMemoOptPackage(cartItem.getMemoryOptID());
+                                Products.MemoryOption MemoOptPackage = productDetails.getProductOptPackage(cartItem.getMemoryOptID());
 
                                 inCartItemList.add(new ProductInCartItem(dataSnapshot.getKey(), productDetails.getProduct_name(), MemoOptPackage.getProduct_price(), cartItem.quantity, productDetails.getProduct_img(), productDetails.getProductID(), cartItem.getMemoryOptID()));
                                 LoadCartItem2View();
