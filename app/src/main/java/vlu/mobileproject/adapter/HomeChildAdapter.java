@@ -92,8 +92,15 @@ public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.View
 //        Pair<View, String> p1 = Pair.create((View) viewHolder.ivProductImg, "product_img");
 //        Pair<View, String> p2 = Pair.create((View) viewHolder.tvProductName, "product_name");
 //        Pair<View, String> p3 = Pair.create((View) viewHolder.tvProductPrice, "product_price");
-        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, viewHolder.ivProductImg, "product_img");
-        mContext.startActivity(intent, options.toBundle());
+        if(mContext instanceof Activity){
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, viewHolder.ivProductImg, "product_img");
+            mContext.startActivity(intent, options.toBundle());
+        }
+        else {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
+        }
+
     }
 
     public void setItems(List<Products> items) {

@@ -76,7 +76,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     List<TextView> listPrice, listDescription;
 
-    DatabaseReference cartReference, productRef;
+    DatabaseReference cartReference, productRef, favoriteRef;
 
     FirebaseAuth auth;
 
@@ -99,6 +99,27 @@ public class ProductDetailsActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         product = (Products) bundle.getSerializable("object_product");
+
+        String user_id = auth.getCurrentUser().getUid();
+        favoriteRef = FirebaseDatabase.getInstance().getReference("Favorite_2").child(user_id);
+        favoriteRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child(product.getProductID()).exists()){
+                    btnFavorite_empty.setVisibility(View.INVISIBLE);
+                    btnFavorite_full.setVisibility(View.VISIBLE);
+                }
+                else {
+                    btnFavorite_empty.setVisibility(View.VISIBLE);
+                    btnFavorite_full.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         if (product == null) {
             String productID = bundle.getString("productID");
@@ -215,6 +236,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
         btnFavorite_empty.setBackground(null);
         btnFavorite_full = findViewById(R.id.btnFavorite_full);
         btnFavorite_full.setBackground(null);
+
+
         gvCapacities = findViewById(R.id.gvCapacities);
 
         //translate
@@ -296,16 +319,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
 
         btnFavorite_empty.setOnClickListener(view -> {
-//            if (isFavoritePresent) {
-//                FavoriteProduct.lstProduct.remove(product);
-//                btnFavorite.setImageResource(R.drawable.grey_heart_icon);
-//                isFavoritePresent = false;
-//            } else {
-//                FavoriteProduct.lstProduct.add(product);
-//                btnFavorite.setImageResource(R.drawable.red_heart_icon);
-//                isFavoritePresent = true;
-//                saveDataToDatabase(userEmail, product.getProduct_id());
-//            }
+            String user_id = auth.getCurrentUser().getUid();
+            String product_id = product.getProductID();
+            favoriteRef = FirebaseDatabase.getInstance().getReference("Favorite_2").child(user_id);
+            favoriteRef.child(product_id).setValue("");
+
+
             btnFavorite_full.setVisibility(View.VISIBLE);
             Animation animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_in_heart);
             btnFavorite_full.startAnimation(animation);
@@ -316,6 +335,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         });
         btnFavorite_full.setOnClickListener(view -> {
+            String user_id = auth.getCurrentUser().getUid();
+            String product_id = product.getProductID();
+            favoriteRef = FirebaseDatabase.getInstance().getReference("Favorite_2").child(user_id);
+            favoriteRef.child(product_id).removeValue();
+
             btnFavorite_empty.setVisibility(View.VISIBLE);
             Animation animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_heart);
             btnFavorite_full.startAnimation(animation);
