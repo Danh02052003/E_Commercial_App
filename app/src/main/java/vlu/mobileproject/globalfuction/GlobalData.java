@@ -64,8 +64,6 @@ public class GlobalData {
 //                        else {
 //
 //                        }
-
-
                     }
                     callBack.onCompleted(products);
                 }
