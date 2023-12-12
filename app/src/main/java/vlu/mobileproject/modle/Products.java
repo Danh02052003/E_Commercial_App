@@ -13,14 +13,15 @@ public class Products implements Serializable {
     private Map<String, MemoryOption> product_memoryOptions;
     private String product_name;
 
-    String ProductID;
+    // Product key in firebase - the actual ID
+    String productID;
 
     public String getProductID() {
-        return ProductID;
+        return productID;
     }
 
     public void setProductID(String productID) {
-        ProductID = productID;
+        this.productID = productID;
     }
 
     public Products() {
@@ -118,7 +119,7 @@ public class Products implements Serializable {
         return 0.0;
     }
 
-    public MemoryOption GetMemoOptPackage(String memoryOptKey) {
+    public MemoryOption getProductOptPackage(String memoryOptKey) {
         for (String optionName : product_memoryOptions.keySet()) {
             if (optionName.equals(memoryOptKey)) {
                 return product_memoryOptions.get(optionName);

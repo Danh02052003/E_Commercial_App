@@ -6,9 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,9 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vlu.mobileproject.R;
-import vlu.mobileproject.adapter.OrderHistoryAdapter;
 import vlu.mobileproject.data.DeliveryStatus;
-import vlu.mobileproject.modle.Order;
+import vlu.mobileproject.data.FirebaseReferenceKey;
 import vlu.mobileproject.modle.OrderHistory;
 import vlu.mobileproject.modle.OrderItem;
 
@@ -84,11 +81,12 @@ public class OrderHistoryActivity extends AppCompatActivity {
     void LoadOrderHistory(DeliveryStatus deliveryStatus) {
         orderHistories.clear();
         String userID = auth.getCurrentUser().getUid();
-        orderReference = FirebaseDatabase.getInstance().getReference(ORDER_REFERENCE_KEY);
-        orderItemReference = FirebaseDatabase.getInstance().getReference(ORDER_ITEM_REFERENCE_KEY);
+        orderReference = FirebaseDatabase.getInstance().getReference(FirebaseReferenceKey.ORDER.getReferenceKey());
+        orderItemReference = FirebaseDatabase.getInstance().getReference(FirebaseReferenceKey.ORDER_ITEM.getReferenceKey());
         orderReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                orderHistories.clear();
                 if (snapshot.exists()) {
                     for (DataSnapshot orderSnapshot : snapshot.getChildren()) {
                         OrderHistory orderHistory = orderSnapshot.getValue(OrderHistory.class);
@@ -96,15 +94,14 @@ public class OrderHistoryActivity extends AppCompatActivity {
                             orderItemReference.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    int count = 0;
-                                    OrderItem orderItem;
+                                    List<OrderItem> orderItemList = new ArrayList<>();
                                     for (DataSnapshot orderItemSnapshot : snapshot.getChildren()) {
-                                        orderItem = orderItemSnapshot.getValue(OrderItem.class);
+                                        OrderItem orderItem = orderItemSnapshot.getValue(OrderItem.class);
                                         if (orderItem.getOrder_id().equals(orderHistory.getOrder_id())) {
-                                            count++;
+                                            orderItemList.add(orderItem);
                                         }
                                     }
-
+                                    orderHistory.setOrderItemList(orderItemList);
                                     if (DeliveryStatus.ALL.equals(deliveryStatus)) {
                                         orderHistories.add(orderHistory);
                                     } else {
@@ -115,7 +112,6 @@ public class OrderHistoryActivity extends AppCompatActivity {
                                     orderHistoryAdapter = new OrderHistoryAdapter(OrderHistoryActivity.this, orderHistories);
                                     recOrderHis.setAdapter(orderHistoryAdapter);
 
-                                    orderHistory.setOrderItemCount(count);
                                     orderHistoryAdapter.updateData(orderHistories);
                                 }
 

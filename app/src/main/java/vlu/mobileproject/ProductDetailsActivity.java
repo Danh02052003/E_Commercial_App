@@ -30,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 
@@ -40,6 +41,7 @@ import java.util.Objects;
 
 import vlu.mobileproject.activity.view.cart.Cart;
 import vlu.mobileproject.activity.view.home.MainActivity;
+import vlu.mobileproject.data.FirebaseReferenceKey;
 import vlu.mobileproject.login.UserManager;
 import vlu.mobileproject.modle.FavoriteFirebase;
 
@@ -93,7 +95,25 @@ public class ProductDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
 
+        cartReference = FirebaseDatabase.getInstance().getReference(FirebaseReferenceKey.CART.getReferenceKey());
+        auth = FirebaseAuth.getInstance();
+
         product = (Products) bundle.getSerializable("object_product");
+
+        if (product == null) {
+            String productID = bundle.getString("productID");
+            GetProductData(productID);
+        }
+
+        LoadProductData();
+
+        SetTextForQuantity();
+        String lang = language.getPresentLang();
+        UpdateLang.exchangeCurrency(listPrice.toArray(new TextView[0]), this);
+        UpdateLang.translateLanguage(listDescription.toArray(new TextView[0]), this);
+    }
+
+    void LoadProductData() {
         if (product != null) {
             tvDetails_productName.setText(product.getProduct_name());
             tvDetails_productPrice.setText("$" + product.getPriceForMemory());
@@ -108,10 +128,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
             tvDetailsAddProduct_productPrice.setText("$" + product.getPriceForMemory());
             tvDetails_nProductLeft.setText("Tổng " + product.getTotalQuantity() + " sản phẩm.");
-
-            cartReference = FirebaseDatabase.getInstance().getReference("Cart");
-            productRef = FirebaseDatabase.getInstance().getReference("Products");
-            auth = FirebaseAuth.getInstance();
 
             gvCapacities.setOnItemClickListener((adapterView, view, position, l) -> {
                 if (gvCapacities.isItemChecked(position)) {
@@ -138,15 +154,31 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 capacitiesAdapter.notifyDataSetChanged();
             });
         }
+    }
 
+    void GetProductData(String productID) {
+        if (productID != null && !productID.isEmpty()) {
+            productRef = FirebaseDatabase.getInstance().getReference(FirebaseReferenceKey.PRODUCT.getReferenceKey());
+            Query query = productRef.child(productID);
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        Products SelectedProduct = snapshot.getValue(Products.class);
+                        product = SelectedProduct;
+                        product.setProductID(productID);
+                        LoadProductData();
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
+                }
+            });
 
-        SetTextForQuantity();
-        String lang = language.getPresentLang();
-        UpdateLang.exchangeCurrency(listPrice.toArray(new TextView[0]), this);
-        UpdateLang.translateLanguage(listDescription.toArray(new TextView[0]), this);
-
-
+        } else {
+            Toast.makeText(getApplicationContext(), "Lỗi mã sản phẩm", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void addControl() {
@@ -245,7 +277,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         });
 
-        btnDetails_wBuyNow.setOnClickListener(view -> AddProductItem2Cart(true));
+        btnDetails_wBuyNow.setOnClickListener(view ->
+                AddProductItem2Cart(true));
 
         btnDetails_wAddToCart.setOnClickListener(view -> {
             AddProductItem2Cart(false);
@@ -349,6 +382,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     assert CartItemProduct != null;
                     String productID = CartItemProduct.getProductID();
                     String productMemOpt = CartItemProduct.getMemoryOptID();
+                    if (productID == null) {
+                        productID = "";
+                    }
 
                     shouldAddQuantty = productID.equals(product.getProductID()) && productSelectedOption.equals(productMemOpt);
                     if (shouldAddQuantty) {
