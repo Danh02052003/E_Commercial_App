@@ -43,27 +43,6 @@ public class GlobalData {
                         Log.d("Product debug: ", "Product " + String.valueOf(product.getProduct_id()));
                         i++;
                         products.add(product);
-//                        if(products.size() == snapshot.getChildrenCount())
-//                            callBack.onCompleted(products);
-//                        if(product.getProduct_categoryId() == 2){
-//                            String imageCategory_path = product.getProduct_categoryId() == 1 ? "samsung" : "iphone";
-//                            product.setProduct_img("product_image/"+imageCategory_path+"/"+product.getProduct_img());
-//                            StorageReference imgRef = FirebaseStorage.getInstance().getReference().child(product.getProduct_img());
-//                            imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
-//                                product.setProduct_img(uri.toString());
-//                                dataSnapshot.getRef().child("product_img").setValue(uri.toString());
-//                                products.add(product);
-//                                if(products.size() == snapshot.getChildrenCount())
-//                                    callBack.onCompleted(products);
-//
-//                            }).addOnFailureListener(e -> {
-//                                Log.e(this.toString(), "Error loading image from Firebase: " + e.getMessage());
-//                                e.printStackTrace();
-//                            });
-//                        }
-//                        else {
-//
-//                        }
                     }
                     callBack.onCompleted(products);
                 }
