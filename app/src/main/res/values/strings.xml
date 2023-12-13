@@ -144,5 +144,6 @@
     <string name="loading">Loading...</string>
     <string name="goods">món hàng</string>
     <string name="Ad">Có thể bạn quan tâm:</string>
+    <string name="delivery_method">Phương thức giao hàng</string>
 
 </resources>

@@ -42,7 +42,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="Chi tiết"
+                        android:text="@string/Detail"
                         android:textSize="10pt" />
 
                     <RelativeLayout
@@ -574,7 +574,7 @@
                                 android:layout_marginLeft="5dp"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp"
-                                android:text="Thêm vào giỏ hàng"
+                                android:text="@string/add_cart"
                                 android:textColor="@color/white"
                                 android:textSize="9pt" />
 

@@ -117,5 +117,6 @@
     <string name="loading">Loading...</string>
     <string name="goods">Goods</string>
     <string name="Ad">Your ad: </string>
+    <string name="delivery_method">Delivery method</string>
 
 </resources>
