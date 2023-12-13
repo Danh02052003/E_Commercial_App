@@ -48,7 +48,8 @@
     <string name="doing">" Your order is being processed...."</string>
     <string name="filter">Filter</string>
     <string name="price">Price</string>
-    <string name="cancle">Cancle</string>
+    <string name="cancel">Cancel</string>
+    <string name="canceled">Canceled</string>
     <string name="setting">Settings</string>
     <string name="account">Account</string>
     <string name="notification">Notification</string>
@@ -98,5 +99,6 @@
     <string name="DiscountValue">Discount Value</string>
     <string name="OtherFees">Other Fees</string>
     <string name="ProvisionalTotal">Provisional total</string>
+    <string name="OrderTracking">Order Tracking</string>
 
 </resources>

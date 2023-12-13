@@ -44,7 +44,7 @@ public class OrderActivity extends AppCompatActivity {
 
     RecyclerView cardTitle;
 
-    TextView orderStatus, orderTime, orderItemCount, paymentMethod, totalPrice, DestinationEnd, btnDetail2, deliveryMethod;
+    TextView orderStatus, orderTime, orderItemCount, paymentMethod, totalPrice, DestinationEnd, btnDetail2, deliveryMethod, progressDetail;
     ProgressBar pendingBar, inprogressBar, Delivering2YouBar;
     ImageView btnBack;
     Button btnDetail;
@@ -68,6 +68,7 @@ public class OrderActivity extends AppCompatActivity {
         btnDetail2 = findViewById(R.id.btnDetail2);
         DestinationEnd = findViewById(R.id.DestinationEnd);
         deliveryMethod = findViewById(R.id.deliveryMethod);
+        progressDetail = findViewById(R.id.progressDetail);
 
         orderStatus = findViewById(R.id.orderStatus);
         orderTime = findViewById(R.id.orderTime);
@@ -176,6 +177,17 @@ public class OrderActivity extends AppCompatActivity {
         String PM_Method = (order.getDeliveryMethod().getdeliveryMethod()) == null ? "#Null" : order.getDeliveryMethod().getdeliveryMethod();
         paymentMethod.setText(PM_Method);
         deliveryMethod.setText(DE_Method);
+        if (order.getStatus().equals(DeliveryStatus.PENDING)) {
+            progressDetail.setText(R.string.onPending);
+        } else if (order.getStatus().equals(DeliveryStatus.PENDING)) {
+            progressDetail.setText(R.string.onInProgress);
+        } else if (order.getStatus().equals(DeliveryStatus.DELIVERING_TO_YOU)) {
+            progressDetail.setText(R.string.onDelivering2You);
+        } else if (order.getStatus().equals(DeliveryStatus.DELIVERED)) {
+            progressDetail.setText(R.string.onDelivered);
+        } else if (order.getStatus().equals(DeliveryStatus.CANCELED)) {
+            progressDetail.setText(R.string.canceled);
+        }
         if (order.getStatus().getStatus().equals(DeliveryStatus.CANCELED.getStatus())) {
             ColorStateList colorStateList = ContextCompat.getColorStateList(this, R.color.red);
             orderStatus.setTextColor(colorStateList);

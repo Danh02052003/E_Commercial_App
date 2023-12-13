@@ -70,7 +70,8 @@
     <!--Search-->
     <string name="filter">Bộ lọc</string>
     <string name="price">Mức giá</string>
-    <string name="cancle">Hủy</string>
+    <string name="cancel">Hủy</string>
+    <string name="canceled">Đã hủy</string>
 
     <!--Settings-->
     <string name="setting">Cài đặt</string>
@@ -127,5 +128,6 @@
     <string name="DiscountValue">Giảm giá:</string>
     <string name="OtherFees">Phí áp dụng</string>
     <string name="ProvisionalTotal">Tổng tạm tính</string>
+    <string name="OrderTracking">Theo Dõi Đơn Hàng</string>
 
 </resources>
