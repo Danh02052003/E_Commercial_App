@@ -9,7 +9,6 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -20,14 +19,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import vlu.mobileproject.R;
 import vlu.mobileproject.data.DeliveryStatus;
@@ -41,7 +38,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     private Context context;
     private ArrayList<OrderHistory> orderHistoryList;
 
-    List<OrderItem> OrderItemList = new ArrayList<>();
+    List<String> imgList = new ArrayList<>();
 
     List<Products> productsList;
 
@@ -89,7 +86,12 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         return new OrderHistoryAdapter.ViewHolder(view);
     }
 
-    void GetOrderItemList(OrderHistory orderHistory) {
+    @Override
+    public void onBindViewHolder(@NonNull OrderHistoryAdapter.ViewHolder holder, int position) {
+        OrderHistory orderHistory = orderHistoryList.get(position);
+
+        List<OrderItem> OrderItemList = new ArrayList<>();
+
         for (Products product : productsList) {
             for (OrderItem orderItem : orderHistory.getOrderItemList()) {
                 if (orderItem.getProduct_id().equals(product.getProductID())) {
@@ -102,19 +104,10 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                 }
             }
         }
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull OrderHistoryAdapter.ViewHolder holder, int position) {
-        OrderHistory orderHistory = orderHistoryList.get(position);
-
-        GetOrderItemList(orderHistory);
-
         Runnable updateTextRunnable = new Runnable() {
             @Override
             public void run() {
                 if (OrderItemList.size() == 0) {
-                    GetOrderItemList(orderHistory);
                     handler.postDelayed(this, 500);
                     return;
                 }
