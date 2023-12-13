@@ -39,7 +39,7 @@
                 android:textSize="7pt"
                 android:textAlignment="textEnd"
                 android:layout_gravity="center_vertical"
-                android:text="Xem tất cả"
+                android:text="@string/see_all"
                 android:layout_alignParentEnd="true"
                 android:textColor="@color/greenVLUS"
                 style="@style/SCREEN"

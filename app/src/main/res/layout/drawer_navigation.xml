@@ -90,7 +90,7 @@
             android:textSize="10pt"
             android:layout_marginTop="5dp"
             android:textColor="@color/white"
-            android:text="Đăng xuất"/>
+            android:text="@string/log_out"/>
     </LinearLayout>
 
 </LinearLayout>

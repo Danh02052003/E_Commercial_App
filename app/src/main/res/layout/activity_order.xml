@@ -299,7 +299,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="10dp"
-                            android:text="Có thể bạn quan tâm: Đây là Tân"
+                            android:text="@string/Ad"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"

@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="116dp"
-        android:text="Avatar"
+        android:text="@string/avatar"
         android:textSize="16dp" />
 
     <de.hdodenhof.circleimageview.CircleImageView

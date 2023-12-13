@@ -34,12 +34,12 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
+                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Dành cho bạn"
-                android:textSize="11pt"
-                style="@style/TitleText"/>
+                android:text="@string/for_you"
+                android:textSize="11pt" />
 
         </RelativeLayout>
 

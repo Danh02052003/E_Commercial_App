@@ -89,7 +89,7 @@
         android:contentDescription="Toggle Password Visibility"
         android:focusable="true"
         android:src="@drawable/close_eye"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/editTextPassword"
         app:layout_constraintTop_toTopOf="@+id/editTextPassword" />
 
     <ImageView
