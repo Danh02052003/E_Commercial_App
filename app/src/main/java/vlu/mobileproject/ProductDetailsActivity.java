@@ -105,7 +105,20 @@ public class ProductDetailsActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         product = (Products) bundle.getSerializable("object_product");
+        if (product == null) {
+            String productID = bundle.getString("productID");
+            GetProductData(productID);
+        }
+        GetFavorite();
+        LoadProductData();
 
+        SetTextForQuantity();
+        String lang = language.getPresentLang();
+        UpdateLang.exchangeCurrency(listPrice.toArray(new TextView[0]), this);
+        UpdateLang.translateLanguage(listDescription.toArray(new TextView[0]), this);
+    }
+
+    void GetFavorite() {
         String user_id = auth.getCurrentUser().getUid();
         favoriteRef = FirebaseDatabase.getInstance().getReference("Favorite_2").child(user_id);
         favoriteRef.addValueEventListener(new ValueEventListener() {
@@ -126,18 +139,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
             }
         });
-
-        if (product == null) {
-            String productID = bundle.getString("productID");
-            GetProductData(productID);
-        }
-
-        LoadProductData();
-
-        SetTextForQuantity();
-        String lang = language.getPresentLang();
-        UpdateLang.exchangeCurrency(listPrice.toArray(new TextView[0]), this);
-        UpdateLang.translateLanguage(listDescription.toArray(new TextView[0]), this);
     }
 
     void LoadProductData() {
