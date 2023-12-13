@@ -19,7 +19,7 @@ public class VerifyDialog {
     }
 
     public static void showDialog(String phoneNumber, Context context, final OnVerifyListener listener) {
-        final Dialog dialog = new Dialog(context);
+        final Dialog dialog = new Dialog(context, R.style.RoundedDialog); // Apply the custom style
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         dialog.setContentView(R.layout.dialog_verify);

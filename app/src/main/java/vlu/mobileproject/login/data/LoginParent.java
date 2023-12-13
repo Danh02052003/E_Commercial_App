@@ -99,7 +99,6 @@ public class LoginParent extends AppCompatActivity implements IOnSuccLogin {
 
     void checkForPhoneNumber(String number, Consumer<Boolean> callback) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-
         ref.orderByChild("phone").equalTo(number).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

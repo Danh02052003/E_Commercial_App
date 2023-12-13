@@ -9,6 +9,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -141,13 +143,10 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         int statusColor;
         if (orderHistory.getStatus().equals(DeliveryStatus.CANCELED)) {
             statusColor = context.getColor(R.color.red);
-        } else if (orderHistory.getStatus().equals(DeliveryStatus.DELIVERED)) {
-            statusColor = context.getColor(R.color.greenVLUS);
         } else {
-            statusColor = context.getColor(R.color.black);
+            statusColor = context.getColor(R.color.greenVLUS);
         }
         holder.productStatus.setTextColor(statusColor);
-
         holder.orderHisItem.setOnClickListener(v -> {
             onClickGoToDetail(orderHistory, holder);
         });

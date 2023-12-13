@@ -198,7 +198,7 @@ public class OrderActivity extends AppCompatActivity {
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
-        }, 3000);
+        }, 2000);
 
         dialog.show();
         dialog.getWindow().setAttributes(layoutParams);
@@ -223,26 +223,15 @@ public class OrderActivity extends AppCompatActivity {
             deliveryMethod.setText(R.string.high_speed);
         }
         if (order.getStatus().equals(DeliveryStatus.PENDING)) {
-            progressDetail.setText(R.string.onPending);
-            orderStatus.setText(R.string.Pending);
+            OnDeliveryStatusChange(R.string.onPending, R.string.Pending, R.color.greenVLUS);
         } else if (order.getStatus().equals(DeliveryStatus.PENDING)) {
-            progressDetail.setText(R.string.onInProgress);
-            orderStatus.setText(R.string.InProgress);
+            OnDeliveryStatusChange(R.string.onInProgress, R.string.InProgress, R.color.greenVLUS);
         } else if (order.getStatus().equals(DeliveryStatus.DELIVERING_TO_YOU)) {
-            progressDetail.setText(R.string.onDelivering2You);
-            orderStatus.setText(R.string.Delivering2You);
-
+            OnDeliveryStatusChange(R.string.onDelivering2You, R.string.Delivering2You, R.color.greenVLUS);
         } else if (order.getStatus().equals(DeliveryStatus.DELIVERED)) {
-            progressDetail.setText(R.string.onDelivered);
-            orderStatus.setText(R.string.Delivered);
-
+            OnDeliveryStatusChange(R.string.onDelivered, R.string.Delivered, R.color.greenVLUS);
         } else if (order.getStatus().equals(DeliveryStatus.CANCELED)) {
-            progressDetail.setText(R.string.canceled);
-            orderStatus.setText(R.string.canceled);
-        }
-        if (order.getStatus().getStatus().equals(DeliveryStatus.CANCELED.getStatus())) {
-            ColorStateList colorStateList = ContextCompat.getColorStateList(this, R.color.red);
-            orderStatus.setTextColor(colorStateList);
+            OnDeliveryStatusChange(R.string.canceled, R.string.canceled, R.color.red);
         }
         orderTime.setText(order.getOrder_date());
 
@@ -255,6 +244,13 @@ public class OrderActivity extends AppCompatActivity {
         ProgressBarAnimation(order);
         String orderID = order.getOrder_id();
         SetupDetailBtn(orderID);
+    }
+
+    void OnDeliveryStatusChange(int progressDetailString, int orderStatusString, int textColor) {
+        progressDetail.setText(progressDetailString);
+        orderStatus.setText(orderStatusString);
+        ColorStateList colorStateList = ContextCompat.getColorStateList(this, textColor);
+        orderStatus.setTextColor(colorStateList);
     }
 
     void ProgressBarAnimation(Order order) {
