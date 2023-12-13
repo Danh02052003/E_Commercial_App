@@ -86,7 +86,6 @@ public class OrderHistoryActivity extends AppCompatActivity {
         orderReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                orderHistories.clear();
                 if (snapshot.exists()) {
                     for (DataSnapshot orderSnapshot : snapshot.getChildren()) {
                         OrderHistory orderHistory = orderSnapshot.getValue(OrderHistory.class);

@@ -25,6 +25,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import vlu.mobileproject.R;
 import vlu.mobileproject.data.DeliveryStatus;
@@ -38,7 +39,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     private Context context;
     private ArrayList<OrderHistory> orderHistoryList;
 
-    List<String> imgList = new ArrayList<>();
+    List<OrderItem> OrderItemList;
 
     List<Products> productsList;
 
@@ -86,28 +87,33 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         return new OrderHistoryAdapter.ViewHolder(view);
     }
 
+    void GetOrderItemList(OrderHistory orderHistory) {
+        OrderItemList = productsList.stream()
+                .flatMap(product ->
+                        orderHistory.getOrderItemList().stream()
+                                .filter(orderItem -> orderItem.getProduct_id().equals(product.getProductID()))
+                                .map(orderItem -> {
+                                    orderItem.setImgUrl(product.getProduct_img());
+                                    orderItem.setProductName(product.getProduct_name());
+                                    orderItem.setPrice_per_unit(product.getProductOptPackage(orderItem.getProductMemoryOptKey()).getProduct_price());
+                                    orderItem.setProductOptName(product.getProductOptPackage(orderItem.getProductMemoryOptKey()).getMemory());
+                                    return orderItem;
+                                })
+                )
+                .collect(Collectors.toList());
+    }
+
     @Override
     public void onBindViewHolder(@NonNull OrderHistoryAdapter.ViewHolder holder, int position) {
         OrderHistory orderHistory = orderHistoryList.get(position);
 
-        List<OrderItem> OrderItemList = new ArrayList<>();
+        GetOrderItemList(orderHistory);
 
-        for (Products product : productsList) {
-            for (OrderItem orderItem : orderHistory.getOrderItemList()) {
-                if (orderItem.getProduct_id().equals(product.getProductID())) {
-                    orderItem.setImgUrl(product.getProduct_img());
-                    orderItem.setProductName(product.getProduct_name());
-                    orderItem.setPrice_per_unit(product.getProductOptPackage(orderItem.getProductMemoryOptKey()).getProduct_price());
-                    orderItem.setProductOptName(product.getProductOptPackage(orderItem.getProductMemoryOptKey()).getMemory());
-                    OrderItemList.add(orderItem);
-                    break;
-                }
-            }
-        }
         Runnable updateTextRunnable = new Runnable() {
             @Override
             public void run() {
                 if (OrderItemList.size() == 0) {
+                    GetOrderItemList(orderHistory);
                     handler.postDelayed(this, 500);
                     return;
                 }
