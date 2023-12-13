@@ -243,17 +243,22 @@ public class OrderActivity extends AppCompatActivity {
             pendingBar.setProgress(100);
             inprogressBar.setProgress(100);
             Delivering2YouBar.setProgress(100);
-            startSmoothAnimation(Delivering2YouBar);
+            stopSmoothAnimation();
+            SetProgressBarsColor(R.color.blue);
         } else {
             stopSmoothAnimation();
             pendingBar.setProgress(100);
             inprogressBar.setProgress(100);
             Delivering2YouBar.setProgress(100);
-            ColorStateList colorStateList = ContextCompat.getColorStateList(this, R.color.red);
-            pendingBar.setProgressTintList(colorStateList);
-            Delivering2YouBar.setProgressTintList(colorStateList);
-            inprogressBar.setProgressTintList(colorStateList);
+            SetProgressBarsColor(R.color.red);
         }
+    }
+
+    void SetProgressBarsColor(int color) {
+        ColorStateList colorStateList = ContextCompat.getColorStateList(this, color);
+        pendingBar.setProgressTintList(colorStateList);
+        Delivering2YouBar.setProgressTintList(colorStateList);
+        inprogressBar.setProgressTintList(colorStateList);
     }
 
     private void startSmoothAnimation(ProgressBar progressBar) {
