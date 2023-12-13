@@ -162,7 +162,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                         double discount = order.getDiscount();
                         double finTotalAmount = totalAmount - discount * totalAmount + otherFees;
                         totalTemp.setText("$ " + totalAmount);
-                        discountText.setText(discount + " %");
+                        discountText.setText(discount * 100 + " %");
                         otherFeesText.setText("$ " + otherFees);
                         finalTotalPrice.setText("$ " + finTotalAmount);
                         DestinationEnd.setText(order.getShippingAddress());
