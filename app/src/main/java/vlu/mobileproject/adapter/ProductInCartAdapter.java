@@ -33,10 +33,12 @@ public class ProductInCartAdapter extends RecyclerView.Adapter<ProductInCartAdap
     private ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
     private OnCheckedChangeListener onCheckedChangeListener;
     Context context;
+    TextView tvCart_totalAdded;
 
-    public ProductInCartAdapter(Context context, List<ProductInCartItem> inCartItemList) {
+    public ProductInCartAdapter(Context context, List<ProductInCartItem> inCartItemList, TextView tvCart_totalAdded) {
         this.inCartItemList = inCartItemList;
         this.context = context;
+        this.tvCart_totalAdded = tvCart_totalAdded;
     }
 
     public interface OnRemoveCartItem {
@@ -58,17 +60,16 @@ public class ProductInCartAdapter extends RecyclerView.Adapter<ProductInCartAdap
         holder.tvCart_productPrice.setText("$" + String.valueOf(product.getProductPrice()));
         holder.tvCart_quantityAdded.setText(String.valueOf(product.getProductQuantity()) + "x");
         loadGlideImageWithCheck(context, product.getProductImg(), holder.ivCart_productImg);
-        holder.rlRemoveProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (onCheckedChangeListener != null) {
-                    onCheckedChangeListener.onItemCheckedChanged(holder.getAdapterPosition(), false);
-                }
-                DatabaseReference cartReference = FirebaseDatabase.getInstance().getReference("Cart");
-                cartReference.child(product.getCartItemID()).removeValue();
-                inCartItemList.remove(holder.getAdapterPosition());
-                notifyItemRemoved(holder.getAdapterPosition());
+        holder.rlRemoveProduct.setOnClickListener(view -> {
+            if (onCheckedChangeListener != null) {
+                onCheckedChangeListener.onItemCheckedChanged(holder.getAdapterPosition(), false);
             }
+            DatabaseReference cartReference = FirebaseDatabase.getInstance().getReference("Cart");
+            cartReference.child(product.getCartItemID()).removeValue();
+            inCartItemList.remove(holder.getAdapterPosition());
+            notifyItemRemoved(holder.getAdapterPosition());
+
+            tvCart_totalAdded.setText(String.format("%d %s", inCartItemList.size(), context.getString(R.string.goods)));
         });
         holder.cbCartCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

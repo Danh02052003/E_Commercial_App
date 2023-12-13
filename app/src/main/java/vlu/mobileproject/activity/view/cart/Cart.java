@@ -187,7 +187,7 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
         rvProductAdded = findViewById(R.id.rvProductAdded);
         rvProductAdded.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new ProductInCartAdapter(this, inCartItemList);
+        adapter = new ProductInCartAdapter(this, inCartItemList, tvCart_totalAdded);
         adapter.setOnCheckedChangeListener(this);
         rvProductAdded.setAdapter(adapter);
         rvProductAdded.setVisibility(View.VISIBLE);
@@ -238,14 +238,14 @@ public class Cart extends AppCompatActivity implements ProductInCartAdapter.OnCh
     }
 
     void LoadCartItem2View() {
+        tvCart_totalAdded.setText(String.format("%s %s", "0", getString(R.string.goods)));
         if (inCartItemList.size() != 0) {
-
-            tvCart_totalAdded.setText(inCartItemList.size() + " món hàng.");
+            tvCart_totalAdded.setText(String.format("%d %s", inCartItemList.size(), getString(R.string.goods)));
 
             rvProductAdded = findViewById(R.id.rvProductAdded);
             rvProductAdded.setLayoutManager(new LinearLayoutManager(this));
 
-            adapter = new ProductInCartAdapter(this, inCartItemList);
+            adapter = new ProductInCartAdapter(this, inCartItemList, tvCart_totalAdded);
             adapter.setOnCheckedChangeListener(this);
             adapter.notifyDataSetChanged();
             rvProductAdded.setAdapter(adapter);

@@ -115,5 +115,6 @@
     <string name="iphone">Iphone</string>
     <string name="GlobalProducts">Global products</string>
     <string name="loading">Loading...</string>
+    <string name="goods">Goods</string>
 
 </resources>
