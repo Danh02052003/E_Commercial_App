@@ -49,7 +49,7 @@
     <string name="see_more">Xem thêm</string>
     <string name="buy_now">Mua ngay</string>
     <string name="add_cart">Thêm vào giỏ hàng</string>
-    <string name="quantity">Số lượng</string>
+    <string name="quantity">Số lượng: </string>
     <string name="only">Chỉ còn lại 1 sản phẩm</string>
     <string name="added_cart">Sản phẩm đã được thêm vào giỏ hàng</string>
 

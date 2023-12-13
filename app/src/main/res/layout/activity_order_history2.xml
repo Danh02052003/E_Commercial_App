@@ -39,58 +39,66 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scrollbars="none"
-            android:layout_marginTop="40dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:cardElevation="30dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtStatusTitle">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginTop="40dp"
+                android:scrollbars="none"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtStatusTitle">
 
-                <!-- All Orders -->
-                <TextView
-                    android:id="@+id/textAllOrders"
-                    style="@style/MenuText"
-                    android:text="All Orders" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-                <!-- Pending -->
-                <TextView
-                    android:id="@+id/textPending"
-                    style="@style/MenuText"
-                    android:text="Pending" />
+                    <!-- All Orders -->
+                    <TextView
+                        android:id="@+id/textAllOrders"
+                        style="@style/MenuText"
+                        android:text="All Orders" />
 
-                <TextView
-                    android:id="@+id/textInprogress"
-                    style="@style/MenuText"
-                    android:text="In progress" />
+                    <!-- Pending -->
+                    <TextView
+                        android:id="@+id/textPending"
+                        style="@style/MenuText"
+                        android:text="Pending" />
 
-                <!-- Delivering -->
-                <TextView
-                    android:id="@+id/textDelivering"
-                    style="@style/MenuText"
-                    android:text="Delivering to you" />
-                <!-- Delivered -->
-                <TextView
-                    android:id="@+id/textDelivered"
-                    style="@style/MenuText"
-                    android:onClick="onMenuClick"
-                    android:text="Delivered" />
+                    <TextView
+                        android:id="@+id/textInprogress"
+                        style="@style/MenuText"
+                        android:text="In progress" />
 
-                <!-- Canceled -->
-                <TextView
-                    android:id="@+id/textCanceled"
-                    style="@style/MenuText"
-                    android:text="Canceled" />
+                    <!-- Delivering -->
+                    <TextView
+                        android:id="@+id/textDelivering"
+                        style="@style/MenuText"
+                        android:text="Delivering to you" />
+                    <!-- Delivered -->
+                    <TextView
+                        android:id="@+id/textDelivered"
+                        style="@style/MenuText"
+                        android:onClick="onMenuClick"
+                        android:text="Delivered" />
 
-            </LinearLayout>
-        </HorizontalScrollView>
+                    <!-- Canceled -->
+                    <TextView
+                        android:id="@+id/textCanceled"
+                        style="@style/MenuText"
+                        android:text="Canceled" />
 
+                </LinearLayout>
+            </HorizontalScrollView>
+        </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView

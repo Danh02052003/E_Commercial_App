@@ -36,7 +36,7 @@
     <string name="see_more">See more</string>
     <string name="buy_now">Buy now</string>
     <string name="add_cart">Add to your cart</string>
-    <string name="quantity">Quantity</string>
+    <string name="quantity">Quantity: </string>
     <string name="only">Only 1 product left</string>
     <string name="your_cart">Your cart</string>
     <string name="use_sale">Use VLU encryption when paying</string>
