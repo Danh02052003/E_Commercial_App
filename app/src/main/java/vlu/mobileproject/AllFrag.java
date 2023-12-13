@@ -2,13 +2,19 @@ package vlu.mobileproject;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +22,8 @@ import java.util.List;
 
 import vlu.mobileproject.adapter.HomeParentAdapter;
 import vlu.mobileproject.globalfuction.GlobalData;
+import vlu.mobileproject.globalfuction.RecentlyViewedManager;
+import vlu.mobileproject.modle.Product;
 import vlu.mobileproject.modle.Products;
 
 
@@ -109,5 +117,71 @@ public class AllFrag extends Fragment implements GlobalData.Callback {
         parentAdapter = new HomeParentAdapter(parentItemList);
         rvCategory.setAdapter(parentAdapter);
         parentAdapter.notifyDataSetChanged();
+        RecentlyViewedManager.recentlyViewedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                long count = snapshot.getChildrenCount();
+
+                if(count > 0){
+                    RecentlyViewedManager.GetRecentlyViewedProducts(new ValueEventListener() {
+                        List<Products> recently_viewed_list = new ArrayList<>();
+                        List<String> products_key = new ArrayList<>();
+                        List<Long> time_viewed = new ArrayList<>();
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            recently_viewed_list.clear();
+                            products_key.clear();
+                            time_viewed.clear();
+
+                            for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                time_viewed.add(dataSnapshot.getValue(Long.class));
+                                Collections.sort(time_viewed, Collections.reverseOrder());
+                            }
+
+                            for(int i = 0; i < time_viewed.size(); i++)
+                                for(DataSnapshot dataSnapshot : snapshot.getChildren())
+                                    if(dataSnapshot.getValue(Long.class).equals(time_viewed.get(i)))
+                                        products_key.add(dataSnapshot.getKey());
+
+
+                            for(int i = 0; i < products_key.size(); i++)
+                                for(Products product : products)
+                                    if(product.getProductID().equals(products_key.get(i)))
+                                        recently_viewed_list.add(product);
+
+                            if(parentItemList.size() == 2){
+                                parentItemList.add(new HomeParentItem("Đã xem gần đây", recently_viewed_list));
+                                parentAdapter.notifyDataSetChanged();
+                            }else{
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        parentAdapter.notifyDataSetChanged();
+                                    }
+                                }, 2000);
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                }
+                else {
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 }

@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -26,6 +27,7 @@ import java.util.List;
 
 import vlu.mobileproject.ProductDetailsActivity;
 import vlu.mobileproject.R;
+import vlu.mobileproject.globalfuction.RecentlyViewedManager;
 import vlu.mobileproject.modle.Products;
 
 public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.ViewHolder> {
@@ -93,10 +95,14 @@ public class HomeChildAdapter extends RecyclerView.Adapter<HomeChildAdapter.View
 //        Pair<View, String> p2 = Pair.create((View) viewHolder.tvProductName, "product_name");
 //        Pair<View, String> p3 = Pair.create((View) viewHolder.tvProductPrice, "product_price");
         if(mContext instanceof Activity){
+            RecentlyViewedManager.AddRecentlyViewed(product.getProductID());
+
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, viewHolder.ivProductImg, "product_img");
             mContext.startActivity(intent, options.toBundle());
         }
         else {
+            RecentlyViewedManager.AddRecentlyViewed(product.getProductID());
+
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mContext.startActivity(intent);
         }
