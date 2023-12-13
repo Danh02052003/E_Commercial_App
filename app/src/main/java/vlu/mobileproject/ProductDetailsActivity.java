@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -15,16 +16,20 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -58,13 +63,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
     ImageButton btnFavorite_empty, btnFavorite_full, ibtnDetails_remove_1, ibtnDetails_add_1, btnBack;
 
     RelativeLayout btnDetails_wAddToCart, btnDetails_wBuyNow;
-    RelativeLayout rlPopupWindow;
+    RelativeLayout rlPopupWindow, rlProgressBar, rlProductDetails;
     CardView cvPopupWindow_display;
     GridView gvCapacities;
     ArrayAdapter<String> capacitiesAdapter;
     Products product;
     TextView tvDetails_productName, tvDetails_productPrice, tvDetails_productDescr, tvDetailsAddProduct_productPrice, tvDetails_quantity, tvDetails_quantity_2, tvDetails_nProductLeft, tvDetails_expand;
     ImageView ivDetails_productIllustration, ivDetailsAddProduct_productImg, ibtnDetails_remove_2, ibtnDetails_add_2;
+    ProgressBar progressBar;
     double productPriceBasedCapacity;
 
     int productQuantityAdded = 1;
@@ -243,6 +249,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
         //translate
         listPrice = Collections.singletonList(tvDetails_productPrice);
         listDescription =  Arrays.asList(tvDetails_productDescr);
+        rlProgressBar = findViewById(R.id.rlProgressBar);
+        progressBar = findViewById(R.id.progressBar);
+        rlProductDetails = findViewById(R.id.rlProductDetails);
 
     }
 
@@ -319,32 +328,32 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
 
         btnFavorite_empty.setOnClickListener(view -> {
-            String user_id = auth.getCurrentUser().getUid();
-            String product_id = product.getProductID();
-            favoriteRef = FirebaseDatabase.getInstance().getReference("Favorite_2").child(user_id);
-            favoriteRef.child(product_id).setValue("");
 
 
-            btnFavorite_full.setVisibility(View.VISIBLE);
-            Animation animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_in_heart);
-            btnFavorite_full.startAnimation(animation);
-            animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_out_heart);
-            btnFavorite_full.startAnimation(animation);
-            btnFavorite_empty.setVisibility(View.INVISIBLE);
-            btnFavorite_full.setClickable(true);
+//            Animation animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in_progress);
+//            rlProgressBar.setVisibility(View.VISIBLE);
+//            rlProgressBar.startAnimation(animation);
+//            animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in_progress_2);
+//            progressBar.startAnimation(animation);
+//
+//            String user_id = auth.getCurrentUser().getUid();
+//            String product_id = product.getProductID();
+//            favoriteRef = FirebaseDatabase.getInstance().getReference("Favorite_2").child(user_id);
+//            favoriteRef.child(product_id).setValue("");
+//
+//            animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out_progress;
+//            rlProgressBar.startAnimation(animation);
+//            rlProgressBar.setVisibility(View.INVISIBLE);
+//            animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in_progress_2);
+//            progressBar.startAnimation(animation);
+//            rlProgressBar.clearAnimation();
+//            progressBar.clearAnimation();
+
+            HandleFavorite(false);
 
         });
         btnFavorite_full.setOnClickListener(view -> {
-            String user_id = auth.getCurrentUser().getUid();
-            String product_id = product.getProductID();
-            favoriteRef = FirebaseDatabase.getInstance().getReference("Favorite_2").child(user_id);
-            favoriteRef.child(product_id).removeValue();
-
-            btnFavorite_empty.setVisibility(View.VISIBLE);
-            Animation animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_heart);
-            btnFavorite_full.startAnimation(animation);
-            btnFavorite_full.setVisibility(View.INVISIBLE);
-            btnFavorite_full.setClickable(false);
+            HandleFavorite(true);
         });
 
         ibtnDetails_remove_1.setOnClickListener(view -> {
@@ -385,7 +394,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         });
 
-        btnBack.setOnClickListener(view -> supportFinishAfterTransition());
+        btnBack.setOnClickListener(view ->
+//                finish()
+                supportFinishAfterTransition()
+        );
     }
 
     void reset_gvCapacitiesBtns() {
@@ -476,5 +488,106 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Failed to add to Favorites.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    void HandleFavorite(boolean isFavoritePresent){
+        Animation fadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in_progress);
+        Animation fadeOutAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out_progress);
+        Animation fadeInAnimation_2 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in_progress_2);
+        Animation fadeOutAnimation_2 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out_progress_2);
+
+        rlProgressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        rlProductDetails.setClickable(false);
+        rlProgressBar.startAnimation(fadeInAnimation);
+        progressBar.startAnimation(fadeInAnimation_2);
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                String user_id = auth.getCurrentUser().getUid();
+                String product_id = product.getProductID();
+                favoriteRef = FirebaseDatabase.getInstance().getReference("Favorite_2").child(user_id);
+                if(isFavoritePresent){
+                    favoriteRef.child(product_id).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            rlProgressBar.clearAnimation();
+                            progressBar.clearAnimation();
+                            rlProgressBar.startAnimation(fadeOutAnimation);
+                            progressBar.startAnimation(fadeOutAnimation_2);
+
+                            fadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+                                    btnFavorite_empty.setVisibility(View.VISIBLE);
+                                    animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_heart);
+                                    btnFavorite_full.startAnimation(animation);
+                                    btnFavorite_full.setVisibility(View.INVISIBLE);
+                                    btnFavorite_full.setClickable(false);
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    rlProgressBar.setVisibility(View.INVISIBLE);
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                    rlProgressBar.clearAnimation();
+                                    progressBar.clearAnimation();
+
+                                    rlProductDetails.setClickable(true);
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+                        }
+                    });
+                }
+                else {
+                    favoriteRef.child(product_id).setValue("").addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            rlProgressBar.clearAnimation();
+                            progressBar.clearAnimation();
+                            progressBar.startAnimation(fadeOutAnimation_2);
+                            rlProgressBar.startAnimation(fadeOutAnimation);
+
+                            fadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+                                    btnFavorite_full.setVisibility(View.VISIBLE);
+                                    animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_in_heart);
+                                    btnFavorite_full.startAnimation(animation);
+                                    animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_out_heart);
+                                    btnFavorite_full.startAnimation(animation);
+                                    btnFavorite_empty.setVisibility(View.INVISIBLE);
+                                    btnFavorite_full.setClickable(true);
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    rlProgressBar.setVisibility(View.INVISIBLE);
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                    rlProgressBar.clearAnimation();
+                                    progressBar.clearAnimation();
+
+                                    rlProductDetails.setClickable(true);
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+                        }
+                    });
+                }
+
+            }
+        }, 2000);
     }
 }

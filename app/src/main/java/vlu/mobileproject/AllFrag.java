@@ -159,7 +159,7 @@ public class AllFrag extends Fragment implements GlobalData.Callback {
                                     public void run() {
                                         parentAdapter.notifyDataSetChanged();
                                     }
-                                }, 2000);
+                                }, 5000);
                             }
 
                         }
