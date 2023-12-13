@@ -113,5 +113,7 @@
     <string name="Delivered">Delivered</string>
     <string name="Cancel">Cancel</string>
     <string name="iphone">Iphone</string>
+    <string name="GlobalProducts">Global products</string>
+    <string name="loading">Loading...</string>
 
 </resources>

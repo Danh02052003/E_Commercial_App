@@ -87,7 +87,7 @@
                             android:padding="14dp"
                             android:scaleType="centerCrop"
                             android:background="@color/white"
-                            android:src="@drawable/cart" />
+                            android:src="@drawable/home_bag_icon" />
 
                     </com.google.android.material.card.MaterialCardView>
 

@@ -29,7 +29,7 @@
         android:layout_toEndOf="@+id/searchItem"
         android:background="#FFFFFF"
         android:scaleType="centerCrop"
-        android:src="@drawable/filter" />
+        android:src="@drawable/baseline_filter_list_24" />
 
     <ListView
         android:id="@+id/LVProduct"

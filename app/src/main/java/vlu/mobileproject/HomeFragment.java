@@ -3,6 +3,8 @@ package vlu.mobileproject;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.ColorInt;
@@ -18,10 +20,12 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +38,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import vlu.mobileproject.activity.view.cart.Cart;
+import vlu.mobileproject.activity.view.home.MainActivity;
 import vlu.mobileproject.adapter.CategoriesAdapter;
 import vlu.mobileproject.data.FirebaseReferenceKey;
 import vlu.mobileproject.modle.Discount;
@@ -49,6 +54,11 @@ public class HomeFragment extends Fragment implements CategoriesAdapter.OnItemSe
     TextView tvContent2;
 
     ImageView ivHero;
+    Button tvHeroButton;
+    Context context;
+    TextView tvDiscountName;
+    ImageView gifImageView;
+    String productID = "";
 
     DatabaseReference discountReference;
     int currentIndex = 0;
@@ -63,7 +73,8 @@ public class HomeFragment extends Fragment implements CategoriesAdapter.OnItemSe
             }
 
             if (currentIndex < DiscountList.size()) {
-                animateTextChange(DiscountList.get(currentIndex).getDiscountUrl(), DiscountList.get(currentIndex).getDiscountDescription());
+                animateTextChange(DiscountList.get(currentIndex).getDiscountName(), DiscountList.get(currentIndex).getDiscountUrl(), DiscountList.get(currentIndex).getDiscountDescription());
+                //productID = "";
                 currentIndex++;
             } else {
                 currentIndex = 0;
@@ -74,15 +85,10 @@ public class HomeFragment extends Fragment implements CategoriesAdapter.OnItemSe
     };
 
     public HomeFragment() {
-        // Required empty public constructor
+
     }
-
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-
-        fragment.setArguments(args);
-        return fragment;
+    public HomeFragment(Context context) {
+        this.context = context;
     }
 
     @Override
@@ -100,12 +106,22 @@ public class HomeFragment extends Fragment implements CategoriesAdapter.OnItemSe
         rvCategories = view.findViewById(R.id.rvCategories);
         tvContent2 = view.findViewById(R.id.tvContent2);
         ivHero = view.findViewById(R.id.ivHero);
+        tvDiscountName = view.findViewById(R.id.tvDiscountName);
+        gifImageView = view.findViewById(R.id.gifImageView);
+        //tvHeroButton = view.findViewById(R.id.tvHeroButton);
 
         CategoriesAdapter adapter = new CategoriesAdapter(Arrays.asList(
                 createItemFor(POS_ALL).setChecked(true),
                 createItemFor(POS_SAMSUNG),
                 createItemFor(POS_IPHONE)
         ));
+//        tvHeroButton.setOnClickListener(v -> {
+//            Intent intent = new Intent(context, ProductDetailsActivity.class);
+//            Bundle bundle = new Bundle();
+//            bundle.putString("productID", productID);
+//            intent.putExtras(bundle);
+//            context.startActivity(intent);
+//        });
 
         LoadDiscountInfo(view);
 
@@ -150,35 +166,49 @@ public class HomeFragment extends Fragment implements CategoriesAdapter.OnItemSe
                 .withBackgroundColor(color(R.color.greyVLUS))
                 .withSelectedBackgroundColor(color(R.color.greenVLUS));
     }
-    private void animateTextChange(String discountImgUrl, String newDiscountDescription) {
+    private void animateTextChange(String discountName, String discountImgUrl, String newDiscountDescription) {
         // Fade-out animation for discountDescription
-        ObjectAnimator fadeOutDiscountDescription = ObjectAnimator.ofFloat(tvContent2, "alpha", 1f, 0f);
-        ObjectAnimator fadeOutDiscountImage = ObjectAnimator.ofFloat(ivHero, "alpha", 1f, 0f);
-        fadeOutDiscountDescription.setDuration(500);
-        fadeOutDiscountImage.setDuration(500);
+        performFadeInOutAnimation(500, tvContent2, newDiscountDescription, null);
+        performFadeInOutAnimation(500, tvDiscountName, discountName, null);
+        performFadeInOutAnimation(500, ivHero, null, discountImgUrl);
 
+        if (context == null)
+            return;
+        ObjectAnimator fadeOutDiscountDescription = ObjectAnimator.ofFloat(gifImageView, "alpha", 1f, 0f);
+        fadeOutDiscountDescription.setDuration(500);
         fadeOutDiscountDescription.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                tvContent2.setText(newDiscountDescription);
-                ObjectAnimator fadeInDiscountDescription = ObjectAnimator.ofFloat(tvContent2, "alpha", 0f, 1f);
+                Glide.with(context).load(R.drawable.discount_gif).into(gifImageView);
+                ObjectAnimator fadeInDiscountDescription = ObjectAnimator.ofFloat(gifImageView, "alpha", 0f, 1f);
                 fadeInDiscountDescription.setDuration(500);
                 fadeInDiscountDescription.start();
             }
         });
-        fadeOutDiscountImage.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                Picasso.get().load(discountImgUrl).into(ivHero);
-                ObjectAnimator fadeOutDiscountImage = ObjectAnimator.ofFloat(ivHero, "alpha", 0f, 1f);
-                fadeOutDiscountImage.setDuration(500);
-                fadeOutDiscountImage.start();
-            }
-        });
-
-        fadeOutDiscountImage.start();
         fadeOutDiscountDescription.start();
     }
+
+    private void performFadeInOutAnimation(int animSpeed, View view, String textToShow, String imgUrl) {
+        ObjectAnimator fadeOutAnimation = ObjectAnimator.ofFloat(view, "alpha", 1f, 0f);
+        fadeOutAnimation.setDuration(animSpeed);
+        fadeOutAnimation.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (view instanceof TextView) {
+                    ((TextView) view).setText(textToShow);
+                } else if (view instanceof ImageView) {
+                    String imgLink = imgUrl.isEmpty() ? "https://robohash.org/" + Math.random() : imgUrl;
+                    Picasso.get().load(imgLink).into((ImageView) view);
+                }
+
+                ObjectAnimator fadeInAnimation = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
+                fadeInAnimation.setDuration(animSpeed);
+                fadeInAnimation.start();
+            }
+        });
+        fadeOutAnimation.start();
+    }
+
     @ColorInt
     private int color(@ColorRes int res){
         return ContextCompat.getColor(requireContext(), res);

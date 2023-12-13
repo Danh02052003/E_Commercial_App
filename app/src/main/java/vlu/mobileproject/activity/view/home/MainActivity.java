@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
             actionBar = getSupportActionBar();
 
             if (id == R.id.item_btt_nav_home) {
-                loadFragment(new HomeFragment());
+                loadFragment(new HomeFragment(this));
                 return true;
             } else if (id == R.id.item_btt_nav_favorite) {
                 Intent intent = new Intent(MainActivity.this, Favorite.class);
@@ -272,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         if (position == POS_MAIN_MENU) {
-            HomeFragment homeFragment = new HomeFragment();
+            HomeFragment homeFragment = new HomeFragment(this);
             transaction.replace(R.id.mainContainer, homeFragment);
         } else if (position == POS_SUB_ITEM1) {
             SubFragment1 subFragment1 = new SubFragment1(PhoneType.Iphone);

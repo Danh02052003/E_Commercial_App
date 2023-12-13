@@ -140,5 +140,7 @@
     <string name="low_cost">Giao hàng tiết kiệm</string>
     <string name="high_speed">Hỏa tốc</string>
     <string name="iphone">Iphone</string>
+    <string name="GlobalProducts">Hàng quốc tế</string>
+    <string name="loading">Loading...</string>
 
 </resources>
