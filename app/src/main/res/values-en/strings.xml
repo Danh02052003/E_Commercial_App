@@ -100,5 +100,17 @@
     <string name="OtherFees">Other Fees</string>
     <string name="ProvisionalTotal">Provisional total</string>
     <string name="OrderTracking">Order Tracking</string>
+    <string name="cash_on_delivery">cash on delivery</string>
+    <string name="banking">Banking</string>
+    <string name="credit_card">Credit Card</string>
+    <string name="normal_speed">Normal speed</string>
+    <string name="low_cost">Low cost</string>
+    <string name="high_speed">High speed</string>
+
+    <string name="Pending">Pending</string>
+    <string name="InProgress">InProgress</string>
+    <string name="Delivering2You">Delivering2You</string>
+    <string name="Delivered">Delivered</string>
+    <string name="Cancel">Cancel</string>
 
 </resources>

@@ -118,8 +118,8 @@ public class PaymentActivity extends AppCompatActivity {
         String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         checkedRadioButtonPaymentMethod = findViewById(radioGroupPaymentMethod.getCheckedRadioButtonId());
         checkedRadioButtonDeliveryMethod = findViewById(radioGroupDeliveryMethod.getCheckedRadioButtonId());
-        PaymentMethod paymentMethod = getpaymentMethod(checkedRadioButtonPaymentMethod.getText().toString());
-        DeliveryMethod deliveryMethod = getDeliveryMethod(checkedRadioButtonDeliveryMethod.getText().toString());
+        PaymentMethod paymentMethod = getpaymentMethod(checkedRadioButtonPaymentMethod.getTag().toString());
+        DeliveryMethod deliveryMethod = getDeliveryMethod(checkedRadioButtonDeliveryMethod.getTag().toString());
 
         Order newOrder = new Order(UserID, newOrderKey, totalPrice, discount, otherFees, currentDate, DeliveryStatus.PENDING, paymentMethod, deliveryMethod, shippingAddress.getText().toString(), phoneNumber.getText().toString());
 

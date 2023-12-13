@@ -167,19 +167,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="Cash on Delivery" />
+                    android:tag="Cash on Delivery"
+                    android:text="@string/cash_on_delivery" />
 
                 <RadioButton
                     android:id="@+id/radioButtonBanking"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Banking" />
+                    android:tag="Banking"
+                    android:text="@string/banking" />
 
                 <RadioButton
                     android:id="@+id/radioButtonCreditCard"
                     android:layout_width="wrap_content"
+                    android:tag="Credit Card"
+
                     android:layout_height="wrap_content"
-                    android:text="Credit Card" />
+                    android:text="@string/credit_card"
+                    />
 
             </RadioGroup>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -232,19 +237,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="Normal speed" />
+                    android:tag="Normal speed"
+                    android:text="@string/normal_speed"
+                    />
 
                 <RadioButton
                     android:id="@+id/radioButtonSaving"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Low cost" />
+                    android:tag="Low cost"
+                    android:text="@string/low_cost"
+                    />
 
                 <RadioButton
                     android:id="@+id/radioButtonHighSpeed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="High speed" />
+                    android:tag="High speed"
+                    android:text="@string/high_speed" />
 
             </RadioGroup>
         </androidx.constraintlayout.widget.ConstraintLayout>

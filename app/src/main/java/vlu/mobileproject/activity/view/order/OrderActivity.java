@@ -27,7 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vlu.mobileproject.R;
+import vlu.mobileproject.data.DeliveryMethod;
 import vlu.mobileproject.data.DeliveryStatus;
+import vlu.mobileproject.data.PaymentMethod;
 import vlu.mobileproject.modle.Order;
 import vlu.mobileproject.modle.OrderItem;
 import vlu.mobileproject.modle.Products;
@@ -173,26 +175,44 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     void SetupInfo2View(Order order) {
-        String DE_Method = (order.getPaymentMethod().getPaymentMethod()) == null ? "#Null" : order.getPaymentMethod().getPaymentMethod();
-        String PM_Method = (order.getDeliveryMethod().getdeliveryMethod()) == null ? "#Null" : order.getDeliveryMethod().getdeliveryMethod();
-        paymentMethod.setText(PM_Method);
-        deliveryMethod.setText(DE_Method);
+        String DE_Method = (order.getPaymentMethod().getPaymentMethod());
+        if (DE_Method.equals(PaymentMethod.COD.getPaymentMethod())) {
+            paymentMethod.setText(R.string.cash_on_delivery);
+        } else if (DE_Method.equals(PaymentMethod.BANKING.getPaymentMethod())) {
+            paymentMethod.setText(R.string.banking);
+        } else if (DE_Method.equals(PaymentMethod.CREDIT_CARD.getPaymentMethod())) {
+            paymentMethod.setText(R.string.credit_card);
+        }
+        String DM_Method = (order.getDeliveryMethod().getdeliveryMethod());
+        if (DM_Method.equals(DeliveryMethod.NORMAL)) {
+            deliveryMethod.setText(R.string.normal_speed);
+        } else if (DM_Method.equals(DeliveryMethod.LOW_COST)) {
+            deliveryMethod.setText(R.string.low_cost);
+        } else if (DM_Method.equals(DeliveryMethod.HIGH_SPEED)) {
+            deliveryMethod.setText(R.string.high_speed);
+        }
         if (order.getStatus().equals(DeliveryStatus.PENDING)) {
             progressDetail.setText(R.string.onPending);
+            orderStatus.setText(R.string.Pending);
         } else if (order.getStatus().equals(DeliveryStatus.PENDING)) {
             progressDetail.setText(R.string.onInProgress);
+            orderStatus.setText(R.string.InProgress);
         } else if (order.getStatus().equals(DeliveryStatus.DELIVERING_TO_YOU)) {
             progressDetail.setText(R.string.onDelivering2You);
+            orderStatus.setText(R.string.Delivering2You);
+
         } else if (order.getStatus().equals(DeliveryStatus.DELIVERED)) {
             progressDetail.setText(R.string.onDelivered);
+            orderStatus.setText(R.string.Delivered);
+
         } else if (order.getStatus().equals(DeliveryStatus.CANCELED)) {
             progressDetail.setText(R.string.canceled);
+            orderStatus.setText(R.string.canceled);
         }
         if (order.getStatus().getStatus().equals(DeliveryStatus.CANCELED.getStatus())) {
             ColorStateList colorStateList = ContextCompat.getColorStateList(this, R.color.red);
             orderStatus.setTextColor(colorStateList);
         }
-        orderStatus.setText(order.getStatus().getStatus());
         orderTime.setText(order.getOrder_date());
 
         double totalAmount = order.getTotal_amount();
