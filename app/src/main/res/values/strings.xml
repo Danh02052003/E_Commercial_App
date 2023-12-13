@@ -119,4 +119,13 @@
 
     <!--Order tracking-->
 
+    <string name="memoryOption">Dung lượng</string>
+    <string name="OrderSummary">Tóm Tắt Đơn Hàng</string>
+    <string name="OrderId">Mã đơn hàng</string>
+    <string name="YourOrders">Đơn hàng của bạn</string>
+    <string name="t_ng_c_ng">Tổng cộng</string>
+    <string name="DiscountValue">Giảm giá:</string>
+    <string name="OtherFees">Phí áp dụng</string>
+    <string name="ProvisionalTotal">Tổng tạm tính</string>
+
 </resources>

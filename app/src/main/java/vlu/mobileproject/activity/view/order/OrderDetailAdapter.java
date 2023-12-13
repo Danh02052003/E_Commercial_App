@@ -64,6 +64,7 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
         Picasso.get().load(orderItem.getImgUrl()).into(holder.itemImg);
         holder.quantityTextView.setText(String.valueOf("X " + orderItem.getQuantity()));
         //holder.color.setText(String.valueOf("X " + orderItem.getQuantity()));
+        holder.memoOpt.setText(orderItem.getProductOptName());
         holder.total.setText(String.valueOf("$ " + (orderItem.getPrice_per_unit() * orderItem.getQuantity())));
 
         holder.orderItemItem.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +94,7 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView itemNameTextView, quantityTextView, total;
+        TextView itemNameTextView, quantityTextView, total, memoOpt;
         ConstraintLayout orderItemItem;
 
         ImageView itemImg;
@@ -106,6 +107,7 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
             orderItemItem = itemView.findViewById(R.id.orderItemItem);
             itemImg = itemView.findViewById(R.id.itemImg);
             total = itemView.findViewById(R.id.totalTemp);
+            memoOpt = itemView.findViewById(R.id.memoOpt);
         }
     }
 }

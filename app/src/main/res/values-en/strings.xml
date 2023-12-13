@@ -91,4 +91,12 @@
     <string name="verify_desc">Please enter the verification code sent to</string>
     <string name="noSent">No code sent?</string>
 
+    <string name="OrderSummary">Order summary</string>
+    <string name="memoryOption">Memory option</string>
+    <string name="OrderId">Order id</string>
+    <string name="YourOrders">Your Orders</string>
+    <string name="DiscountValue">Discount Value</string>
+    <string name="OtherFees">Other Fees</string>
+    <string name="ProvisionalTotal">Provisional total</string>
+
 </resources>
