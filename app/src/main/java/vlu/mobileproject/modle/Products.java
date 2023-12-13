@@ -15,6 +15,7 @@ public class Products implements Serializable {
 
     // Product key in firebase - the actual ID
     String productID;
+    vlu.mobileproject.data.PhoneType PhoneType;
 
     public String getProductID() {
         return productID;
@@ -41,6 +42,14 @@ public class Products implements Serializable {
     public int getProduct_categoryId() {
 
         return product_categoryId;
+    }
+
+    public vlu.mobileproject.data.PhoneType getPhoneType() {
+        return PhoneType;
+    }
+
+    public void setPhoneType(vlu.mobileproject.data.PhoneType phoneType) {
+        PhoneType = phoneType;
     }
 
     public void setProduct_categoryId(int product_categoryId) {

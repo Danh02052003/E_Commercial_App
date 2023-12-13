@@ -71,6 +71,7 @@ public class Order {
         this.discount = discount;
         this.otherFees = otherFees;
         this.deliveryMethod = deliveryMethod;
+        this.phoneNumber = phoneNumber;
     }
 
     public Order(){}

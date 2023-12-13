@@ -87,7 +87,7 @@ public class LoginParent extends AppCompatActivity implements IOnSuccLogin {
                                 .build();
                 PhoneAuthProvider.verifyPhoneNumber(options);
 
-                VerifyDialog.showDialog(LoginParent.this, code -> {
+                VerifyDialog.showDialog(phoneNumber, LoginParent.this, code -> {
                     PhoneAuthCredential credential = VerifyCode(code);
                     signInWithPhoneAuthCredential(credential);
                 });

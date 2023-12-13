@@ -51,12 +51,10 @@
     </RelativeLayout>
 
 
-
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/drawer_list"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/drawer_list" />
-
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/ll_logout"

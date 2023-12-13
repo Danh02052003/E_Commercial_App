@@ -8,6 +8,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import vlu.mobileproject.R;
 
@@ -17,7 +18,7 @@ public class VerifyDialog {
         void onVerify(String input);
     }
 
-    public static void showDialog(Context context, final OnVerifyListener listener) {
+    public static void showDialog(String phoneNumber, Context context, final OnVerifyListener listener) {
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -28,6 +29,8 @@ public class VerifyDialog {
         dialog.getWindow().setGravity(Gravity.CENTER);
 
         final EditText editText = dialog.findViewById(R.id.editText);
+        TextView txtPhone = dialog.findViewById(R.id.txtPhone);
+        txtPhone.setText(phoneNumber);
         Button btnVerify = dialog.findViewById(R.id.btnVerify);
 
         btnVerify.setOnClickListener(v -> {

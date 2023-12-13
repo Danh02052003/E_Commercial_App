@@ -6,20 +6,15 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.telephony.PhoneNumberUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -33,47 +28,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 import com.yarolegovich.slidingrootnav.callback.DragStateListener;
 
 import java.util.Arrays;
-import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
 import vlu.mobileproject.DrawerItem;
 import vlu.mobileproject.Favorite;
 import vlu.mobileproject.HomeFragment;
 import vlu.mobileproject.R;
-import vlu.mobileproject.SettingFragment;
 import vlu.mobileproject.SimpleItem;
-import vlu.mobileproject.SpaceItem;
 import vlu.mobileproject.SubFragment1;
-import vlu.mobileproject.SubFragment2;
 import vlu.mobileproject.SubFragment3;
 import vlu.mobileproject.activity.view.cart.Cart;
 import vlu.mobileproject.activity.view.order.OrderHistoryActivity;
 import vlu.mobileproject.activity.view.search.SearchFragment;
 import vlu.mobileproject.adapter.DrawerAdapter;
 import vlu.mobileproject.activity.view.profile.Information_Account;
-import vlu.mobileproject.databinding.ActivityMainBinding;
+import vlu.mobileproject.data.PhoneType;
 import vlu.mobileproject.globalfuction.DarkModeUtils;
-import vlu.mobileproject.globalfuction.GlobalData;
-import vlu.mobileproject.globalfuction.ImageHandler;
-import vlu.mobileproject.login.LoginActivity;
-import vlu.mobileproject.login.SignupActivity;
 import vlu.mobileproject.login.StartupActivity;
-import vlu.mobileproject.login.loading;
-import vlu.mobileproject.modle.Products;
-import vlu.mobileproject.modle.User;
 
 public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener {
     private static final int POS_MAIN_MENU = 0;
@@ -299,14 +275,14 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
             HomeFragment homeFragment = new HomeFragment();
             transaction.replace(R.id.mainContainer, homeFragment);
         } else if (position == POS_SUB_ITEM1) {
-            SubFragment1 subFragment1 = new SubFragment1("Iphone");
+            SubFragment1 subFragment1 = new SubFragment1(PhoneType.Iphone);
             transaction.replace(R.id.mainContainer, subFragment1);
         } else if (position == POS_SUB_ITEM2) {
-            SubFragment1 subFragment1 = new SubFragment1("Samsung");
+            SubFragment1 subFragment1 = new SubFragment1(PhoneType.Samsung);
             transaction.replace(R.id.mainContainer, subFragment1);
         } else if (position == POS_SUB_ITEM3) {
-            SubFragment3 subFragment3 = new SubFragment3();
-            transaction.replace(R.id.mainContainer, subFragment3);
+            Intent intent = new Intent(MainActivity.this, OrderHistoryActivity.class);
+            startActivity(intent);
         } else if (position == POS_SETTING) {
             Intent intent = new Intent(MainActivity.this, Information_Account.class);
             startActivity(intent);

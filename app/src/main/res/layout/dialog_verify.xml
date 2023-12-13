@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:layout_gravity="center"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/strokeless_rounded_button"
         android:ems="10"
         android:gravity="center"
@@ -36,7 +36,7 @@
         android:textColorHint="@color/colorHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/txtPhone" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnVerify"
@@ -66,14 +66,17 @@
         android:layout_height="wrap_content"
         style="@style/discountDescription"
         android:layout_margin="10dp"
+        android:textSize="15sp"
         android:text="@string/verify_desc"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
     <TextView
-        android:id="@+id/txtEmail"
+        android:id="@+id/txtPhone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
         android:layout_marginTop="5dp"
         android:text="Email@gmail.com"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,24 +91,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText">
 
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/noSent"
-            app:layout_constraintEnd_toStartOf="@+id/textView26"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText" />
+<!--        <TextView-->
+<!--            android:id="@+id/textView11"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/noSent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/textView26"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/editText" />-->
 
-        <TextView
-            android:id="@+id/textView26"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/greenText"
-            android:textStyle="bold"
-            android:text=" Gửi lại"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText" />
+<!--        <TextView-->
+<!--            android:id="@+id/reSendCode"-->
+<!--            style="@style/greenText"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text=" Gửi lại"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/editText" />-->
     </LinearLayout>
 
 

@@ -124,7 +124,7 @@ public class SignupActivity extends AppCompatActivity {
                         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
                         if (currentUser != null) {
                             SendVerificationCode(phone);
-                            VerifyDialog.showDialog(SignupActivity.this, code -> {
+                            VerifyDialog.showDialog(phone, SignupActivity.this, code -> {
                                 PhoneAuthCredential credential = VerifyCode(code);
                                 saveUserDataToDatabase(username, credential);
                             });

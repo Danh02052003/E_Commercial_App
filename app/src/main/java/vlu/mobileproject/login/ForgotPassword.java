@@ -30,7 +30,7 @@ public class ForgotPassword extends LoginParent {
         editTextEmailPhone = findViewById(R.id.edtEmailPhone);
         buttonResetPassword = findViewById(R.id.bttResetPassword);
         edtNewPassword = findViewById(R.id.edtNewPassword);
-        bttdangnhap =findViewById(R.id.bttdangnhap);
+        bttdangnhap = findViewById(R.id.bttdangnhap);
 
         bttdangnhap.setOnClickListener(view -> {
             OpenLoginWithEmailActivity();

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 import vlu.mobileproject.adapter.HomeChildAdapter;
+import vlu.mobileproject.data.PhoneType;
 import vlu.mobileproject.globalfuction.GlobalData;
 import vlu.mobileproject.modle.Products;
 
@@ -29,8 +30,8 @@ public class SubFragment1 extends Fragment implements GlobalData.Callback {
     TextView TitleText;
 
 
-    String typeOfPhone;
-    public SubFragment1(String TypeofPhone) {
+    PhoneType typeOfPhone;
+    public SubFragment1(PhoneType TypeofPhone) {
         typeOfPhone = TypeofPhone;
     }
 
@@ -39,12 +40,12 @@ public class SubFragment1 extends Fragment implements GlobalData.Callback {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.sample_fragment, container, false);
 
         TitleText = root.findViewById(R.id.Title);
-        TitleText.setText(typeOfPhone);
+        TitleText.setText(typeOfPhone.getPhoneType());
         GlobalData.initData(getContext(), this);
 
         List<Products> filteredProducts = new ArrayList<>();
         for (Products product : allProducts) {
-            if (product.getProduct_name().toLowerCase(Locale.getDefault()).contains(typeOfPhone.toLowerCase(Locale.getDefault()))) {
+            if (product.getPhoneType().getPhoneType().toLowerCase(Locale.getDefault()).contains(typeOfPhone.getPhoneType().toLowerCase(Locale.getDefault()))) {
                 filteredProducts.add(product);
             }
         }
