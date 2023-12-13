@@ -10,5 +10,8 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:clickable">true</item>
         <item name="android:background">@color/greenVLUS</item>
+        <item name="android:windowEnterAnimation">@anim/dialog_animation</item>
+        <item name="android:windowExitAnimation">@anim/dialog_animation</item>
+
     </style>
 </resources>

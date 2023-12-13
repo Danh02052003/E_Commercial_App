@@ -109,6 +109,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                     Order order = dataSnapshot.getValue(Order.class);
                     if (order.getStatus().equals(DeliveryStatus.PENDING)) {
                         Toast.makeText(OrderDetailActivity.this, "Đã hủy đơn hàng", Toast.LENGTH_SHORT).show();
+                        supportFinishAfterTransition();
                         orderReference.child(OrderID).child("status").setValue(DeliveryStatus.CANCELED);
                     } else {
                         Toast.makeText(OrderDetailActivity.this, "Không thể hủy được nữa", Toast.LENGTH_SHORT).show();

@@ -7,14 +7,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.ValueAnimator;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -174,6 +179,32 @@ public class OrderActivity extends AppCompatActivity {
         });
     }
 
+    private void showPopupDialog(int targetGif) {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_layout);
+        dialog.setCancelable(false);
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        ImageView imageView = dialog.findViewById(R.id.gifImageView);
+        Glide.with(this).asGif().load(targetGif).into(imageView);
+
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        }, 3000);
+
+        dialog.show();
+        dialog.getWindow().setAttributes(layoutParams);
+    }
+
+
     void SetupInfo2View(Order order) {
         String DE_Method = (order.getPaymentMethod().getPaymentMethod());
         if (DE_Method.equals(PaymentMethod.COD.getPaymentMethod())) {
@@ -228,30 +259,28 @@ public class OrderActivity extends AppCompatActivity {
 
     void ProgressBarAnimation(Order order) {
         if (order.getStatus().getStatus().equals(DeliveryStatus.PENDING.getStatus())) {
-            inprogressBar.setProgress(0);
-            Delivering2YouBar.setProgress(0);
-            startSmoothAnimation(pendingBar);
+            OnDeliveryStatusChange(0, 0, 0, R.drawable.pending, R.color.greenVLUS, true, pendingBar);
         } else if (order.getStatus().getStatus().equals(DeliveryStatus.IN_PROGRESS.getStatus())) {
-            startSmoothAnimation(inprogressBar);
-            pendingBar.setProgress(100);
-            Delivering2YouBar.setProgress(0);
+            OnDeliveryStatusChange(100, 0, 0, R.drawable.delivering, R.color.greenVLUS, true, inprogressBar);
         } else if (order.getStatus().getStatus().equals(DeliveryStatus.DELIVERING_TO_YOU.getStatus())) {
-            pendingBar.setProgress(100);
-            inprogressBar.setProgress(100);
-            startSmoothAnimation(Delivering2YouBar);
+            OnDeliveryStatusChange(100, 100, 0, R.drawable.deliveringtoyou, R.color.greenVLUS, true, Delivering2YouBar);
         } else if (order.getStatus().getStatus().equals(DeliveryStatus.DELIVERED.getStatus())) {
-            pendingBar.setProgress(100);
-            inprogressBar.setProgress(100);
-            Delivering2YouBar.setProgress(100);
-            stopSmoothAnimation();
-            SetProgressBarsColor(R.color.blue);
+            OnDeliveryStatusChange(100, 100, 100, R.drawable.deliverycompleted, R.color.blue, false, Delivering2YouBar);
         } else {
-            stopSmoothAnimation();
-            pendingBar.setProgress(100);
-            inprogressBar.setProgress(100);
-            Delivering2YouBar.setProgress(100);
-            SetProgressBarsColor(R.color.red);
+            OnDeliveryStatusChange(100, 100, 100, R.drawable.order_canceled, R.color.red, false, Delivering2YouBar);
         }
+    }
+
+    void OnDeliveryStatusChange(int pendingBarProgress, int inprogressBarProgress, int Delivering2YouBarProgress, int targetGif, int progressBarColor, boolean shouldPlayAnim, ProgressBar progresBar2Play) {
+        stopSmoothAnimation();
+        pendingBar.setProgress(pendingBarProgress);
+        inprogressBar.setProgress(inprogressBarProgress);
+        Delivering2YouBar.setProgress(Delivering2YouBarProgress);
+        if (shouldPlayAnim) {
+            startSmoothAnimation(progresBar2Play);
+        }
+        showPopupDialog(targetGif);
+        SetProgressBarsColor(progressBarColor);
     }
 
     void SetProgressBarsColor(int color) {

@@ -395,7 +395,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
 
         btnBack.setOnClickListener(view ->
-//                finish()
                 supportFinishAfterTransition()
         );
     }

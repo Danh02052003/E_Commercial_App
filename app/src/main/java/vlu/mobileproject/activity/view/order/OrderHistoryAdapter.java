@@ -39,7 +39,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     private Context context;
     private ArrayList<OrderHistory> orderHistoryList;
 
-    List<OrderItem> OrderItemList;
+    List<OrderItem> OrderItemList = new ArrayList<>();
 
     List<Products> productsList;
 
@@ -88,19 +88,18 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     }
 
     void GetOrderItemList(OrderHistory orderHistory) {
-        OrderItemList = productsList.stream()
-                .flatMap(product ->
-                        orderHistory.getOrderItemList().stream()
-                                .filter(orderItem -> orderItem.getProduct_id().equals(product.getProductID()))
-                                .map(orderItem -> {
-                                    orderItem.setImgUrl(product.getProduct_img());
-                                    orderItem.setProductName(product.getProduct_name());
-                                    orderItem.setPrice_per_unit(product.getProductOptPackage(orderItem.getProductMemoryOptKey()).getProduct_price());
-                                    orderItem.setProductOptName(product.getProductOptPackage(orderItem.getProductMemoryOptKey()).getMemory());
-                                    return orderItem;
-                                })
-                )
-                .collect(Collectors.toList());
+        for (Products product : productsList) {
+            for (OrderItem orderItem : orderHistory.getOrderItemList()) {
+                if (orderItem.getProduct_id().equals(product.getProductID())) {
+                    orderItem.setImgUrl(product.getProduct_img());
+                    orderItem.setProductName(product.getProduct_name());
+                    orderItem.setPrice_per_unit(product.getProductOptPackage(orderItem.getProductMemoryOptKey()).getProduct_price());
+                    orderItem.setProductOptName(product.getProductOptPackage(orderItem.getProductMemoryOptKey()).getMemory());
+                    OrderItemList.add(orderItem);
+                    break;
+                }
+            }
+        }
     }
 
     @Override

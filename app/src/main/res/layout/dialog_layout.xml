@@ -1,0 +1,14 @@
+<!-- res/layout/custom_dialog.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="300dp"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/gifImageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/discount_gif" />
+
+</RelativeLayout>
