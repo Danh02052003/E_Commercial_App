@@ -32,7 +32,6 @@
         android:ems="10"
         android:gravity="center"
         android:hint="@string/verification"
-        android:inputType="text"
         android:textColorHint="@color/colorHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

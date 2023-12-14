@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
 import vlu.mobileproject.R;
@@ -52,5 +54,22 @@ public class ForgotPassword extends LoginParent {
         }
 
         SendVerificationCode(emailPhone);
+    }
+
+    @Override
+    public void OnLoginSuccessful() {
+        super.OnLoginSuccessful();
+
+        FirebaseUser user2ChangePass = FirebaseAuth.getInstance().getCurrentUser();
+        String newPassword = edtNewPassword.getText().toString().trim();
+        user2ChangePass.updatePassword(newPassword)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(ForgotPassword.this, "Đổi mật khẩu thành công.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Exception exception = task.getException();
+                        Toast.makeText(ForgotPassword.this, "Đổi mật khẩu không thành công." + exception, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
