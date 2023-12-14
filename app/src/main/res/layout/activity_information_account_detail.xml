@@ -59,7 +59,7 @@
         android:id="@+id/imgAvatarAccount"
         android:layout_width="140dp"
         android:layout_height="140dp"
-        android:layout_marginLeft="202dp"
+        android:layout_marginLeft="135dp"
         android:layout_marginTop="142dp" />
 
 
