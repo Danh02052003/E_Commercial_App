@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
     // bottom navigation View
     ActionBar actionBar;
     BottomNavigationView BotNavMenu;
-    Toolbar toolbar;
+    Toolbar toolbar, toolbar_2;
     RelativeLayout layoutBorder;
     ImageButton myImageButton, ibtnCart;
     public static String bet = "https://e-commerce-73482-default-rtdb.asia-southeast1.firebasedatabase.app/";
@@ -111,9 +112,9 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
                         if(isMenuOpened)
                             toReverseCorner = false;
                         else {
-                            Animation animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.main_anim_1_reverse);
+                            Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.main_anim_1_reverse);
                             cvLayout_shadow.startAnimation(animation);
-                            animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.main_anim_2_reverse);
+                            animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.main_anim_2_reverse);
                             cvBorderNavigation.startAnimation(animation);
                             Handler handler = new Handler();
                             handler.postDelayed(() -> {
@@ -127,6 +128,8 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
                 })
                 .inject();
         toolbar.setNavigationIcon(R.drawable.menu_icon);
+        toolbar_2.setNavigationIcon(R.drawable.menu_icon);
+
         // Load the saved night mode state from SharedPreferences and apply it
 
 
@@ -164,12 +167,13 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
         DarkModeUtils.applyNightMode(this, isNightMode);
     }
     private void addControls() {
-        View  drawer_navigation = getLayoutInflater().inflate(R.layout.drawer_navigation, null);
+        View drawer_navigation = getLayoutInflater().inflate(R.layout.drawer_navigation, null);
 
         ibtnCart= findViewById(R.id.ibtnCart);
 
         layoutBorder = findViewById(R.id.layout_border);
         toolbar = findViewById(R.id.toolbar);
+        toolbar_2 = findViewById(R.id.toolbar_2);
         BotNavMenu = findViewById(R.id.BotNavMenu);
         //from drawer_navigation layout
 
@@ -283,24 +287,27 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
 
     @Override
     public void onItemSelected(int position) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
 
         if (position == POS_MAIN_MENU) {
             HomeFragment homeFragment = new HomeFragment(this);
-            HomeFragment homeFragment2 = new HomeFragment(this);
+            HomeFragment homeFragment1  = homeFragment.cloneFragment();
             transaction.replace(R.id.mainContainer, homeFragment);
-            transaction2.replace(R.id.mainContainer_2, homeFragment2);
+            transaction.replace(R.id.mainContainer_2, homeFragment1);
+
+
         } else if (position == POS_SUB_ITEM1) {
             SubFragment1 subFragment1 = new SubFragment1(PhoneType.Iphone);
             SubFragment1 subFragment1_1 = new SubFragment1(PhoneType.Iphone);
             transaction.replace(R.id.mainContainer, subFragment1);
-            transaction2.replace(R.id.mainContainer_2, subFragment1_1);
+//            transaction_shadow.replace(R.id.mainContainer_2, subFragment1_1);
         } else if (position == POS_SUB_ITEM2) {
             SubFragment1 subFragment1 = new SubFragment1(PhoneType.Samsung);
             SubFragment1 subFragment1_1 = new SubFragment1(PhoneType.Iphone);
             transaction.replace(R.id.mainContainer, subFragment1);
-            transaction2.replace(R.id.mainContainer_2, subFragment1_1);
+//            transaction_shadow.replace(R.id.mainContainer_2, subFragment1_1);
         } else if (position == POS_SUB_ITEM3) {
             Intent intent = new Intent(MainActivity.this, OrderHistoryActivity.class);
             startActivity(intent);

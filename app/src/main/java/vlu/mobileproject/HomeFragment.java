@@ -247,4 +247,13 @@ public class HomeFragment extends Fragment implements CategoriesAdapter.OnItemSe
         // Remove the callback to avoid memory leaks
         handler.removeCallbacks(updateTextRunnable);
     }
+    public HomeFragment cloneFragment() {
+        HomeFragment clonedFragment = new HomeFragment();
+        // Copy any necessary arguments or data from the original fragment to the cloned fragment here
+        Bundle args = getArguments();
+        if (args != null) {
+            clonedFragment.setArguments(new Bundle(args));
+        }
+        return clonedFragment;
+    }
 }
