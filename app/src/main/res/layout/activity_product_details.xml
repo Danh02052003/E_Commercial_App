@@ -304,7 +304,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="24dp"
                     android:layout_marginTop="5dp"
-                    android:text="Xem thêm >"
+                    android:text="@string/see_more"
                     android:textColor="@color/greenVLUS"
                     android:textSize="6pt" />
 
@@ -466,7 +466,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Số lượng"
+                            android:text="@string/quantity"
                             android:textSize="9pt"
                             android:textStyle="bold" />
 
