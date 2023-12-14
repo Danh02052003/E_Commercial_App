@@ -6,8 +6,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
     private String[] screenTitles;
 
     private SlidingRootNav slidingRootNav;
-    CardView cvBorderNavigation;
+    CardView cvBorderNavigation, cvLayout_shadow;
     boolean toReverseCorner = true;
     boolean isDataLoaded = false;
     RelativeLayout btnLogout;
@@ -90,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
         setSupportActionBar(toolbar);
 
         slidingRootNav = new SlidingRootNavBuilder(this)
-                .withDragDistance(245)
+                .withDragDistance(220)
                 .withRootViewScale(0.70f)
                 .withRootViewElevation(25)
                 .withToolbarMenuToggle(toolbar)
@@ -101,14 +103,25 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
                 .addDragStateListener(new DragStateListener() {
                     @Override
                     public void onDragStart() {
-                        animateCornerRadius(0, 70, toReverseCorner);
+                        animateCornerRadius(0, 50, toReverseCorner);
                     }
 
                     @Override
                     public void onDragEnd(boolean isMenuOpened) {
                         if(isMenuOpened)
                             toReverseCorner = false;
-                        else toReverseCorner = true;
+                        else {
+                            Animation animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.main_anim_1_reverse);
+                            cvLayout_shadow.startAnimation(animation);
+                            animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.main_anim_2_reverse);
+                            cvBorderNavigation.startAnimation(animation);
+                            Handler handler = new Handler();
+                            handler.postDelayed(() -> {
+                                cvLayout_shadow.clearAnimation();
+                                cvBorderNavigation.clearAnimation();
+                            }, 200);
+                            toReverseCorner = true;}
+
 
                     }
                 })
@@ -163,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
         btnLogout = drawer_navigation.findViewById(R.id.btnLogout);
 
         cvBorderNavigation = findViewById(R.id.cvBorderNavigation);
+        cvLayout_shadow = findViewById(R.id.cvLayout_shadow);
     }
 
     private void addEvents() {
@@ -270,16 +284,23 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
     @Override
     public void onItemSelected(int position) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
 
         if (position == POS_MAIN_MENU) {
             HomeFragment homeFragment = new HomeFragment(this);
+            HomeFragment homeFragment2 = new HomeFragment(this);
             transaction.replace(R.id.mainContainer, homeFragment);
+            transaction2.replace(R.id.mainContainer_2, homeFragment2);
         } else if (position == POS_SUB_ITEM1) {
             SubFragment1 subFragment1 = new SubFragment1(PhoneType.Iphone);
+            SubFragment1 subFragment1_1 = new SubFragment1(PhoneType.Iphone);
             transaction.replace(R.id.mainContainer, subFragment1);
+            transaction2.replace(R.id.mainContainer_2, subFragment1_1);
         } else if (position == POS_SUB_ITEM2) {
             SubFragment1 subFragment1 = new SubFragment1(PhoneType.Samsung);
+            SubFragment1 subFragment1_1 = new SubFragment1(PhoneType.Iphone);
             transaction.replace(R.id.mainContainer, subFragment1);
+            transaction2.replace(R.id.mainContainer_2, subFragment1_1);
         } else if (position == POS_SUB_ITEM3) {
             Intent intent = new Intent(MainActivity.this, OrderHistoryActivity.class);
             startActivity(intent);
@@ -311,6 +332,10 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
                 cvBorderNavigation.setRadius(dpToPx(animatedValue));
             }
         });
+        Animation animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.main_anim_1);
+        cvLayout_shadow.startAnimation(animation);
+        animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.main_anim_2);
+        cvBorderNavigation.startAnimation(animation);
 
         valueAnimator.start();
     }
