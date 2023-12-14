@@ -118,5 +118,8 @@
     <string name="goods">Goods</string>
     <string name="Ad">Your ad: </string>
     <string name="delivery_method">Delivery method</string>
+    <string name="empty_cart">Cart Empty</string>
+    <string name="discount_code">Discount code</string>
+    <string name="to_payment">To Payment</string>
 
 </resources>

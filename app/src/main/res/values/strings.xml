@@ -145,5 +145,8 @@
     <string name="goods">món hàng</string>
     <string name="Ad">Có thể bạn quan tâm:</string>
     <string name="delivery_method">Phương thức giao hàng</string>
+    <string name="empty_cart">Giỏ hàng rỗng</string>
+    <string name="discount_code">Mã giảm giá</string>
+    <string name="to_payment">Thanh toán</string>
 
 </resources>
